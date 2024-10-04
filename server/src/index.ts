@@ -1,13 +1,93 @@
+import express, { Request, Response } from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import isEnvConfigurate from './utils/env.service.js';
+import { configMysql, mysqlDb } from './mysql/config/config.mysql.js';
+import { manageSocket } from './socket/socket.services.js';
 
-import express, { Request, Response } from "express";
+//configure environment
+dotenv.config();
+try {
+  isEnvConfigurate();
+} catch (error) {
+  console.error(error);
+  process.exit(1);
+}
 
+//connect to database
+(async () => {
+  try {
+    await configMysql();
+  } catch (error) {
+    //do nothing wait the next connection
+  }
+})();
+
+//config cors
+const domains = process.env.DOMAINS_CORS || '';
+const corsOptions = {
+  origin: domains,
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  optionsSuccessStatus: 200,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+//launch server
 const app = express();
-const port = 3000;
+const server = createServer(app);
+app.use(cors(corsOptions));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, TypeScript with Express!");
+//socket management
+const io = new Server(server, {
+  cors: {
+    origin: domains,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  },
+});
+manageSocket(io);
+
+//Routes
+app.use(express.json({ limit: '100mb' }));
+// app.use('/auth', authRouter);
+// app.use('/user', userRouter);
+// app.use('/profile', profileRouter);
+// app.use('/action', actionRouter);
+// app.use('/list', listRouter);
+// app.use('/search', searchRouter);
+app.use('/*', (req: Request, res: Response) => {
+  res.status(404).json({
+    message: "La ressource que vous essayez d'atteindre n'existe pas",
+  });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+// Start the server
+server.listen(8001, () => {
+  console.log('Server is listening on port 8001...');
+});
+
+//Disconnect if server is stopped with SIGINT or SIGTERM
+process.on('SIGINT', async () => {
+  try {
+    await mysqlDb.end();
+  } catch (error) {
+    console.error('MySQL was not properly disconnected: ', error);
+    process.exit(1);
+  }
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  try {
+    await mysqlDb.end();
+  } catch (error) {
+    console.error('MySQL was not properly disconnected: ', error);
+    process.exit(1);
+  }
+  process.exit(0);
 });
