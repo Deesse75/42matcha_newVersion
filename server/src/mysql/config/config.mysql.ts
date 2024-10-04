@@ -1,7 +1,7 @@
 import fs from 'fs';
 import mysql2 from 'mysql2/promise';
 import { matchaError } from '../../utils/matcha_error.js';
-import { FakeActionType, FakeTagNameType, FakeTagType, FakeUserType } from '../interfaces/config.interface.js';
+import { FakeActionType, FakeTagNameType, FakeTagType, FakeUserType } from '../interfaces/fake.interface.js';
 import { banJson, createTableBan, createTableChat, createTableLike, createTableTag, createTableTagName, createTableUser, createTableView, likeJson, tagEditJson, tagJson, userJson, viewJson } from '../utils/config.utils.js';
 import { create } from 'domain';
 

@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+NG+Modern:wght@100..400');
 @import './variable';
+@import './mixin';
+
 @import './app';
 @import './auth';
 @import './error';
@@ -27,15 +29,25 @@ body {
     justify-content: space-between;
 
     .header {
-
+      width: 100vw;
+      height: 110px;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      position: fixed;
     }
 
     .routes {
-
+      width: 100%;
+      display: flex;
+      margin-top: 110px;
+      padding: 0;
+      box-sizing: border-box;
+      flex-grow: 1;
     }
 
     .footer {
-      
+      width: 100%;
     }
   }
 }
