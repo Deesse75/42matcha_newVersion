@@ -261,7 +261,7 @@ export const authBodyValidation = async (
     }
   } else {
     res.status(404).json({
-      message: "La ressource que vous essayez d'atteindre n'existe pas",
+      message: "La ressource que vous essayez d'atteindre n'existe pas.",
     });
     return;
   }

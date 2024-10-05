@@ -6,12 +6,10 @@ import AuthSignupForm from './AuthSignupForm';
 type Props = {
   setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
   selectedPage: string | null;
-  setSelectedPage: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const Signup: FC<Props> = ({
   selectedPage,
-  setSelectedPage,
   setSystemNotif,
 }) => {
   return (
@@ -19,11 +17,9 @@ const Signup: FC<Props> = ({
       <AuthTitle title='Inscription' />
       <AuthSignupForm
         setSystemNotif={setSystemNotif}
-        setSelectedPage={setSelectedPage}
       />
       <AuthRedirect
         selectedPage={selectedPage}
-        setSelectedPage={setSelectedPage}
       />
     </>
   );

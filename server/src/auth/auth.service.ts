@@ -10,7 +10,6 @@ export const authInitDatabase = async (): Promise<void> => {
   try {
     await configMysql();
   } catch (error) {
-    console.log('config', error);
     throw error;
   }
 };
@@ -39,7 +38,6 @@ export const authSignup = async (
     if (!user) {
       throw new matchaError(500, 'Une erreur interne est survenue');
     }
-    console.log('signup');
     await mailer.sendEmailTokenProcess(user.email, emailCode);
   } catch (error) {
     throw error;
@@ -74,10 +72,7 @@ export const authValidate = async (
   code: string,
 ): Promise<void> => {
   try {
-    const compareCode = await argon.verifyData(
-      code,
-      existingUser.emailCode,
-    );
+    const compareCode = await argon.verifyData(code, existingUser.emailCode);
     await authMysql.updateEmailCode(existingUser.id, '');
     if (!compareCode) {
       throw new matchaError(401, 'Token invalide, absent ou expiré.');
@@ -88,7 +83,9 @@ export const authValidate = async (
   }
 };
 
-export const authResendEmail = async (existingUser: MysqlUserValidationType): Promise<void> => {
+export const authResendEmail = async (
+  existingUser: MysqlUserValidationType,
+): Promise<void> => {
   try {
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
     const emailCode = await argon.hashedData(num);
@@ -106,7 +103,7 @@ export const authForgotPassword = async (
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
     const emailCode = await argon.hashedData(num);
     await authMysql.updateEmailCode(existingUser.id, num);
-    mailer.sendEmailPasswordProcess(existingUser.email, emailCode);
+    mailer.sendEmailPasswordProcess(existingUser.email, num);
   } catch (error) {
     throw error;
   }
@@ -118,15 +115,10 @@ export const authReinitPassword = async (
   existingUser: MysqlUserValidationType,
 ): Promise<void> => {
   try {
-    const emailCode = await argon.hashedData(code);
-    const compareCode = await argon.verifyData(emailCode, existingUser.emailCode);
+    const copyCode = existingUser.emailCode;
     await authMysql.updateEmailCode(existingUser.id, '');
-    if (!compareCode) {
-      throw new matchaError(
-        401,
-        'Les informations sont invalides, veuillez demander un nouveau lien.',
-      );
-    }
+    if (code !== copyCode)
+      throw new matchaError(401, 'Le code ne correspond pas.');
     const hashedPassword = await argon.hashedData(newPassword);
     await authMysql.updateHashedPassword(existingUser.id, hashedPassword);
   } catch (error) {

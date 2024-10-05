@@ -139,7 +139,7 @@ const AuthSigninUsernameForm: FC<Props> = ({ setSystemNotif }) => {
             onClick={handleClick}
             className='auth_submit_button'
           >
-            Connexion
+            Se connecter
           </button>
           <button
             onClick={handleClear}

@@ -132,16 +132,16 @@ export type MemoryContextType = {
   >;
   deleteAllList: () => void;
 
-  reloadHistoryMenu: boolean;
-  reloadProfilePage: boolean;
-  reloadSearchPage: boolean;
-  reloadChatPage: boolean;
-  reloadDashboardPage: boolean;
-  setReloadHistoryMenu: React.Dispatch<React.SetStateAction<boolean>>;
-  setReloadProfilePage: React.Dispatch<React.SetStateAction<boolean>>;
-  setReloadSearchPage: React.Dispatch<React.SetStateAction<boolean>>;
-  setReloadChatPage: React.Dispatch<React.SetStateAction<boolean>>;
-  setReloadDashboardPage: React.Dispatch<React.SetStateAction<boolean>>;
+  reloadHistoryMenu: string | null;
+  reloadProfilePage: string | null;
+  reloadSearchPage: string | null;
+  reloadChatPage: string | null;
+  reloadDashboardPage: string | null;
+  setReloadHistoryMenu: React.Dispatch<React.SetStateAction<string | null>>;
+  setReloadProfilePage: React.Dispatch<React.SetStateAction<string | null>>;
+  setReloadSearchPage: React.Dispatch<React.SetStateAction<string | null>>;
+  setReloadChatPage: React.Dispatch<React.SetStateAction<string | null>>;
+  setReloadDashboardPage: React.Dispatch<React.SetStateAction<string | null>>;
   stopReloadPage: () => void;
 
   displayProfileId: number;
@@ -217,16 +217,16 @@ export const initialMemory: MemoryContextType = {
   setLikedList: () => null,
   setBannedList: () => null,
   deleteAllList: () => {},
-  reloadHistoryMenu: false,
-  reloadProfilePage: false,
-  reloadChatPage: false,
-  reloadSearchPage: false,
-  reloadDashboardPage: false,
-  setReloadHistoryMenu: () => false,
-  setReloadProfilePage: () => false,
-  setReloadChatPage: () => false,
-  setReloadSearchPage: () => false,
-  setReloadDashboardPage: () => false,
+  reloadHistoryMenu: null,
+  reloadProfilePage: null,
+  reloadChatPage: null,
+  reloadSearchPage: null,
+  reloadDashboardPage: null,
+  setReloadHistoryMenu: () => null,
+  setReloadProfilePage: () => null,
+  setReloadChatPage: () => null,
+  setReloadSearchPage: () => null,
+  setReloadDashboardPage: () => null,
   stopReloadPage: () => {},
   displayProfileId: 0,
   setDisplayProfileId: () => 0,

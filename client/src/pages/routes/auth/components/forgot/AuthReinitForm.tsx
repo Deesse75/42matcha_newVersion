@@ -6,6 +6,7 @@ import InputEye from '../../../../../utils/functions/InputEye';
 import generate from '../../../../../utils/functions/generate';
 import { passwordValidation } from '../../../../../utils/functions/inputValidation';
 import { authRoute, appRedir } from '../../../../../utils/config/appPath';
+import { useMemory } from '../../../../../utils/context/memory.context';
 
 type Props = {
   setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -19,6 +20,7 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
     newPassword: string;
     email: string;
   } | null>(null);
+  const memo = useMemory();
   const nav = useNavigate();
   const refPassword = useRef<HTMLInputElement>(null);
   const refInput = {
@@ -66,6 +68,7 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
       setSystemNotif(
         'Il y a une erreur avec votre adresse email actuelle. Veuillez recommencer.',
       );
+      setEmail(null);
       return;
     }
     setBodyRequest({
@@ -92,21 +95,25 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
     const request = async () => {
       try {
         const response = await fetch(authRoute.reinitPassword, {
-          method: 'POST',
+          method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bodyRequest),
         });
         const data = await response.json();
         if (!isMounted) return;
 
+        setSystemNotif(data.message);
         if (response.status === 500) {
-          setSystemNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
 
-        setSystemNotif(data.message);
-        setEmail(null);
+        if (response.status !== 200) {
+          setEmail(null);
+          return;
+        }
+
+        memo.setSubPageName('signin');
       } catch (error) {
         if (!isMounted) return;
         setSystemNotif((error as Error).message);
@@ -192,7 +199,7 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
             onClick={handleClick}
             className='auth_submit_button'
           >
-            Connexion
+            Modifier
           </button>
           <button
             onClick={handleClear}

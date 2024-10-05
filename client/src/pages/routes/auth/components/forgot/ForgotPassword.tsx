@@ -7,12 +7,10 @@ import AuthReinitForm from './AuthReinitForm';
 type Props = {
   setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
   selectedPage: string | null;
-  setSelectedPage: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const ForgotPassword: FC<Props> = ({
   selectedPage,
-  setSelectedPage,
   setSystemNotif,
 }) => {
   const [code, setCode] = useState<boolean>(false);
@@ -44,7 +42,6 @@ const ForgotPassword: FC<Props> = ({
       )}
       <AuthRedirect
         selectedPage={selectedPage}
-        setSelectedPage={setSelectedPage}
       />
     </>
   );

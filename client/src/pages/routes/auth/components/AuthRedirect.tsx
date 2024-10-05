@@ -1,11 +1,13 @@
 import { FC } from 'react';
+import { useMemory } from '../../../../utils/context/memory.context';
 
 type Props = {
   selectedPage: string | null;
-  setSelectedPage: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AuthRedirect: FC<Props> = ({ selectedPage, setSelectedPage }) => {
+const AuthRedirect: FC<Props> = ({ selectedPage }) => {
+  const memo = useMemory();
+
   return (
     <>
       <div className='auth_redirect_container'>
@@ -14,21 +16,21 @@ const AuthRedirect: FC<Props> = ({ selectedPage, setSelectedPage }) => {
             <div className='auth_redirect_part'>
               <button
                 onClick={() => {
-                  setSelectedPage('signup');
+                  memo.setSubPageName('signup');
                 }}
               >
                 Vous n'avez pas encore de compte
               </button>
               <button
                 onClick={() => {
-                  setSelectedPage('resendLinkEmail');
+                  memo.setSubPageName('resendLinkEmail');
                 }}
               >
                 Vous souhaitez valider votre adresse email
               </button>
               <button
                 onClick={() => {
-                  setSelectedPage('forgotPassword');
+                  memo.setSubPageName('forgotPassword');
                 }}
               >
                 Vous avez oublié votre mot de passe
@@ -41,21 +43,21 @@ const AuthRedirect: FC<Props> = ({ selectedPage, setSelectedPage }) => {
             <div className='auth_redirect_part'>
               <button
                 onClick={() => {
-                  setSelectedPage('signin');
+                  memo.setSubPageName('signin');
                 }}
               >
                 Vous avez déjà un compte
               </button>
               <button
                 onClick={() => {
-                  setSelectedPage('resendLinkEmail');
+                  memo.setSubPageName('resendLinkEmail');
                 }}
               >
                 Vous souhaitez valider votre adresse email
               </button>
               <button
                 onClick={() => {
-                  setSelectedPage('forgotPassword');
+                  memo.setSubPageName('forgotPassword');
                 }}
               >
                 Vous avez oublié votre mot de passe
@@ -68,7 +70,7 @@ const AuthRedirect: FC<Props> = ({ selectedPage, setSelectedPage }) => {
             <div className='auth_redirect_part'>
               <button
                 onClick={() => {
-                  setSelectedPage('signin');
+                  memo.setSubPageName('signin');
                 }}
               >
                 Retour à la page de connexion
@@ -81,7 +83,7 @@ const AuthRedirect: FC<Props> = ({ selectedPage, setSelectedPage }) => {
             <div className='auth_redirect_part'>
               <button
                 onClick={() => {
-                  setSelectedPage('signin');
+                  memo.setSubPageName('signin');
                 }}
               >
                 Retour à la page de connexion

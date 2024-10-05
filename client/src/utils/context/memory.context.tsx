@@ -79,17 +79,17 @@ const MemoryProvider = ({ children }: { children: React.ReactNode }) => {
     setBannedList(null);
   };
 
-  const [reloadHistoryMenu, setReloadHistoryMenu] = useState<boolean>(false);
-  const [reloadProfilePage, setReloadProfilePage] = useState<boolean>(false);
-  const [reloadChatPage, setReloadChatPage] = useState<boolean>(false);
-  const [reloadSearchPage, setReloadSearchPage] = useState<boolean>(false);
-  const [reloadDashboardPage, setReloadDashboardPage] = useState<boolean>(false);
+  const [reloadHistoryMenu, setReloadHistoryMenu] = useState<string | null>(null);
+  const [reloadProfilePage, setReloadProfilePage] = useState<string | null>(null);
+  const [reloadChatPage, setReloadChatPage] = useState<string | null>(null);
+  const [reloadSearchPage, setReloadSearchPage] = useState<string | null>(null);
+  const [reloadDashboardPage, setReloadDashboardPage] = useState<string | null>(null);
   const stopReloadPage = () => {
-    setReloadHistoryMenu(false);
-    setReloadProfilePage(false);
-    setReloadChatPage(false);
-    setReloadSearchPage(false);
-    setReloadDashboardPage(false);
+    setReloadHistoryMenu(null);
+    setReloadProfilePage(null);
+    setReloadChatPage(null);
+    setReloadSearchPage(null);
+    setReloadDashboardPage(null);
   };
 
   const [displayProfileId, setDisplayProfileId] = useState<number>(0);

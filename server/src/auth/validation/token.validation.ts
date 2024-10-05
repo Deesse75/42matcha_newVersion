@@ -1,7 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 import url from 'url';
 import * as jwt from '../../utils/jwt.service.js';
-import * as argon from '../../utils/argon.services.js';
 
 export const authTokenValidation = (
   req: Request,

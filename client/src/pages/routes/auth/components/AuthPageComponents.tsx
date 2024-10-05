@@ -15,14 +15,18 @@ const AuthPageComponents: FC<Props> = ({ setSystemNotif }) => {
   const memo = useMemory();
   const nav = useNavigate();
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
+  
 
   useEffect(() => {
     if (!memo.subPageName) {
       nav(appRedir.errorNotfound);
       return;
     }
+    console.log('memo.subPageName', memo.subPageName);
     setSelectedPage(memo.subPageName);
   }, [memo.subPageName]);
+
+  useEffect(() => {console.log('selected', selectedPage)}, [selectedPage]);
 
   return (
     <>
@@ -33,28 +37,24 @@ const AuthPageComponents: FC<Props> = ({ setSystemNotif }) => {
               <Signin
                 setSystemNotif={setSystemNotif}
                 selectedPage={selectedPage}
-                setSelectedPage={setSelectedPage}
               />
             )}
             {selectedPage === 'signup' && (
               <Signup
                 setSystemNotif={setSystemNotif}
                 selectedPage={selectedPage}
-                setSelectedPage={setSelectedPage}
               />
             )}
             {selectedPage === 'resendLinkEmail' && (
               <ResendLinkEmail
                 setSystemNotif={setSystemNotif}
                 selectedPage={selectedPage}
-                setSelectedPage={setSelectedPage}
               />
             )}
             {selectedPage === 'forgotPassword' && (
               <ForgotPassword
                 setSystemNotif={setSystemNotif}
                 selectedPage={selectedPage}
-                setSelectedPage={setSelectedPage}
               />
             )}
           </>

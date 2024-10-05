@@ -108,7 +108,7 @@ export const forgotPassword = async (
 ): Promise<void> => {
   try {
     await authForgotPassword(req.body.existingUser);
-    res.status(200).json({ message: '' });
+    res.status(200).json({ message: 'ok' });
     return;
   } catch (error) {
     return matchaError.catched(error as Error, res);
@@ -121,13 +121,13 @@ export const reinitPassword = async (
 ): Promise<void> => {
   try {
     await authReinitPassword(
-      req.body.dataUser.code,
-      req.body.dataUser.newPassword,
+      req.body.code,
+      req.body.newPassword,
       req.body.existingUser,
     );
     res.status(200).json({
       message:
-        'Votre mot de passe a été réinitialisé, vous pouvez vous connecter',
+        'Votre pouvez vous connecter avec votre nouveau mot de passe.',
     });
     return;
   } catch (error) {

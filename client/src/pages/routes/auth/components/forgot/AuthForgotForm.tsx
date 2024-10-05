@@ -47,17 +47,17 @@ const AuthForgotForm: FC<Props> = ({ setSystemNotif, setEmail }) => {
         const data = await response.json();
         if (!isMounted) return;
 
+        setSystemNotif(data.message);
         if (response.status === 500) {
-          setSystemNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
 
-        setSystemNotif(data.message);
         if (response.status !== 200) {
-          setEmail(null);
+          setCurrentEmail(null);
           return;
         }
+
         setEmail(currentEmail);
       } catch (error) {
         if (!isMounted) return;
@@ -86,7 +86,7 @@ const AuthForgotForm: FC<Props> = ({ setSystemNotif, setEmail }) => {
             required
             autoComplete='email'
             ref={refEmail}
-            placeholder='adresse_email@exemple.fr'
+            placeholder='Adresse email'
           />
         </div>
 
@@ -95,7 +95,7 @@ const AuthForgotForm: FC<Props> = ({ setSystemNotif, setEmail }) => {
             onClick={handleClick}
             className='auth_submit_button'
           >
-            Connexion
+            Envoyer
           </button>
           <button
             onClick={handleClear}

@@ -3,6 +3,7 @@ import { MdOutlineAlternateEmail } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { emailValidation } from '../../../../../utils/functions/inputValidation';
 import { appRedir, authRoute } from '../../../../../utils/config/appPath';
+import { useMemory } from '../../../../../utils/context/memory.context';
 
 type Props = {
   setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -11,6 +12,7 @@ type Props = {
 const AuthResendForm: FC<Props> = ({ setSystemNotif }) => {
   const refEmail = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
+  const memo = useMemory();
   const [email, setEmail] = useState<string | null>(null);
 
   const handleClick = () => {
@@ -46,19 +48,18 @@ const AuthResendForm: FC<Props> = ({ setSystemNotif }) => {
         const data = await response.json();
         if (!isMounted) return;
 
+        setSystemNotif(data.message);
         if (response.status === 500) {
-          setSystemNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
 
-        setSystemNotif(data.message);
+        setEmail(null);
         if (response.status !== 200) {
-          setEmail(null);
           return;
         }
 
-        nav(appRedir.auth);
+        memo.setSubPageName('signin');
       } catch (error) {
         if (!isMounted) return;
         setSystemNotif((error as Error).message);
@@ -86,7 +87,7 @@ const AuthResendForm: FC<Props> = ({ setSystemNotif }) => {
             required
             autoComplete='email'
             ref={refEmail}
-            placeholder='adresse_email@exemple.fr'
+            placeholder='Adresse email'
           />
         </div>
 
@@ -95,7 +96,7 @@ const AuthResendForm: FC<Props> = ({ setSystemNotif }) => {
             onClick={handleClick}
             className='auth_submit_button'
           >
-            Connexion
+            Envoyer
           </button>
           <button
             onClick={handleClear}

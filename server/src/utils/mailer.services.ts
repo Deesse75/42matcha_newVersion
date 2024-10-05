@@ -31,7 +31,7 @@ export const sendNewEmail = (
       },
       (error, info) => {
         if (error) {
-          throw new matchaError(500, error.message);
+          throw error;
         }
       },
     );
@@ -50,12 +50,12 @@ export const sendEmailTokenProcess = async (
       email,
       process.env.JWT_SECRET_MAIL || '',
     );
-    sendNewEmail(
-      email,
-      'Validation de votre adresse email',
-      temp.validateSignupEmail(token),
-    );
-    console.log('mailer', token)
+    // sendNewEmail(
+    //   email,
+    //   'Validation de votre adresse email',
+    //   temp.validateSignupEmail(token),
+    // );
+    console.log(temp.validateSignupEmail(token));
   } catch (error) {
     throw error;
   }
@@ -66,16 +66,12 @@ export const sendEmailPasswordProcess = async (
   emailCode: string,
 ): Promise<void> => {
   try {
-    const token = jwt.createEmailToken(
-      emailCode,
-      email,
-      process.env.JWT_SECRET_MAIL || '',
-    );
-    sendNewEmail(
-      email,
-      'Réinitialisation de votre mot de passe',
-      temp.sendPasswordCode(token),
-    );
+    // sendNewEmail(
+    //   email,
+    //   'Réinitialisation de votre mot de passe',
+    //   temp.sendPasswordCode(emailCode),
+    // );
+    console.log(temp.sendPasswordCode(emailCode));
   } catch (error) {
     throw error;
   }

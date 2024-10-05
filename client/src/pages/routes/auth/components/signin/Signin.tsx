@@ -7,12 +7,10 @@ import AuthSigninUsernameForm from './AuthSigninUsernameForm';
 type Props = {
   setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
   selectedPage: string | null;
-  setSelectedPage: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const Signin: FC<Props> = ({
   selectedPage,
-  setSelectedPage,
   setSystemNotif,
 }) => {
   const [openUsername, setOpenUsername] = useState<boolean>(true);
@@ -38,7 +36,6 @@ const Signin: FC<Props> = ({
       )}
       <AuthRedirect
         selectedPage={selectedPage}
-        setSelectedPage={setSelectedPage}
       />
     </>
   );
