@@ -15,7 +15,7 @@ const Signin: FC<Props> = ({
   setSelectedPage,
   setSystemNotif,
 }) => {
-  const [openUsername, setOpenUsername] = useState<boolean>(false);
+  const [openUsername, setOpenUsername] = useState<boolean>(true);
 
   return (
     <>

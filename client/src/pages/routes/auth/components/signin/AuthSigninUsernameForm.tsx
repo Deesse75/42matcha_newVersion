@@ -46,10 +46,8 @@ const AuthSigninUsernameForm: FC<Props> = ({ setSystemNotif }) => {
   };
 
   const handleClear = () => {
-    if (refUsername.current && refPassword.current) {
-      refUsername.current.value = '';
-      refPassword.current.value = '';
-    }
+    if (refUsername.current) refUsername.current.value = '';
+    if (refPassword.current) refPassword.current.value = '';
   };
 
   useEffect(() => {
@@ -57,7 +55,7 @@ const AuthSigninUsernameForm: FC<Props> = ({ setSystemNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(authRoute.signin, {
+        const response = await fetch(authRoute.signinUsername, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bodyRequest),
@@ -138,17 +136,13 @@ const AuthSigninUsernameForm: FC<Props> = ({ setSystemNotif }) => {
 
         <div className='auth_submit'>
           <button
-            onClick={() => {
-              handleClick;
-            }}
+            onClick={handleClick}
             className='auth_submit_button'
           >
             Connexion
           </button>
           <button
-            onClick={() => {
-              handleClear;
-            }}
+            onClick={handleClear}
             className='auth_submit_button'
           >
             Effacer

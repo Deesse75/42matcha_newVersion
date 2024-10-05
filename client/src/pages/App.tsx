@@ -16,7 +16,6 @@ function App() {
         menuIsOpen={menuIsOpen}
         setMenuIsOpen={setMenuIsOpen}
         displayIconMenu={displayIconMenu}
-        setDisplayIconMenu={setDisplayIconMenu}
         />
       </div>
 

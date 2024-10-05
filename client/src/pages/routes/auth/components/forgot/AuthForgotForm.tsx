@@ -92,17 +92,13 @@ const AuthForgotForm: FC<Props> = ({ setSystemNotif, setEmail }) => {
 
         <div className='auth_submit'>
           <button
-            onClick={() => {
-              handleClick;
-            }}
+            onClick={handleClick}
             className='auth_submit_button'
           >
             Connexion
           </button>
           <button
-            onClick={() => {
-              handleClear;
-            }}
+            onClick={handleClear}
             className='auth_submit_button'
           >
             Effacer

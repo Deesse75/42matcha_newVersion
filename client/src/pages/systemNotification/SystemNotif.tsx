@@ -11,7 +11,6 @@ const SystemNotif: FC<Props> = ({
   setSystemNotif,
   setMenuIsOpen,
 }) => {
-
   useEffect(() => {
     if (!systemNotif) return;
 
@@ -31,11 +30,7 @@ const SystemNotif: FC<Props> = ({
         }}
         className='systemNotif_container'
       >
-        {systemNotif && (
-          <div className='systemNotif_anim'>
-            <div className='systemNotif_text'>{systemNotif}</div>
-          </div>
-        )}
+        {systemNotif && <div className='systemNotif_text'>{systemNotif}</div>}
       </div>
     </>
   );

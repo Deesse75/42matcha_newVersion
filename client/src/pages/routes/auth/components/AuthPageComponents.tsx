@@ -17,20 +17,11 @@ const AuthPageComponents: FC<Props> = ({ setSystemNotif }) => {
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (
-      (!selectedPage && !memo.subPageName) ||
-      (selectedPage !== 'signin' &&
-        selectedPage !== 'signup' &&
-        selectedPage !== 'resendLinkEmail' &&
-        selectedPage !== 'forgotPassword')
-    )
+    if (!memo.subPageName) {
       nav(appRedir.errorNotfound);
-  }, [selectedPage]);
-
-  useEffect(() => {
-    if (!memo.subPageName) return;
+      return;
+    }
     setSelectedPage(memo.subPageName);
-    memo.setSubPageName(null);
   }, [memo.subPageName]);
 
   return (

@@ -17,7 +17,10 @@ const Signup: FC<Props> = ({
   return (
     <>
       <AuthTitle title='Inscription' />
-      <AuthSignupForm setSystemNotif={setSystemNotif} />
+      <AuthSignupForm
+        setSystemNotif={setSystemNotif}
+        setSelectedPage={setSelectedPage}
+      />
       <AuthRedirect
         selectedPage={selectedPage}
         setSelectedPage={setSelectedPage}

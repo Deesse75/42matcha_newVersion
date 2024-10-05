@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { createServer } from 'http';
@@ -6,6 +6,8 @@ import { Server } from 'socket.io';
 import isEnvConfigurate from './utils/env.service.js';
 import { configMysql, mysqlDb } from './mysql/config/config.mysql.js';
 import { manageSocket } from './socket/socket.services.js';
+import authRouter from './auth/auth.route.js';
+import { matchaError } from './utils/matcha_error.js';
 
 //configure environment
 dotenv.config();
@@ -54,7 +56,7 @@ manageSocket(io);
 
 //Routes
 app.use(express.json({ limit: '100mb' }));
-// app.use('/auth', authRouter);
+app.use('/auth', authRouter);
 // app.use('/user', userRouter);
 // app.use('/profile', profileRouter);
 // app.use('/action', actionRouter);
@@ -65,6 +67,7 @@ app.use('/*', (req: Request, res: Response) => {
     message: "La ressource que vous essayez d'atteindre n'existe pas",
   });
 });
+
 
 // Start the server
 server.listen(8001, () => {

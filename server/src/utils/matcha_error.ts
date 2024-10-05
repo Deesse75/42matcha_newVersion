@@ -8,14 +8,16 @@ export class matchaError extends Error {
     this.statusCode = statusCode;
   }
 
-  static catched(error: Error, res: Response): Response {
+  static catched(error: Error, res: Response): void {
     if (error instanceof matchaError) {
-      return res.status(error.statusCode).json({
+      res.status(error.statusCode).json({
         message: error.message,
       });
+      return;
     }
-    return res.status(500).json({
+    res.status(500).json({
       message: (error as Error).message,
     });
+    return;
   }
 }

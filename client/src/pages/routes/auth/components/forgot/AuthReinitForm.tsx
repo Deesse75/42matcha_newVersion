@@ -77,23 +77,13 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
 
   const handleClear = () => {
     if (refPassword.current) refPassword.current.value = '';
-    if (
-      refInput.ref1.current &&
-      refInput.ref2.current &&
-      refInput.ref3.current &&
-      refInput.ref4.current &&
-      refInput.ref5.current &&
-      refInput.ref6.current &&
-      refInput.ref7.current
-    ) {
-      refInput.ref1.current.value = '';
-      refInput.ref2.current.value = '';
-      refInput.ref3.current.value = '';
-      refInput.ref4.current.value = '';
-      refInput.ref5.current.value = '';
-      refInput.ref6.current.value = '';
-      refInput.ref7.current.value = '';
-    }
+    if (refInput.ref1.current) refInput.ref1.current.value = '';
+    if (refInput.ref2.current) refInput.ref2.current.value = '';
+    if (refInput.ref3.current) refInput.ref3.current.value = '';
+    if (refInput.ref4.current) refInput.ref4.current.value = '';
+    if (refInput.ref5.current) refInput.ref5.current.value = '';
+    if (refInput.ref6.current) refInput.ref6.current.value = '';
+    if (refInput.ref7.current) refInput.ref7.current.value = '';
   };
 
   useEffect(() => {
@@ -199,17 +189,13 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
 
         <div className='auth_submit'>
           <button
-            onClick={() => {
-              handleClick;
-            }}
+            onClick={handleClick}
             className='auth_submit_button'
           >
             Connexion
           </button>
           <button
-            onClick={() => {
-              handleClear;
-            }}
+            onClick={handleClear}
             className='auth_submit_button'
           >
             Effacer

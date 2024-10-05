@@ -35,13 +35,13 @@ const LoadingPage: FC<Props> = ({
         const response = await fetch(authRoute.init);
         const data = await response.json();
         if (!isMounted) return;
-
+        
         if (response.status !== 200) {
           setSystemNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
-
+        
         //If server up set cookie
         Cookies.set(
           'matchaOn',
@@ -52,7 +52,7 @@ const LoadingPage: FC<Props> = ({
             secure: true,
           },
         );
-
+        
         memo.closeAllSubPage();
         memo.setSubPageName('signin');
         nav(appRedir.auth);

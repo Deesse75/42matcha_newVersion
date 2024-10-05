@@ -46,10 +46,9 @@ const AuthSigninEmailForm: FC<Props> = ({ setSystemNotif }) => {
   };
 
   const handleClear = () => {
-    if (refEmail.current && refPassword.current) {
-      refEmail.current.value = '';
-      refPassword.current.value = '';
-    }
+    if (refEmail.current ) refEmail.current.value = '';
+    if (refPassword.current) refPassword.current.value = '';
+    
   };
 
   useEffect(() => {
@@ -57,7 +56,7 @@ const AuthSigninEmailForm: FC<Props> = ({ setSystemNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(authRoute.signup, {
+        const response = await fetch(authRoute.signinEmail, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bodyRequest),
@@ -135,17 +134,13 @@ const AuthSigninEmailForm: FC<Props> = ({ setSystemNotif }) => {
 
         <div className='auth_submit'>
           <button
-            onClick={() => {
-              handleClick;
-            }}
+            onClick={handleClick}
             className='auth_submit_button'
           >
             Connexion
           </button>
           <button
-            onClick={() => {
-              handleClear;
-            }}
+            onClick={handleClear}
             className='auth_submit_button'
           >
             Effacer
