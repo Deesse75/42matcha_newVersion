@@ -1,3 +1,6 @@
+const PORT = import.meta.env.VITE_PORT_BACK;
+const HOST = import.meta.env.VITE_HOST_BACK;
+const PATH = `http://${HOST}:${PORT}`;
 
 export const appRedir = {
   loading: '/',
@@ -13,12 +16,13 @@ export const appRedir = {
   errorNotfound: '/page_introuvable',
 };
 
-
 export const authRoute = {
-  init: '/auth/init',
-  signin: '/auth/signin',
-  signup: '/auth/signup',
-  resendLinkEmail: '/auth/resend_link_email',
-  forgotPassword: '/auth/forgot_password',
-  reinitPassword: '/auth/reinit_password',
+  init: `${PATH}/auth/init`,
+  signinUsername: `${PATH}/auth/signin_username`,
+  signinEmail: `${PATH}/auth/signin_Email`,
+  signup: `${PATH}/auth/signup`,
+  resendLinkEmail: `${PATH}/auth/resend_email`,
+  forgotPassword: `${PATH}/auth/forgot_password`,
+  reinitPassword: `${PATH}/auth/reinit_password`,
+  ValidateLinkEmail: `${PATH}/auth/validate_email`,
 };

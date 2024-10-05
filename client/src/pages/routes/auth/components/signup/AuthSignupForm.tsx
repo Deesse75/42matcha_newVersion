@@ -1,5 +1,8 @@
 import { FC, useRef, useState, useEffect } from 'react';
-import { MdOutlineAlternateEmail, MdOutlineDriveFileRenameOutline } from 'react-icons/md';
+import {
+  MdOutlineAlternateEmail,
+  MdOutlineDriveFileRenameOutline,
+} from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { authRoute, appRedir } from '../../../../../utils/config/appPath';
@@ -9,6 +12,8 @@ import usernameValidation, {
   passwordValidation,
 } from '../../../../../utils/functions/inputValidation';
 import InputEye from '../../../../../utils/functions/InputEye';
+import { useMemory } from '../../../../../utils/context/memory.context';
+import generate from '../../../../../utils/functions/generate';
 
 type Props = {
   setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -21,6 +26,7 @@ const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
   const refEmail = useRef<HTMLInputElement>(null);
   const refPassword = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
+  const memo = useMemory();
   const [bodyRequest, setBodyRequest] = useState<{
     firstname: string;
     lastname: string;
@@ -75,19 +81,11 @@ const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
   };
 
   const handleClear = () => {
-    if (
-      refUsername.current &&
-      refPassword.current &&
-      refFirstname.current &&
-      refLastname.current &&
-      refEmail.current
-    ) {
-      refFirstname.current.value = '';
-      refLastname.current.value = '';
-      refUsername.current.value = '';
-      refEmail.current.value = '';
-      refPassword.current.value = '';
-    }
+    if (refFirstname.current) refFirstname.current.value = '';
+    if (refLastname.current) refLastname.current.value = '';
+    if (refUsername.current) refUsername.current.value = '';
+    if (refEmail.current) refEmail.current.value = '';
+    if (refPassword.current) refPassword.current.value = '';
   };
 
   useEffect(() => {
@@ -103,18 +101,17 @@ const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
         const data = await response.json();
         if (!isMounted) return;
 
+        setSystemNotif(data.message);
         if (response.status === 500) {
-          setSystemNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
-        
-        setSystemNotif(data.message);
-        if (response.status !== 200) {
-          setBodyRequest(null);
+
+        setBodyRequest(null);
+        if (response.status !== 201) {
           return;
         }
-        nav(appRedir.auth);
+        memo.setSubPageName('signin');
       } catch (error) {
         if (!isMounted) return;
         setSystemNotif((error as Error).message);
@@ -161,7 +158,7 @@ const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
             minLength={3}
             required
             autoComplete='family-name'
-            ref={refUsername}
+            ref={refLastname}
             placeholder='Nom'
           />
         </div>
@@ -196,7 +193,7 @@ const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
             required
             autoComplete='email'
             ref={refEmail}
-            placeholder='adresse_email@exemple.fr'
+            placeholder='Adresse email'
           />
         </div>
 
@@ -217,23 +214,21 @@ const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
             placeholder='&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;'
           />
           <InputEye refInput={refPassword} />
+          <div
+            className='auth_input_password_generate'
+            onClick={() => {
+              generate(refPassword);
+            }}
+          >
+            Random Pass
+          </div>
         </div>
 
         <div className='auth_submit'>
-          <button
-            onClick={() => {
-              handleClick;
-            }}
-            className='auth_submit_button'
-          >
-            Connexion
+          <button onClick={handleClick} className='auth_submit_button'>
+            S'enregistrer
           </button>
-          <button
-            onClick={() => {
-              handleClear;
-            }}
-            className='auth_submit_button'
-          >
+          <button onClick={handleClear} className='auth_submit_button'>
             Effacer
           </button>
         </div>

@@ -2,8 +2,7 @@ import fs from 'fs';
 import mysql2 from 'mysql2/promise';
 import { matchaError } from '../../utils/matcha_error.js';
 import { FakeActionType, FakeTagNameType, FakeTagType, FakeUserType } from '../interfaces/fake.interface.js';
-import { banJson, createTableBan, createTableChat, createTableLike, createTableTag, createTableTagName, createTableUser, createTableView, likeJson, tagEditJson, tagJson, userJson, viewJson } from '../utils/config.utils.js';
-import { create } from 'domain';
+import { banHistorySchema, chatHistorySchema, likeHistorySchema, tagHistorySchema, userSchema, viewHistorySchema } from './mysql.schemas.js';
 
 export const mysqlDb = mysql2.createPool({
   host: process.env.MYSQL_HOST || '',
@@ -19,18 +18,18 @@ export async function configMysql(): Promise<void> {
       //try until the mysql container is connected
       ret = await isConnectMysql();
     }
-
+    
     await createDatabase();
     await createUserTable();
-    await createTagNameTable();
     await createViewTable();
     await createLikeTable();
     await createBanTable();
     await createTagsTable();
     await createChatTable();
 
-    await insertFakeData();
+    // await insertFakeData();
   } catch (error) {
+    console.log('config mysql', error);
     throw error;
   }
 }
@@ -77,18 +76,8 @@ export async function createDatabase(): Promise<void> {
 
 async function createUserTable(): Promise<void> {
   try {
-    await mysqlDb.query(createTableUser);
+    await mysqlDb.query(userSchema);
     const query = `SELECT * FROM User LIMIT 1`;
-    await mysqlDb.query(query);
-  } catch (error) {
-    throw new matchaError(500, (error as Error).message);
-  }
-}
-
-async function createTagNameTable(): Promise<void> {
-  try {
-    await mysqlDb.query(createTableTagName);
-    const query = `SELECT * FROM TagEdit LIMIT 1`;
     await mysqlDb.query(query);
   } catch (error) {
     throw new matchaError(500, (error as Error).message);
@@ -97,7 +86,7 @@ async function createTagNameTable(): Promise<void> {
 
 async function createLikeTable(): Promise<void> {
   try {
-    await mysqlDb.query(createTableLike);
+    await mysqlDb.query(likeHistorySchema);
     const query = `SELECT * FROM LikeHistory LIMIT 1`;
     await mysqlDb.query(query);
   } catch (error) {
@@ -107,17 +96,18 @@ async function createLikeTable(): Promise<void> {
 
 async function createViewTable(): Promise<void> {
   try {
-    await mysqlDb.query(createTableView);
+    await mysqlDb.query(viewHistorySchema);
     const query = `SELECT * FROM ViewHistory LIMIT 1`;
     await mysqlDb.query(query);
   } catch (error) {
+    console.log('error', error);
     throw new matchaError(500, (error as Error).message);
   }
 }
 
 async function createBanTable(): Promise<void> {
   try {
-    await mysqlDb.query(createTableBan);
+    await mysqlDb.query(banHistorySchema);
     const query = `SELECT * FROM BanHistory LIMIT 1`;
     await mysqlDb.query(query);
   } catch (error) {
@@ -127,7 +117,7 @@ async function createBanTable(): Promise<void> {
 
 async function createTagsTable(): Promise<void> {
   try {
-    await mysqlDb.query(createTableTag);
+    await mysqlDb.query(tagHistorySchema);
     const query = `SELECT * FROM TagHistory LIMIT 1`;
     await mysqlDb.query(query);
   } catch (error) {
@@ -137,11 +127,10 @@ async function createTagsTable(): Promise<void> {
 
 async function createChatTable(): Promise<void> {
   try {
-    await mysqlDb.query(createTableChat);
+    await mysqlDb.query(chatHistorySchema);
     const query = `SELECT * FROM ChatHistory LIMIT 1`;
     await mysqlDb.query(query);
   } catch (error) {
-    console.log('error8', error);
     throw new matchaError(500, (error as Error).message);
   }
 }
@@ -150,10 +139,10 @@ export async function insertFakeTagName() {
   try {
     const rows: any = await mysqlDb.query('SELECT * FROM TagEdit LIMIT 1');
     if (rows[0].length > 0) return;
-    if (!fs.existsSync(tagEditJson)) return;
+    if (!fs.existsSync('./src/mysql/fakeData/mysql_tagedit.json')) return;
     const query = `INSERT INTO TagEdit SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync(tagEditJson, 'utf8'),
+      fs.readFileSync('./src/mysql/fakeData/mysql_tagedit.json', 'utf8'),
     );
     fakeData.forEach(async (item: FakeTagNameType) => {
       await mysqlDb.query(query, item);
@@ -167,10 +156,10 @@ export async function insertFakeUser(): Promise<void> {
   try {
     const rows: any = await mysqlDb.query('SELECT * FROM User LIMIT 1');
     if (rows[0].length > 0) return;
-    if (!fs.existsSync(userJson)) return;
+    if (!fs.existsSync('./src/mysql/fakeData/mysql_users.json')) return;
     const query = `INSERT INTO User SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync(userJson, 'utf8'),
+      fs.readFileSync('./src/mysql/fakeData/mysql_users.json', 'utf8'),
     );
     fakeData.forEach(async (item: FakeUserType) => {
       await mysqlDb.query(query, item);
@@ -184,10 +173,10 @@ export async function insertFakeLike() {
   try {
     const rows: any = await mysqlDb.query('SELECT * FROM LikeHistory LIMIT 1');
     if (rows[0].length > 0) return;
-    if (!fs.existsSync(likeJson)) return;
+    if (!fs.existsSync('./src/mysql/fakeData/mysql_like.json')) return;
     const query = `INSERT INTO LikeHistory SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync(likeJson, 'utf8'),
+      fs.readFileSync('./src/mysql/fakeData/mysql_like.json', 'utf8'),
     );
     fakeData.forEach(async (item: FakeActionType) => {
       await mysqlDb.query(query, item);
@@ -201,10 +190,10 @@ export async function insertFakeView() {
   try {
     const rows: any = await mysqlDb.query('SELECT * FROM ViewHistory LIMIT 1');
     if (rows[0].length > 0) return;
-    if (!fs.existsSync(viewJson)) return;
+    if (!fs.existsSync('./src/mysql/fakeData/mysql_view.json')) return;
     const query = `INSERT INTO ViewHistory SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync(viewJson, 'utf8'),
+      fs.readFileSync('./src/mysql/fakeData/mysql_view.json', 'utf8'),
     );
     fakeData.forEach(async (item: FakeActionType) => {
       await mysqlDb.query(query, item);
@@ -218,10 +207,10 @@ export async function insertFakeBan() {
   try {
     const rows: any = await mysqlDb.query('SELECT * FROM BanHistory LIMIT 1');
     if (rows[0].length > 0) return;
-    if (!fs.existsSync(banJson)) return;
+    if (!fs.existsSync('./src/mysql/fakeData/mysql_ban.json')) return;
     const query = `INSERT INTO BanHistory SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync(banJson, 'utf8'),
+      fs.readFileSync('./src/mysql/fakeData/mysql_ban.json', 'utf8'),
     );
     fakeData.forEach(async (item: FakeActionType) => {
       await mysqlDb.query(query, item);
@@ -235,10 +224,10 @@ export async function insertFakeTags() {
   try {
     const rows: any = await mysqlDb.query('SELECT * FROM TagHistory LIMIT 1');
     if (rows[0].length > 0) return;
-    if (!fs.existsSync(tagJson)) return;
+    if (!fs.existsSync('./src/mysql/fakeData/mysql_tags.json')) return;
     const query = `INSERT INTO TagHistory SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync(tagJson, 'utf8'),
+      fs.readFileSync('./src/mysql/fakeData/mysql_tags.json', 'utf8'),
     );
     fakeData.forEach(async (item: FakeTagType) => {
       await mysqlDb.query(query, item);

@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import { usePages } from '../../../utils/context/pages.context';
+import { useMemory } from '../../../utils/context/memory.context';
 
 type Props = {};
 
 const MenuElements: FC<Props> = ({}) => {
-  const markMenu = usePages();
+  const memo = useMemory();
 
   return (
     <>
@@ -12,7 +12,7 @@ const MenuElements: FC<Props> = ({}) => {
         <div className='header_menu_elements'>
           <div
             className={
-              markMenu.dashboardPage
+              memo.dashboard
                 ? 'header_menu_elements_on'
                 : 'header_menu_elements_off'
             }
@@ -21,14 +21,14 @@ const MenuElements: FC<Props> = ({}) => {
           </div>
           <div
             className={
-              markMenu.profilePage ? 'menu_on' : 'header_menu_elements_off'
+              memo.profile ? 'menu_on' : 'header_menu_elements_off'
             }
           >
             Profil
           </div>
           <div
             className={
-              markMenu.chatPage
+              memo.chat
                 ? 'header_menu_elements_on'
                 : 'header_menu_elements_off'
             }
@@ -37,7 +37,7 @@ const MenuElements: FC<Props> = ({}) => {
           </div>
           <div
             className={
-              markMenu.searchPage
+              memo.search
                 ? 'header_menu_elements_on'
                 : 'header_menu_elements_off'
             }

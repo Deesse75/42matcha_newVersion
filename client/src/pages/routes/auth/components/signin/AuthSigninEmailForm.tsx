@@ -8,6 +8,7 @@ import {
 } from '../../../../../utils/functions/inputValidation';
 import { appRedir, authRoute } from '../../../../../utils/config/appPath';
 import Cookies from 'js-cookie';
+import InputEye from '../../../../../utils/functions/InputEye';
 
 type Props = {
   setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -46,10 +47,9 @@ const AuthSigninEmailForm: FC<Props> = ({ setSystemNotif }) => {
   };
 
   const handleClear = () => {
-    if (refEmail.current && refPassword.current) {
-      refEmail.current.value = '';
-      refPassword.current.value = '';
-    }
+    if (refEmail.current ) refEmail.current.value = '';
+    if (refPassword.current) refPassword.current.value = '';
+    
   };
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const AuthSigninEmailForm: FC<Props> = ({ setSystemNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(authRoute.signup, {
+        const response = await fetch(authRoute.signinEmail, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bodyRequest),
@@ -111,7 +111,7 @@ const AuthSigninEmailForm: FC<Props> = ({ setSystemNotif }) => {
             required
             autoComplete='email'
             ref={refEmail}
-            placeholder='adresse_email@exemple.fr'
+            placeholder='Adresse email'
           />
         </div>
 
@@ -131,23 +131,14 @@ const AuthSigninEmailForm: FC<Props> = ({ setSystemNotif }) => {
             ref={refPassword}
             placeholder='&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;'
           />
+          <InputEye refInput={refPassword} />
         </div>
 
         <div className='auth_submit'>
-          <button
-            onClick={() => {
-              handleClick;
-            }}
-            className='auth_submit_button'
-          >
-            Connexion
+          <button onClick={handleClick} className='auth_submit_button'>
+            Se connecter
           </button>
-          <button
-            onClick={() => {
-              handleClear;
-            }}
-            className='auth_submit_button'
-          >
+          <button onClick={handleClear} className='auth_submit_button'>
             Effacer
           </button>
         </div>
