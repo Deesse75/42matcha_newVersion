@@ -26,3 +26,26 @@ export const authRoute = {
   reinitPassword: `${PATH}/auth/reinit_password`,
   ValidateLinkEmail: `${PATH}/auth/validate_email`,
 };
+
+export const userRoute = {
+  getMe: `${PATH}/user/get_me`,
+};
+
+export const socketRoute = {
+  path: `${PATH}`,
+  connected: 'connected',
+  connectFailed: 'connection_failed',
+  newConnection: 'newConnection',
+  newDisconnect: 'newDisconnect',
+  isConnected: 'isUserConnected',
+  receptIsConnected: 'receptIsConnected',
+  sendView: 'sendView', //{receiverId: number}
+  sendLike: 'sendLike', //{senderUsername: string, receiverId: number}
+  sendDislike: 'sendDislike', //{senderUsername: string, receiverId: number}
+  sendBan: 'sendBan', //{receiverId: number}
+  receptView: 'receptView', // {senderUsername: string}
+  receptLike: 'receptLike', // {senderUsernq,e: string}
+  receptDislike: 'receptDislike', // {senderUsername: string}
+  receptBan: 'receptBan', //vide
+};
+

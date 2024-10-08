@@ -3,11 +3,14 @@ import App from './pages/App.tsx';
 import './styles/index.scss';
 import MemoryProvider from './utils/context/memory.context.tsx';
 import { BrowserRouter } from 'react-router-dom';
+import UserProvider from './utils/context/user.context.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <MemoryProvider>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </UserProvider>
   </MemoryProvider>,
 );

@@ -22,7 +22,6 @@ const AuthPageComponents: FC<Props> = ({ setSystemNotif }) => {
       nav(appRedir.errorNotfound);
       return;
     }
-    console.log('memo.subPageName', memo.subPageName);
     setSelectedPage(memo.subPageName);
   }, [memo.subPageName]);
 

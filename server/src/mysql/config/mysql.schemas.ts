@@ -6,7 +6,7 @@ export const userSchema = `
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     emailCertified BOOLEAN DEFAULT FALSE,
-    emailCode VARCHAR(6) DEFAULT '0000',
+    emailCode VARCHAR(6),
     hashedPassword VARCHAR(255) NOT NULL,
     birthdate DATE,
     age INT DEFAULT 0,

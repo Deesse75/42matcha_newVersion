@@ -8,6 +8,7 @@ function App() {
   const [displayIconMenu, setDisplayIconMenu] = useState<boolean>(false);
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [systemNotif, setSystemNotif] = useState<string | null>(null);
+  const [historyMenuOn, setHistoryMenuOn] = useState<boolean>(false);
 
   return (
     <>
@@ -29,10 +30,11 @@ function App() {
 
       <div className='routes'>
         <AppRoutes
-        displayIconMenu={displayIconMenu}
         setDisplayIconMenu={setDisplayIconMenu}
         setMenuIsOpen={setMenuIsOpen}
         setSystemNotif={setSystemNotif}
+        historyMenuOn={historyMenuOn}
+        setHistoryMenuOn={setHistoryMenuOn}
         />
       </div>
 

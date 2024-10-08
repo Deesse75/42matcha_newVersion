@@ -5,9 +5,9 @@ export type MysqlUserType = {
   username: string;
   email: string;
   emailCertified: boolean;
-  emailCode: string;
+  emailCode: string | null;
   hashedPassword: string;
-  birthdate: string;
+  birthdate: string | null;
   age: number;
   gender: string | null;
   orientation: string | null;

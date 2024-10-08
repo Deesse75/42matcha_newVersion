@@ -4,16 +4,17 @@ import { appRedir } from '../../utils/config/appPath';
 import LoadingPage from './auth/LoadingPage';
 import Auth from './auth/AuthPage';
 import ValidateLinkEmail from './auth/components/ValidateLinkEmail';
+import GetMe from './home/GetMe';
 
 type Props = {
-  displayIconMenu: boolean;
   setDisplayIconMenu: React.Dispatch<React.SetStateAction<boolean>>;
   setMenuIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  historyMenuOn: boolean;
+  setHistoryMenuOn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AppRoutes: FC<Props> = ({
-  displayIconMenu,
   setDisplayIconMenu,
   setMenuIsOpen,
   setSystemNotif,
@@ -45,9 +46,18 @@ const AppRoutes: FC<Props> = ({
             />
           }
         />
+        <Route
+          path={appRedir.getMe}
+          element={
+            <GetMe
+              setDisplayIconMenu={setDisplayIconMenu}
+              setMenuIsOpen={setMenuIsOpen}
+              setSystemNotif={setSystemNotif}
+            />
+          }
+        />
         {/* <Route path={appRedir.signout} element={<Signout />} />
         <Route path={appRedir.validateLinkEmail} element={} />
-        <Route path={appRedir.getMe} element={} />
         <Route path={appRedir.home} element={} />
         <Route path={appRedir.contact} element={} />
         <Route path={appRedir.footer} element={} />
