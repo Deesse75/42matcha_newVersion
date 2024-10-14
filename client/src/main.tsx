@@ -1,9 +1,9 @@
 import { createRoot } from 'react-dom/client';
-import App from './pages/App.tsx';
+import App from './App.tsx';
 import './styles/index.scss';
-import MemoryProvider from './utils/context/memory.context.tsx';
+import MemoryProvider from './appContext/memory.context.tsx';
 import { BrowserRouter } from 'react-router-dom';
-import UserProvider from './utils/context/user.context.tsx';
+import UserProvider from './appContext/profile.context.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <MemoryProvider>

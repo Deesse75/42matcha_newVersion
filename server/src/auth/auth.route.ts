@@ -12,6 +12,7 @@ import {
 
 const authRouter = Router();
 
+
 authRouter.get('/init', initializeDatabase);
 authRouter.post(
   '/signup',

@@ -1,27 +1,24 @@
-export type MysqlUserType = {
+export type FullProfileType = {
   id: number;
   firstname: string;
   lastname: string;
   username: string;
   email: string;
-  emailCertified: boolean;
-  emailCode: string | null;
-  hashedPassword: string;
-  birthdate: string | null;
+  birthdate: string;
   age: number;
   gender: string | null;
   orientation: string | null;
-  region: string | null;
+  region: string;
   county: string | null;
   town: string | null;
   tall: number;
   biography: string | null;
   fameRating: number;
-  photo1: Buffer | null;
-  photo2: Buffer | null;
-  photo3: Buffer | null;
-  photo4: Buffer | null;
-  photo5: Buffer | null;
+  photo1: string | null;
+  photo2: string | null;
+  photo3: string | null;
+  photo4: string | null;
+  photo5: string | null;
   ageMinLookFor: number;
   ageMaxLookFor: number;
   genderLookFor: string | null;
@@ -37,12 +34,28 @@ export type MysqlUserType = {
   updatedAt: string;
 };
 
-export type MysqlUserValidationType = {
+export type MiniProfileType = {
   id: number;
   username: string;
-  email: string;
-  emailCertified: boolean;
-  emailCode: string;
-  hashedPassword: string;
 };
 
+export type MediumProfileType = {
+  id: number;
+  username: string;
+  age: number;
+  gender: string | null;
+  orientation: string | null;
+  region: string;
+  county: string | null;
+  town: string | null;
+  photo: string | null;
+  fameRating: number;
+};
+
+export type ChatDataType = {
+  id: number;
+  senderId: number;
+  receiverId: number;
+  message: string;
+  createdAt: string;
+};
