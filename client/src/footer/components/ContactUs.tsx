@@ -1,7 +1,7 @@
-import { FC, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { appRedir, mailerRoute } from "../../appConfig/appPath";
-import Cookies from "js-cookie";
+import { FC, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { appRedir, mailerRoute } from '../../appConfig/appPath';
+import Cookies from 'js-cookie';
 
 type ReqDataType = {
   contactName: string;
@@ -11,11 +11,11 @@ type ReqDataType = {
 };
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  setMenuIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ContactUs: FC<Props> = ({ setSystemNotif, setMenuIsOpen }) => {
+const ContactUs: FC<Props> = ({ setMatchaNotif, setMatchaMenuOpen }) => {
   const nav = useNavigate();
   const [reqData, setReqData] = useState<ReqDataType | null>(null);
 
@@ -28,7 +28,7 @@ const ContactUs: FC<Props> = ({ setSystemNotif, setMenuIsOpen }) => {
     const subject = e.currentTarget!.subject.value.trim();
     const text = e.currentTarget!.text.value.trim();
     if (!contactName || !contactEmail || !subject || !text) {
-      setSystemNotif('Tous les champs sont requis.');
+      setMatchaNotif('Tous les champs sont requis.');
       return;
     }
 
@@ -43,11 +43,11 @@ const ContactUs: FC<Props> = ({ setSystemNotif, setMenuIsOpen }) => {
 
   useEffect(() => {
     if (!Cookies.get('matchaOn')) {
-      setSystemNotif('Votre session a expiré, le site a redemarré.');
+      setMatchaNotif('Votre session a expiré, le site a redemarré.');
       nav(appRedir.loading);
       return;
     }
-    setMenuIsOpen(false);
+    setMatchaMenuOpen(false);
   }, []);
 
   useEffect(() => {
@@ -63,11 +63,11 @@ const ContactUs: FC<Props> = ({ setSystemNotif, setMenuIsOpen }) => {
         const data = await response.json();
         if (!isMounted) return;
         if (response.status === 500) {
-          setSystemNotif(data.message);
+          setMatchaNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
-        setSystemNotif(data.message);
+        setMatchaNotif(data.message);
         if (response.status !== 200) {
           setReqData(null);
           return;
@@ -79,7 +79,7 @@ const ContactUs: FC<Props> = ({ setSystemNotif, setMenuIsOpen }) => {
         }
       } catch (error) {
         if (!isMounted) return;
-        setSystemNotif((error as Error).message);
+        setMatchaNotif((error as Error).message);
         nav(appRedir.errorInternal);
       }
     };

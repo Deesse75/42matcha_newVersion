@@ -8,12 +8,12 @@ import { passwordValidation } from '../../utils/inputValidation';
 import { authRoute, appRedir } from '../../appConfig/appPath';
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
   email: string | null;
   setEmail: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
+const AuthReinitForm: FC<Props> = ({ setMatchaNotif, email, setEmail }) => {
   const [bodyRequest, setBodyRequest] = useState<{
     code: string;
     newPassword: string;
@@ -34,11 +34,11 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
   const handleClick = () => {
     const newPasswordValue = refPassword.current?.value.trim() || null;
     if (!newPasswordValue) {
-      setSystemNotif('Veuillez entrer votre nouveau mot de passe.');
+      setMatchaNotif('Veuillez entrer votre nouveau mot de passe.');
       return;
     }
     if (!passwordValidation(newPasswordValue)) {
-      setSystemNotif(
+      setMatchaNotif(
         'Le format du nouveau mot de passe est invalide. Voir règles de saisie de formulaire.',
       );
       return;
@@ -51,19 +51,19 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
       refInput.ref5.current?.value === '' &&
       refInput.ref6.current?.value === ''
     ) {
-      setSystemNotif('Veuillez remplir le code.');
+      setMatchaNotif('Veuillez remplir le code.');
       return;
     }
 
     const newCode: string = `${refInput.ref1.current?.value}${refInput.ref2.current?.value}${refInput.ref3.current?.value}${refInput.ref4.current?.value}${refInput.ref5.current?.value}${refInput.ref6.current?.value}`;
     if (!newCode || newCode.length !== 6) {
-      setSystemNotif('Le code est incorrect.');
+      setMatchaNotif('Le code est incorrect.');
       setEmail(null);
       return;
     }
 
     if (!email) {
-      setSystemNotif(
+      setMatchaNotif(
         'Il y a une erreur avec votre adresse email actuelle. Veuillez recommencer.',
       );
       setEmail(null);
@@ -100,7 +100,7 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
         const data = await response.json();
         if (!isMounted) return;
 
-        setSystemNotif(data.message);
+        setMatchaNotif(data.message);
         if (response.status === 500) {
           nav(appRedir.errorInternal);
           return;
@@ -114,7 +114,7 @@ const AuthReinitForm: FC<Props> = ({ setSystemNotif, email, setEmail }) => {
         nav(appRedir.signin);
       } catch (error) {
         if (!isMounted) return;
-        setSystemNotif((error as Error).message);
+        setMatchaNotif((error as Error).message);
         nav(appRedir.errorInternal);
       }
     };

@@ -15,10 +15,10 @@ import InputEye from '../../utils/InputEye';
 import generate from '../../utils/generate';
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
+const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
   const refFirstname = useRef<HTMLInputElement>(null);
   const refLastname = useRef<HTMLInputElement>(null);
   const refUsername = useRef<HTMLInputElement>(null);
@@ -41,34 +41,34 @@ const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
     const password = refPassword.current?.value.trim() || null;
 
     if (!username || !password || !firstname || !lastname || !email) {
-      setSystemNotif('Tous les champs sont requis.');
+      setMatchaNotif('Tous les champs sont requis.');
       return;
     }
     if (!nameValidation(firstname)) {
-      setSystemNotif(
+      setMatchaNotif(
         'Le format du prénom est invalide. Voir règles de saisie de formulaire en bas de page.',
       );
       return;
     }
 
     if (!nameValidation(lastname)) {
-      setSystemNotif(
+      setMatchaNotif(
         'Le format du nom est invalide. Voir règles de saisie de formulaire en bas de page.',
       );
       return;
     }
     if (!usernameValidation(username)) {
-      setSystemNotif(
+      setMatchaNotif(
         "Le format du nom d'utilisateur est invalide. Voir règles de saisie de formulaire en bas de page.",
       );
       return;
     }
     if (!passwordValidation(password)) {
-      setSystemNotif(
+      setMatchaNotif(
         'Le format du mot de passe est invalide. Voir règles de saisie de formulaire en bas de page.',
       );
       if (!emailValidation(email)) {
-        setSystemNotif(
+        setMatchaNotif(
           "Le format de l'adresse email est invalide. Voir règles de saisie de formulaire en bas de page.",
         );
         return;
@@ -99,7 +99,7 @@ const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
         const data = await response.json();
         if (!isMounted) return;
 
-        setSystemNotif(data.message);
+        setMatchaNotif(data.message);
         if (response.status === 500) {
           nav(appRedir.errorInternal);
           return;
@@ -112,7 +112,7 @@ const AuthSignupForm: FC<Props> = ({ setSystemNotif }) => {
         nav(appRedir.signin);
       } catch (error) {
         if (!isMounted) return;
-        setSystemNotif((error as Error).message);
+        setMatchaNotif((error as Error).message);
         nav(appRedir.errorInternal);
       }
     };

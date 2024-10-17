@@ -5,10 +5,10 @@ import AuthForgotForm from './AuthForgotForm';
 import AuthReinitForm from './AuthReinitForm';
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const ForgotPassword: FC<Props> = ({ setSystemNotif }) => {
+const ForgotPassword: FC<Props> = ({ setMatchaNotif }) => {
   const [code, setCode] = useState<boolean>(false);
   const [email, setEmail] = useState<string | null>(null);
 
@@ -23,14 +23,14 @@ const ForgotPassword: FC<Props> = ({ setSystemNotif }) => {
       {code ? (
         <>
           <AuthReinitForm
-            setSystemNotif={setSystemNotif}
+            setMatchaNotif={setMatchaNotif}
             email={email}
             setEmail={setEmail}
           />
         </>
       ) : (
         <>
-          <AuthForgotForm setSystemNotif={setSystemNotif} setEmail={setEmail} />
+          <AuthForgotForm setMatchaNotif={setMatchaNotif} setEmail={setEmail} />
         </>
       )}
       <AuthRedirect selectedPage='forgotPassword' />

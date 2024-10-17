@@ -3,23 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import { authRoute, appRedir } from '../../appConfig/appPath';
 
 type Props = {
-  setMenuIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setDisplayIconMenu: React.Dispatch<React.SetStateAction<boolean>>;
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const ValidateLinkEmail: FC<Props> = ({
-  setMenuIsOpen,
-  setDisplayIconMenu,
-  setSystemNotif,
+  setMatchaMenuOpen,
+  setMatchaMenuIcon,
+  setMatchaNotif,
 }) => {
   const nav = useNavigate();
   const url = window.location.href;
   const [failedReq, setFailedReq] = useState<boolean>(false);
 
   useEffect(() => {
-    setMenuIsOpen(false);
-    setDisplayIconMenu(false);
+    setMatchaMenuOpen(false);
+    setMatchaMenuIcon(false);
   }, []);
 
   useEffect(() => {
@@ -36,12 +36,12 @@ const ValidateLinkEmail: FC<Props> = ({
         if (!isMounted) return;
 
         if (response.status === 500) {
-          setSystemNotif(data.message);
+          setMatchaNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
 
-        setSystemNotif(data.message);
+        setMatchaNotif(data.message);
         if (response.status !== 200) {
           setFailedReq(true);
           return;
@@ -49,7 +49,7 @@ const ValidateLinkEmail: FC<Props> = ({
         nav(appRedir.loading);
       } catch (error) {
         if (!isMounted) return;
-        setSystemNotif((error as Error).message);
+        setMatchaNotif((error as Error).message);
         nav(appRedir.errorInternal);
       }
     };

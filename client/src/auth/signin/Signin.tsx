@@ -5,10 +5,10 @@ import AuthRedirect from '../components/AuthRedirect';
 import AuthSigninUsernameForm from './AuthSigninUsernameForm';
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const Signin: FC<Props> = ({ setSystemNotif }) => {
+const Signin: FC<Props> = ({ setMatchaNotif }) => {
   const [openUsername, setOpenUsername] = useState<boolean>(true);
 
   return (
@@ -26,9 +26,9 @@ const Signin: FC<Props> = ({ setSystemNotif }) => {
           : "Se connecter avec le nom d'utilisateur"}
       </button>
       {openUsername ? (
-        <AuthSigninUsernameForm setSystemNotif={setSystemNotif} />
+        <AuthSigninUsernameForm setMatchaNotif={setMatchaNotif} />
       ) : (
-        <AuthSigninEmailForm setSystemNotif={setSystemNotif} />
+        <AuthSigninEmailForm setMatchaNotif={setMatchaNotif} />
       )}
       <AuthRedirect selectedPage='signin' />
     </>

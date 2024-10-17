@@ -5,22 +5,22 @@ import { useNavigate } from 'react-router-dom';
 import { appRedir, authRoute } from '../appConfig/appPath';
 
 type Props = {
-  setMenuIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setDisplayIconMenu: React.Dispatch<React.SetStateAction<boolean>>;
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const LoadingPage: FC<Props> = ({
-  setMenuIsOpen,
-  setDisplayIconMenu,
-  setSystemNotif,
+  setMatchaMenuOpen,
+  setMatchaMenuIcon,
+  setMatchaNotif,
 }) => {
   const [controlPage, setControlPage] = useState<boolean>(false);
   const nav = useNavigate();
 
   useEffect(() => {
-    setMenuIsOpen(false);
-    setDisplayIconMenu(false);
+    setMatchaMenuOpen(false);
+    setMatchaMenuIcon(false);
     if (!Cookies.get('Geoloc')) getCountry();
     setControlPage(true);
   }, []);
@@ -35,7 +35,7 @@ const LoadingPage: FC<Props> = ({
         if (!isMounted) return;
 
         if (response.status !== 200) {
-          setSystemNotif(data.message);
+          setMatchaNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
@@ -54,7 +54,7 @@ const LoadingPage: FC<Props> = ({
         nav(appRedir.signin);
       } catch (error) {
         if (!isMounted) return;
-        setSystemNotif((error as Error).message);
+        setMatchaNotif((error as Error).message);
         nav(appRedir.errorInternal);
       }
     };

@@ -2,18 +2,22 @@ import { FC } from 'react';
 import Menu from './components/Menu';
 
 type Props = {
-  menuIsOpen: boolean;
-  setMenuIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  displayIconMenu: boolean;
+  matchaMenuOpen: boolean;
+  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  matchaMenuIcon: boolean;
 };
 
-const Header: FC<Props> = ({ menuIsOpen, setMenuIsOpen, displayIconMenu }) => {
+const Header: FC<Props> = ({
+  matchaMenuOpen,
+  setMatchaMenuOpen,
+  matchaMenuIcon,
+}) => {
   return (
     <>
       <div
         className='header_navbar'
         onClick={() => {
-          setMenuIsOpen(false);
+          setMatchaMenuOpen(false);
         }}
       >
         <div className='header_navbar_line'></div>
@@ -21,8 +25,11 @@ const Header: FC<Props> = ({ menuIsOpen, setMenuIsOpen, displayIconMenu }) => {
           <div className='header_navbar_logo'>Matcha</div>
         </div>
       </div>
-      {displayIconMenu && (
-        <Menu menuIsOpen={menuIsOpen} setMenuIsOpen={setMenuIsOpen} />
+      {matchaMenuIcon && (
+        <Menu
+          matchaMenuOpen={matchaMenuOpen}
+          setMatchaMenuOpen={setMatchaMenuOpen}
+        />
       )}
     </>
   );

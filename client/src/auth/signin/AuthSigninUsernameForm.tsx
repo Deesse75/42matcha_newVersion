@@ -10,10 +10,10 @@ import Cookies from 'js-cookie';
 import InputEye from '../../utils/InputEye';
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AuthSigninUsernameForm: FC<Props> = ({ setSystemNotif }) => {
+const AuthSigninUsernameForm: FC<Props> = ({ setMatchaNotif }) => {
   const refUsername = useRef<HTMLInputElement>(null);
   const refPassword = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
@@ -27,17 +27,17 @@ const AuthSigninUsernameForm: FC<Props> = ({ setSystemNotif }) => {
     const password = refPassword.current?.value.trim() || null;
 
     if (!username || !password) {
-      setSystemNotif('Tous les champs sont requis.');
+      setMatchaNotif('Tous les champs sont requis.');
       return;
     }
     if (!usernameValidation(username)) {
-      setSystemNotif(
+      setMatchaNotif(
         "Le format du nom d'utilisateur est invalide. Voir règles de saisie de formulaire en bas de page.",
       );
       return;
     }
     if (!passwordValidation(password)) {
-      setSystemNotif(
+      setMatchaNotif(
         'Le format du mot de passe est invalide. Voir règles de saisie de formulaire en bas de page.',
       );
       return;
@@ -64,14 +64,14 @@ const AuthSigninUsernameForm: FC<Props> = ({ setSystemNotif }) => {
         if (!isMounted) return;
 
         if (response.status === 500) {
-          setSystemNotif(data.message);
+          setMatchaNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
 
         if (response.status !== 200) {
           setBodyRequest(null);
-          setSystemNotif(data.message);
+          setMatchaNotif(data.message);
           return;
         }
 
@@ -84,7 +84,7 @@ const AuthSigninUsernameForm: FC<Props> = ({ setSystemNotif }) => {
         nav(appRedir.getMe);
       } catch (error) {
         if (!isMounted) return;
-        setSystemNotif((error as Error).message);
+        setMatchaNotif((error as Error).message);
         nav(appRedir.errorInternal);
       }
     };

@@ -4,14 +4,14 @@ import AuthTitle from '../components/AuthTitle';
 import AuthSignupForm from './AuthSignupForm';
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const Signup: FC<Props> = ({ setSystemNotif }) => {
+const Signup: FC<Props> = ({ setMatchaNotif }) => {
   return (
     <>
       <AuthTitle title='Inscription' />
-      <AuthSignupForm setSystemNotif={setSystemNotif} />
+      <AuthSignupForm setMatchaNotif={setMatchaNotif} />
       <AuthRedirect selectedPage='signup' />
     </>
   );

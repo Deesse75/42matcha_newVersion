@@ -13,8 +13,8 @@ export const userSchema = `
     gender VARCHAR(200),
     orientation VARCHAR(200),
     region VARCHAR(200),
-    departement VARCHAR(200),
-    ville VARCHAR(200),
+    county VARCHAR(200),
+    town VARCHAR(200),
     tall INT DEFAULT 0,
     biography TEXT,
     fameRating INT DEFAULT 0,
@@ -23,21 +23,40 @@ export const userSchema = `
     photo3 LONGBLOB,
     photo4 LONGBLOB,
     photo5 LONGBLOB,
-    ageMinLookFor INT DEFAULT 18,
-    ageMaxLookFor INT DEFAULT 120,
-    genderLookFor VARCHAR(200),
-    orientationLookFor VARCHAR(200),
-    locationLookFor VARCHAR(200),
-    tallMinLookFor INT DEFAULT 50,
-    tallMaxLookFor INT DEFAULT 300,
-    withPhoto BOOLEAN DEFAULT FALSE,
-    withBiography BOOLEAN DEFAULT FALSE,
-    withConnectionOn BOOLEAN DEFAULT FALSE,
     lastConnection TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_lastConnection (lastConnection),
     INDEX idx_age (age)
+  );
+`;
+
+export const lookForSchema = `
+  CREATE TABLE IF NOT EXISTS LookFor (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userId INT NOT NULL,
+    ageMin INT DEFAULT 18,
+    ageMax INT DEFAULT 120,
+    gender VARCHAR(200),
+    orientation VARCHAR(200),
+    region VARCHAR(200),
+    county VARCHAR(200),
+    town VARCHAR(200),
+    tallMin INT DEFAULT 50,
+    tallMax INT DEFAULT 300,
+    withPhoto BOOLEAN DEFAULT FALSE,
+    withBiography BOOLEAN DEFAULT FALSE,
+    withConnectionOn BOOLEAN DEFAULT FALSE,
+  );
+`;
+
+export const userTagsSchema = `
+  CREATE TABLE IF NOT EXISTS TagHistory (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userId INT NOT NULL,
+    tagName VARCHAR(200) NOT NULL,
+    FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE,
+    UNIQUE (userId, tagName)
   );
 `;
 
@@ -74,16 +93,6 @@ export const banHistorySchema = `
     FOREIGN KEY (receiverId) REFERENCES User(id) ON DELETE CASCADE,
     UNIQUE (senderId, receiverId),
     UNIQUE (receiverId, senderId)
-  );
-`;
-
-export const tagHistorySchema = `
-  CREATE TABLE IF NOT EXISTS TagHistory (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    userId INT NOT NULL,
-    tagName VARCHAR(200) NOT NULL,
-    FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE,
-    UNIQUE (userId, tagName)
   );
 `;
 

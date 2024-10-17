@@ -4,14 +4,14 @@ import AuthRedirect from '../components/AuthRedirect';
 import AuthTitle from '../components/AuthTitle';
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const ResendLinkEmail: FC<Props> = ({ setSystemNotif }) => {
+const ResendLinkEmail: FC<Props> = ({ setMatchaNotif }) => {
   return (
     <>
       <AuthTitle title='Recevoir un lien de confirmation' />
-      <AuthResendForm setSystemNotif={setSystemNotif} />
+      <AuthResendForm setMatchaNotif={setMatchaNotif} />
       <AuthRedirect selectedPage='resend' />
     </>
   );

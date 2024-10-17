@@ -1,37 +1,37 @@
-import { useState } from "react";
-import AppRoutes from "./AppRoutes";
-import Footer from "./footer/Footer";
-import Header from "./header/Header";
-import SystemNotif from "./notification/systemNotification/SystemNotif";
+import { useState } from 'react';
+import AppRoutes from './AppRoutes';
+import Footer from './footer/Footer';
+import Header from './header/Header';
+import MatchaNotif from './notification/matchaNotification/MatchaNotif';
 
 function App() {
-  const [displayIconMenu, setDisplayIconMenu] = useState<boolean>(false);
-  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-  const [systemNotif, setSystemNotif] = useState<string | null>(null);
+  const [matchaMenuIcon, setMatchaMenuIcon] = useState<boolean>(false);
+  const [matchaMenuOpen, setMatchaMenuOpen] = useState<boolean>(false);
+  const [matchaNotif, setMatchaNotif] = useState<string | null>(null);
 
   return (
     <>
       <div className='header'>
         <Header
-          menuIsOpen={menuIsOpen}
-          setMenuIsOpen={setMenuIsOpen}
-          displayIconMenu={displayIconMenu}
+          matchaMenuOpen={matchaMenuOpen}
+          setMatchaMenuOpen={setMatchaMenuOpen}
+          matchaMenuIcon={matchaMenuIcon}
         />
       </div>
 
       <div className='system_notification'>
-        <SystemNotif
-          systemNotif={systemNotif}
-          setSystemNotif={setSystemNotif}
-          setMenuIsOpen={setMenuIsOpen}
+        <MatchaNotif
+          matchaNotif={matchaNotif}
+          setMatchaNotif={setMatchaNotif}
+          setMatchaMenuOpen={setMatchaMenuOpen}
         />
       </div>
 
       <div className='routes'>
         <AppRoutes
-          setDisplayIconMenu={setDisplayIconMenu}
-          setMenuIsOpen={setMenuIsOpen}
-          setSystemNotif={setSystemNotif}
+          setMatchaMenuIcon={setMatchaMenuIcon}
+          setMatchaMenuOpen={setMatchaMenuOpen}
+          setMatchaNotif={setMatchaNotif}
         />
       </div>
 

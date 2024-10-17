@@ -4,26 +4,26 @@ import MenuElements from './MenuElements';
 import { LuLogOut } from 'react-icons/lu';
 
 type Props = {
-  menuIsOpen: boolean;
-  setMenuIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  matchaMenuOpen: boolean;
+  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Menu: FC<Props> = ({ menuIsOpen, setMenuIsOpen }) => {
+const Menu: FC<Props> = ({ matchaMenuOpen, setMatchaMenuOpen }) => {
   return (
     <>
       <div className='header_menu_container'>
         <div
           className='header_menu_icon'
           onClick={() => {
-            setMenuIsOpen(!menuIsOpen);
+            setMatchaMenuOpen(!matchaMenuOpen);
           }}
         >
           <IoMenu size={3} />
           <LuLogOut size={30} />
         </div>
-        {menuIsOpen && (
+        {matchaMenuOpen && (
           <>
-            <MenuElements />
+            <MenuElements setMatchaMenuOpen={setMatchaMenuOpen} />
           </>
         )}
       </div>

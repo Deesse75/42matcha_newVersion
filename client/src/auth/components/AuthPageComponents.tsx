@@ -8,10 +8,10 @@ import ResendLinkEmail from '../resend/ResendLinkEmail';
 import ForgotPassword from '../forgot/ForgotPassword';
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AuthPageComponents: FC<Props> = ({ setSystemNotif }) => {
+const AuthPageComponents: FC<Props> = ({ setMatchaNotif }) => {
   const memo = useMemory();
   const nav = useNavigate();
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
@@ -34,16 +34,16 @@ const AuthPageComponents: FC<Props> = ({ setSystemNotif }) => {
         {selectedPage ? (
           <>
             {selectedPage === 'signin' && (
-              <Signin setSystemNotif={setSystemNotif} />
+              <Signin setMatchaNotif={setMatchaNotif} />
             )}
             {selectedPage === 'signup' && (
-              <Signup setSystemNotif={setSystemNotif} />
+              <Signup setMatchaNotif={setMatchaNotif} />
             )}
             {selectedPage === 'resendLinkEmail' && (
-              <ResendLinkEmail setSystemNotif={setSystemNotif} />
+              <ResendLinkEmail setMatchaNotif={setMatchaNotif} />
             )}
             {selectedPage === 'forgotPassword' && (
-              <ForgotPassword setSystemNotif={setSystemNotif} />
+              <ForgotPassword setMatchaNotif={setMatchaNotif} />
             )}
           </>
         ) : (

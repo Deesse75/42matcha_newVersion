@@ -5,10 +5,10 @@ import { emailValidation } from '../../utils/inputValidation';
 import { appRedir, authRoute } from '../../appConfig/appPath';
 
 type Props = {
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AuthResendForm: FC<Props> = ({ setSystemNotif }) => {
+const AuthResendForm: FC<Props> = ({ setMatchaNotif }) => {
   const refEmail = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
@@ -17,11 +17,11 @@ const AuthResendForm: FC<Props> = ({ setSystemNotif }) => {
     const email = refEmail.current?.value.trim() || null;
 
     if (!email) {
-      setSystemNotif("Veuillez remplir l'adresse email.");
+      setMatchaNotif("Veuillez remplir l'adresse email.");
       return;
     }
     if (!emailValidation(email)) {
-      setSystemNotif(
+      setMatchaNotif(
         "Le format de l'adresse email est invalide. Voir règles de saisie de formulaire en bas de page.",
       );
       return;
@@ -46,7 +46,7 @@ const AuthResendForm: FC<Props> = ({ setSystemNotif }) => {
         const data = await response.json();
         if (!isMounted) return;
 
-        setSystemNotif(data.message);
+        setMatchaNotif(data.message);
         if (response.status === 500) {
           nav(appRedir.errorInternal);
           return;
@@ -60,7 +60,7 @@ const AuthResendForm: FC<Props> = ({ setSystemNotif }) => {
         nav(appRedir.signin);
       } catch (error) {
         if (!isMounted) return;
-        setSystemNotif((error as Error).message);
+        setMatchaNotif((error as Error).message);
         nav(appRedir.errorInternal);
       }
     };

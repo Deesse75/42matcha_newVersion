@@ -21,6 +21,8 @@ export async function configMysql(): Promise<void> {
     
     await createDatabase();
     await createUserTable();
+    await createLookforTable();
+    await 
     await createViewTable();
     await createLikeTable();
     await createBanTable();

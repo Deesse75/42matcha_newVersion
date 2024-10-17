@@ -19,7 +19,12 @@ export function byLocation(
   location: string,
   geoloc: boolean,
   filterList: MediumProfileType[],
-): MediumProfileType[] {}
+): MediumProfileType[] {
+  //si geoloc true recupere cookie sinon me.user
+  //si locqtion === ville
+  //si location === departement
+  //si location === region
+}
 
 export function byTags(
   tagsList: string[],

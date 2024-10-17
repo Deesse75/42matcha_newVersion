@@ -4,16 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../appConfig/appPath';
 
 type Props = {
-  setMenuIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Error500: FC<Props> = ({ setMenuIsOpen }) => {
+const Error500: FC<Props> = ({ setMatchaMenuOpen }) => {
   const nav = useNavigate();
 
   useEffect(() => {
     Cookies.remove('matchaOn');
     Cookies.remove('session');
-    setMenuIsOpen(false);
+    setMatchaMenuOpen(false);
   }, []);
 
   return (

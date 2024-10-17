@@ -2,32 +2,30 @@ import { useNavigate } from 'react-router-dom';
 import { FC, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { appRedir, socketRoute, userRoute } from '../appConfig/appPath';
-import { useUserInfo } from '../appContext/profile.context';
+import { useUserInfo } from '../appContext/user.context';
 import { io, Socket } from 'socket.io-client';
-import { useMemory } from '../appContext/memory.context';
 
 type Props = {
-  setDisplayIconMenu: React.Dispatch<React.SetStateAction<boolean>>;
-  setMenuIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setSystemNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
+  setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const GetMe: FC<Props> = ({
-  setDisplayIconMenu,
-  setMenuIsOpen,
-  setSystemNotif,
-}) => {
+const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
   const me = useUserInfo();
-  const memo = useMemory();
   const nav = useNavigate();
   const [controlePage, setControlePage] = useState<boolean>(false);
-  const [getMe, setGetMe] = useState<boolean>(false);
+  const [getMeData, setGetMeData] = useState<boolean>(false);
 
   useEffect(() => {
-    setMenuIsOpen(false);
-    setDisplayIconMenu(false);
+    setMatchaMenuIcon(false);
+
     if (!Cookies.get('session')) {
       nav(appRedir.signout);
+      return;
+    }
+
+    if (!Cookies.get('matchaOn')) {
+      nav(appRedir.loading);
       return;
     }
     setControlePage(true);
@@ -48,21 +46,23 @@ const GetMe: FC<Props> = ({
         const data = await response.json();
         if (!isMounted) return;
         if (data.message && data.message.split(' ')[0] === 'Token') {
-          setSystemNotif(data.message);
+          setMatchaNotif(data.message);
           nav(appRedir.signout);
           return;
         }
         if (response.status !== 200) {
-          setSystemNotif(data.message);
+          setMatchaNotif(data.message);
           nav(appRedir.errorInternal);
           return;
         }
         me.setUser(data.me.user);
+        me.setUserLookFor(data.me.userLookFor);
         me.setUserTags(data.me.userTags);
-        setGetMe(true);
+        setControlePage(false);
+        setGetMeData(true);
       } catch (error) {
         if (!isMounted) return;
-        setSystemNotif((error as Error).message);
+        setMatchaNotif((error as Error).message);
         nav(appRedir.errorInternal);
       }
     };
@@ -73,7 +73,7 @@ const GetMe: FC<Props> = ({
   }, [controlePage]);
 
   useEffect(() => {
-    if (!getMe) return;
+    if (!getMeData || me.userSocket) return;
     const request = async () => {
       //Connect to the socket
       const socket: Socket = io(socketRoute.path, {
@@ -87,25 +87,26 @@ const GetMe: FC<Props> = ({
       //If connection is ok set userSocket
       socket.on(socketRoute.connected, () => {
         me.setUserSocket(socket);
+        setGetMeData(false);
         return;
       });
 
       //If connection is not ok errorPage
       socket.on(socketRoute.connectFailed, () => {
-        setSystemNotif('La connexion a échouée. Veuillez réessayer.');
+        setMatchaNotif('La connexion a échouée. Veuillez réessayer.');
         socket.disconnect();
+        setGetMeData(false);
         nav(appRedir.errorInternal);
         return;
       });
     };
     request();
-  }, [getMe]);
+  }, [getMeData]);
 
   useEffect(() => {
-    if (!me.userSocket) return;
-    if (me.user && me.user.birthdate) memo.setSubPageName('dashboard');
-    else memo.setSubPageName('newProfile');
-    nav(appRedir.dashboard);
+    if (!me.userSocket || !me.user) return;
+    if (me.user.birthdate) nav(appRedir.dashboard);
+    else nav(appRedir.profile);
   }, [me.userSocket]);
 
   return (

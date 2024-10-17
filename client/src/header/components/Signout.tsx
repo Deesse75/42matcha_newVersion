@@ -2,15 +2,14 @@ import { FC, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 type Props = {
-  setMenuIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setDisplayIconMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Signout: FC<Props> = ({ setMenuIsOpen, setDisplayIconMenu }) => {
-
+const Signout: FC<Props> = ({ setMatchaMenuOpen, setMatchaMenuIcon }) => {
   useEffect(() => {
-    setMenuIsOpen(false);
-    setDisplayIconMenu(false);
+    setMatchaMenuOpen(false);
+    setMatchaMenuIcon(false);
     Cookies.remove('session');
   }, []);
 
