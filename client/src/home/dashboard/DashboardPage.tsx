@@ -75,6 +75,7 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif, setMatchaMenuIcon }) => {
           return;
         }
         setListing(data.listing);
+        console.log('listing', data.listing.length);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
