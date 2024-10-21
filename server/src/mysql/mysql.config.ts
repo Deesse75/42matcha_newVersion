@@ -27,7 +27,7 @@ export async function configMysql(): Promise<void> {
     await createBanTable();
     await createChatTable();
 
-    // await insertFakeData();
+    await insertFakeData();
   } catch (error) {
     console.log('config mysql', error);
     throw error;
@@ -37,8 +37,8 @@ export async function configMysql(): Promise<void> {
 export async function insertFakeData() {
   try {
     await insertFakeUser();
-    await insertFakeView();
     await insertFakeTags();
+    await insertFakeView();
     await insertFakeLike();
     await insertFakeBan();
   } catch (error) {
@@ -190,10 +190,10 @@ export async function insertFakeView() {
   try {
     const rows: any = await mysqlDb.query('SELECT * FROM ViewHistory LIMIT 1');
     if (rows[0].length > 0) return;
-    if (!fs.existsSync('./src/mysql/fakeData/mysql_view.json')) return;
+    if (!fs.existsSync('./src/mysql/fake_view.json')) return;
     const query = `INSERT INTO ViewHistory SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync('./src/mysql/fakeData/mysql_view.json', 'utf8'),
+      fs.readFileSync('./src/mysql/fake_view.json', 'utf8'),
     );
     fakeData.forEach(async (item: FakeActionType) => {
       await mysqlDb.query(query, item);
@@ -222,12 +222,12 @@ export async function insertFakeBan() {
 
 export async function insertFakeTags() {
   try {
-    const rows: any = await mysqlDb.query('SELECT * FROM TagHistory LIMIT 1');
+    const rows: any = await mysqlDb.query('SELECT * FROM UserTags LIMIT 1');
     if (rows[0].length > 0) return;
-    if (!fs.existsSync('./src/mysql/fakeData/mysql_tags.json')) return;
-    const query = `INSERT INTO TagHistory SET ?`;
+    if (!fs.existsSync('./src/mysql/fake_tags.json')) return;
+    const query = `INSERT INTO UserTags SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync('./src/mysql/fakeData/mysql_tags.json', 'utf8'),
+      fs.readFileSync('./src/mysql/fake_tags.json', 'utf8'),
     );
     fakeData.forEach(async (item: FakeTagType) => {
       await mysqlDb.query(query, item);
