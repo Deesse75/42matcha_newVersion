@@ -4,10 +4,11 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import isEnvConfigurate from './utils/env.service.js';
-import { configMysql, mysqlDb } from './mysql/config/config.mysql.js';
+import { configMysql, mysqlDb } from './mysql/mysql.config.js';
 import { manageSocket } from './socket/socket.services.js';
 import authRouter from './auth/auth.route.js';
-import { matchaError } from './utils/matcha_error.js';
+import userRouter from './user/user.route.js';
+import listingRouter from './listing/listing.route.js';
 
 //configure environment
 dotenv.config();
@@ -57,10 +58,10 @@ manageSocket(io);
 //Routes
 app.use(express.json({ limit: '100mb' }));
 app.use('/auth', authRouter);
-// app.use('/user', userRouter);
+app.use('/user', userRouter);
 // app.use('/profile', profileRouter);
 // app.use('/action', actionRouter);
-// app.use('/list', listRouter);
+app.use('/listing', listingRouter);
 // app.use('/search', searchRouter);
 app.use('/*', (req: Request, res: Response) => {
   res.status(404).json({

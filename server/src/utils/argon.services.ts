@@ -12,9 +12,10 @@ export const hashedData = async (data: string): Promise<string> => {
 };
 
 export const verifyData = async (
-  currentData: string,
-  newData: string,
+  currentData: string | null,
+  newData: string | null,
 ): Promise<boolean> => {
+  if (!currentData || !newData) return false;
   try {
     return await argon2.verify(currentData, newData);
   } catch (error) {
