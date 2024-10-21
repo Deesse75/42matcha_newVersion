@@ -1,10 +1,10 @@
 import { matchaError } from '../utils/matcha_error.js';
-import { MysqlUserValidationType } from '../mysql/interfaces/mysql_out.interfaces.js';
-import { configMysql } from '../mysql/config/config.mysql.js';
+import { configMysql } from '../mysql/mysql.config.js';
 import * as argon from '../utils/argon.services.js';
-import * as authMysql from '../mysql/service/auth.mysql.js';
+import * as mysqlReq from '../mysql/mysql.service.js';
 import * as mailer from '../utils/mailer.services.js';
 import * as jwt from '../utils/jwt.service.js';
+import { MysqlUserType } from '../interfaces/mysql_out.interfaces.js';
 
 export const authInitDatabase = async (): Promise<void> => {
   try {
@@ -18,23 +18,27 @@ export const authSignup = async (
   firstname: string,
   lastname: string,
   username: string,
+  birthdate: string,
   email: string,
   password: string,
 ): Promise<void> => {
+  console.log("TEST")
   try {
     const hash = await argon.hashedData(password);
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
     const emailCode = await argon.hashedData(num);
 
-    await authMysql.createNewUser({
+    await mysqlReq.createNewUser({
       firstname: firstname,
       lastname: lastname,
       username: username,
+      birthdate: new Date(birthdate),
       email: email,
       emailCode: num,
       hashedPassword: hash,
     });
-    const user = await authMysql.getUserByEmail(email);
+    const query = 'SELECT * FROM User WHERE email = ?';
+    const user = await mysqlReq.getOneUserData(query, [email]);
     if (!user) {
       throw new matchaError(500, 'Une erreur interne est survenue');
     }
@@ -45,7 +49,7 @@ export const authSignup = async (
 };
 
 export const authSignin = async (
-  existingUser: MysqlUserValidationType,
+  existingUser: MysqlUserType,
   password: string,
 ): Promise<string> => {
   try {
@@ -60,7 +64,9 @@ export const authSignin = async (
       existingUser.email,
       process.env.JWT_SECRET_TOKEN || '',
     );
-    await authMysql.updateAge(existingUser.id);
+    const query =
+      'UPDATE User SET age = TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) WHERE id = ?';
+    await mysqlReq.updateUserMysqlData(query, [existingUser.id]);
     return token;
   } catch (error) {
     throw error;
@@ -68,28 +74,32 @@ export const authSignin = async (
 };
 
 export const authValidate = async (
-  existingUser: MysqlUserValidationType,
+  existingUser: MysqlUserType,
   code: string,
 ): Promise<void> => {
+  let query: string = '';
   try {
     const compareCode = await argon.verifyData(code, existingUser.emailCode);
-    await authMysql.updateEmailCode(existingUser.id, '');
+    query = 'UPDATE User SET emailCode = ? WHERE id = ?';
+    await mysqlReq.updateUserMysqlData(query, ['', existingUser.id]);
     if (!compareCode) {
       throw new matchaError(401, 'Token invalide, absent ou expiré.');
     }
-    await authMysql.updateEmailCertified(existingUser.id);
+    query = 'UPDATE User SET emailCertified = 1 WHERE id = ?';
+    await mysqlReq.updateUserMysqlData(query, [existingUser.id]);
   } catch (error) {
     throw error;
   }
 };
 
 export const authResendEmail = async (
-  existingUser: MysqlUserValidationType,
+  existingUser: MysqlUserType,
 ): Promise<void> => {
   try {
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
     const emailCode = await argon.hashedData(num);
-    await authMysql.updateEmailCode(existingUser.id, num);
+    const query = 'UPDATE User SET emailCode = ? WHERE id = ?';
+    await mysqlReq.updateUserMysqlData(query, [num, existingUser.id]);
     mailer.sendEmailTokenProcess(existingUser.email, emailCode);
   } catch (error) {
     throw error;
@@ -97,12 +107,12 @@ export const authResendEmail = async (
 };
 
 export const authForgotPassword = async (
-  existingUser: MysqlUserValidationType,
+  existingUser: MysqlUserType,
 ): Promise<void> => {
   try {
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
-    const emailCode = await argon.hashedData(num);
-    await authMysql.updateEmailCode(existingUser.id, num);
+    const query = 'UPDATE User SET emailCode = ? WHERE id = ?';
+    await mysqlReq.updateUserMysqlData(query, [num, existingUser.id]);
     mailer.sendEmailPasswordProcess(existingUser.email, num);
   } catch (error) {
     throw error;
@@ -112,15 +122,18 @@ export const authForgotPassword = async (
 export const authReinitPassword = async (
   code: string,
   newPassword: string,
-  existingUser: MysqlUserValidationType,
+  existingUser: MysqlUserType,
 ): Promise<void> => {
+  let query: string = '';
   try {
     const copyCode = existingUser.emailCode;
-    await authMysql.updateEmailCode(existingUser.id, '');
+    query = 'UPDATE User SET emailCode = ? WHERE id = ?';
+    await mysqlReq.updateUserMysqlData(query, ['', existingUser.id]);
     if (code !== copyCode)
       throw new matchaError(401, 'Le code ne correspond pas.');
     const hashedPassword = await argon.hashedData(newPassword);
-    await authMysql.updateHashedPassword(existingUser.id, hashedPassword);
+    query = 'UPDATE User SET hashedPassword = ? WHERE id = ?';
+    await mysqlReq.updateUserMysqlData(query, [hashedPassword, existingUser.id]);
   } catch (error) {
     throw error;
   }

@@ -24,12 +24,18 @@ export const initializeDatabase = async (
   }
 };
 
-export const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const signup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  console.log('controller signup');
   try {
     await authSignup(
       req.body.firstname,
       req.body.lastname,
       req.body.username,
+      req.body.birthdate,
       req.body.email,
       req.body.password,
     );
@@ -126,8 +132,7 @@ export const reinitPassword = async (
       req.body.existingUser,
     );
     res.status(200).json({
-      message:
-        'Votre pouvez vous connecter avec votre nouveau mot de passe.',
+      message: 'Votre pouvez vous connecter avec votre nouveau mot de passe.',
     });
     return;
   } catch (error) {

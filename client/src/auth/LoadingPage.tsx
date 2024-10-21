@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie';
 import { FC, useEffect, useState } from 'react';
-import { getCountry } from '../utils/geolocation';
 import { useNavigate } from 'react-router-dom';
 import { appRedir, authRoute } from '../appConfig/appPath';
 
@@ -21,7 +20,6 @@ const LoadingPage: FC<Props> = ({
   useEffect(() => {
     setMatchaMenuOpen(false);
     setMatchaMenuIcon(false);
-    if (!Cookies.get('Geoloc')) getCountry();
     setControlPage(true);
   }, []);
 

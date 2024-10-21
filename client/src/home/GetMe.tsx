@@ -14,7 +14,6 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
   const me = useUserInfo();
   const nav = useNavigate();
   const [controlePage, setControlePage] = useState<boolean>(false);
-  const [getMeData, setGetMeData] = useState<boolean>(false);
 
   useEffect(() => {
     setMatchaMenuIcon(false);
@@ -56,10 +55,8 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
           return;
         }
         me.setUser(data.me.user);
-        me.setUserLookFor(data.me.userLookFor);
         me.setUserTags(data.me.userTags);
         setControlePage(false);
-        setGetMeData(true);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -73,7 +70,8 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
   }, [controlePage]);
 
   useEffect(() => {
-    if (!getMeData || me.userSocket) return;
+    if (me.userSocket) return;
+    if (!me.user) return;
     const request = async () => {
       //Connect to the socket
       const socket: Socket = io(socketRoute.path, {
@@ -87,7 +85,6 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
       //If connection is ok set userSocket
       socket.on(socketRoute.connected, () => {
         me.setUserSocket(socket);
-        setGetMeData(false);
         return;
       });
 
@@ -95,17 +92,18 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
       socket.on(socketRoute.connectFailed, () => {
         setMatchaNotif('La connexion a échouée. Veuillez réessayer.');
         socket.disconnect();
-        setGetMeData(false);
         nav(appRedir.errorInternal);
         return;
       });
     };
     request();
-  }, [getMeData]);
+  }, [me.user]);
 
   useEffect(() => {
     if (!me.userSocket || !me.user) return;
-    if (me.user.birthdate) nav(appRedir.dashboard);
+    if (me.user.lastConnection) {
+      nav(appRedir.dashboard);
+    }
     else nav(appRedir.profile);
   }, [me.userSocket]);
 

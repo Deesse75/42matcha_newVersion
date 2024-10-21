@@ -4,23 +4,23 @@ import { MiniProfileType } from '../../appConfig/interface';
 import { useNavigate } from 'react-router-dom';
 import { appRedir, listingRoute } from '../../appConfig/appPath';
 import { useMenuOnOff } from '../../appContext/menuOnOff.context';
-import { useListingTab } from '../../appContext/ListingTab.context';
-import DisplayMiniProfile from '../display/components/DisplayMiniProfile';
-import DisplaySortProfiles from '../display/components/DisplaySortProfiles';
-import DisplayFilterProfiles from '../display/components/DisplayFilterProfiles';
+import FilterProfiles from './components/FilterProfiles';
+import SortProfiles from './components/SortProfiles';
+import MiniProfile from './components/MiniProfile';
+
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
+const DashboardPage: FC<Props> = ({ setMatchaNotif, setMatchaMenuIcon }) => {
   const nav = useNavigate();
   const mark = useMenuOnOff();
-  const tab = useListingTab();
-  const [reloadListing, setReloadListing] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>('matcha');
   const [listing, setListing] = useState<MiniProfileType[] | null>(null);
-  const [url, setUrl] = useState<string | null>(null);
   const [listingName, setListingName] = useState<string>('matcha');
+  const [reqData, setReqData] = useState<{ listingName: string } | null>(null);
 
   useEffect(() => {
     if (!Cookies.get('session')) {
@@ -34,51 +34,27 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
       return;
     }
     mark.setDashboardMenu(true);
-    setReloadListing(true);
+    setMatchaMenuIcon(true);
+    setListingName('matcha');
   }, []);
 
   useEffect(() => {
-    if (!reloadListing) return;
-    if (tab.matchaTab) {
-      setUrl(listingRoute.getMatchaList);
-      setListingName('matcha');
-    } else if (tab.viewTab) {
-      setUrl(listingRoute.getViewList);
-      setListingName('view');
-    } else if (tab.likeTab) {
-      setUrl(listingRoute.getLikeList);
-      setListingName('like');
-    } else if (tab.matchTab) {
-      setUrl(listingRoute.getMatchList);
-    } else if (tab.visitedTab) {
-      setUrl(listingRoute.getVisitedList);
-    } else if (tab.likedTab) {
-      setUrl(listingRoute.getLikedList);
-    } else if (tab.banTab) {
-      setUrl(listingRoute.getBannedList);
-    }
-    setReloadListing(false);
-  }, [
-    tab.matchaTab,
-    tab.viewTab,
-    tab.likeTab,
-    tab.matchTab,
-    tab.visitedTab,
-    tab.likedTab,
-    tab.banTab,
-  ]);
+    if (!listingName) return;
+    setReqData({ listingName: listingName });
+  }, [listingName]);
 
   useEffect(() => {
-    if (!url) return;
+    if (!reqData) return;
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(url, {
-          method: 'GET',
+        const response = await fetch(listingRoute.getListing, {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${Cookies.get('session')}`,
           },
+          body: JSON.stringify(reqData),
         });
         const data = await response.json();
         if (!isMounted) return;
@@ -92,13 +68,13 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
           nav(appRedir.errorInternal);
           return;
         }
+        setReqData(null);
         if (response.status !== 200) {
           setMatchaNotif(data.message);
           setListing(null);
           return;
         }
         setListing(data.listing);
-        setUrl(null);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -109,71 +85,85 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [url]);
+  }, [reqData]);
 
   return (
     <>
       <div className='dashboard_container'>
         <div className='dashboard_menu'>
           <button
+            className={
+              activeTab === 'matcha' ? 'dashboardTab_on' : 'dashboardTab_off'
+            }
             onClick={() => {
-              tab.setAlltabOff();
-              tab.setMatchaTab(true);
-              setReloadListing(true);
+              setActiveTab('matcha');
+              setListingName('matcha');
             }}
           >
             Selection Matcha
           </button>
           <button
+            className={
+              activeTab === 'view' ? 'dashboardTab_on' : 'dashboardTab_off'
+            }
             onClick={() => {
-              tab.setAlltabOff();
-              tab.setViewTab(true);
-              setReloadListing(true);
+              setActiveTab('view');
+              setListingName('view');
             }}
           >
             Vues
           </button>
           <button
+            className={
+              activeTab === 'like' ? 'dashboardTab_on' : 'dashboardTab_off'
+            }
             onClick={() => {
-              tab.setAlltabOff();
-              tab.setLikeTab(true);
-              setReloadListing(true);
+              setActiveTab('like');
+              setListingName('like');
             }}
           >
             Like
           </button>
           <button
+            className={
+              activeTab === 'match' ? 'dashboardTab_on' : 'dashboardTab_off'
+            }
             onClick={() => {
-              tab.setAlltabOff();
-              tab.setMatchTab(true);
-              setReloadListing(true);
+              setActiveTab('match');
+              setListingName('match');
             }}
           >
             Match
           </button>
           <button
+            className={
+              activeTab === 'visited' ? 'dashboardTab_on' : 'dashboardTab_off'
+            }
             onClick={() => {
-              tab.setAlltabOff();
-              tab.setVisitedTab(true);
-              setReloadListing(true);
+              setActiveTab('visited');
+              setListingName('visited');
             }}
           >
             Profils visités
           </button>
           <button
+            className={
+              activeTab === 'liked' ? 'dashboardTab_on' : 'dashboardTab_off'
+            }
             onClick={() => {
-              tab.setAlltabOff();
-              tab.setLikedTab(true);
-              setReloadListing(true);
+              setActiveTab('liked');
+              setListingName('liked');
             }}
           >
             Profils likés
           </button>
           <button
+            className={
+              activeTab === 'banned' ? 'dashboardTab_on' : 'dashboardTab_off'
+            }
             onClick={() => {
-              tab.setAlltabOff();
-              tab.setBanTab(true);
-              setReloadListing(true);
+              setActiveTab('banned');
+              setListingName('banned');
             }}
           >
             Profils bloqués
@@ -181,29 +171,34 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
         </div>
 
         <div className='dashboard_title'>
-          {tab.matchaTab && 'Selection de profils pouvant vous intéresser'}
-          {tab.viewTab && 'Profils qui vous ont vus'}
-          {tab.likeTab && 'Profils qui vous ont likés'}
-          {tab.matchTab && 'Profils avec qui vous avez matchés'}
-          {tab.visitedTab && 'Profils que vous avez vus'}
-          {tab.likedTab && 'Profils que vous avez likés'}
-          {tab.banTab && 'Profils que vous avez bloqués'}
+          {activeTab === 'matcha' &&
+            'Selection de profils pouvant vous intéresser'}
+          {activeTab === 'view' && 'Profils qui vous ont vus'}
+          {activeTab === 'like' && 'Profils qui vous ont likés'}
+          {activeTab === 'match' && 'Profils avec qui vous avez matchés'}
+          {activeTab === 'visited' && 'Profils que vous avez vus'}
+          {activeTab === 'liked' && 'Profils que vous avez likés'}
+          {activeTab === 'ban' && 'Profils que vous avez bloqués'}
         </div>
 
-        <div className='dashbord_header'>
-          <DisplaySortProfiles listingName={listingName} listing={listing} />
-          <DisplayFilterProfiles
+        <div
+          className={listing ? 'dashbord_header_on' : 'dashboard_header_off'}
+        >
+          <SortProfiles listing={listing} />
+          <FilterProfiles
             listingName={listingName}
             setListing={setListing}
             setMatchaNotif={setMatchaNotif}
           />
         </div>
 
-        <div className='dashboard_content'>
+        <div
+          className={listing ? 'dashbord_content_on' : 'dashboard_content_off'}
+        >
           {listing && (
             <>
               {listing.map((profile, key) => (
-                <DisplayMiniProfile
+                <MiniProfile
                   key={key as number}
                   profile={profile}
                   setMatchaNotif={setMatchaNotif}
@@ -214,7 +209,13 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
         </div>
 
         <div className='dashboard_footer'>
-          <div className='dashboard_footer_text'>{`${listing?.length} profil(s) trouvé(s)`}</div>
+          <div className='dashboard_footer_text'>
+            {listing
+              ? `${listing.length} profil(s) trouvé(s)`
+              : ' 0 profil trouvé'}
+          </div>
+        </div>
+        <div>
         </div>
       </div>
     </>

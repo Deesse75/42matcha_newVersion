@@ -1,61 +1,73 @@
 import { Router } from 'express';
-import { forgotPassword, initializeDatabase, reinitPassword, resendEmail, signinEmail, signinUsername, signup, validateEmail } from './auth.controller.js';
-import { authBodyValidation } from './validation/auth.body.validation.js';
-import { authTokenValidation } from './validation/token.validation.js';
 import {
-  dontFindUserByEmail,
-  dontFindUserByUsername,
-  findUserByUsername,
-  findUserByEmail,
-  findUserNotCertified,
-} from './validation/user.validation.js';
+  forgotPassword,
+  initializeDatabase,
+  reinitPassword,
+  resendEmail,
+  signinEmail,
+  signinUsername,
+  signup,
+  validateEmail,
+} from './auth.controller.js';
+import { authBodyValidation } from '../middleware/auth.body.validation.js';
+import { authTokenValidation } from '../middleware/authToken.validation.js';
+import {
+  authUserValidation,
+  birthdateValidation,
+  isEmailCertified,
+} from '../middleware/auth.data.validation.js';
 
 const authRouter = Router();
-
 
 authRouter.get('/init', initializeDatabase);
 authRouter.post(
   '/signup',
   authBodyValidation,
-  dontFindUserByEmail,
-  dontFindUserByUsername,
+  birthdateValidation,
+  authUserValidation,
   signup,
 );
 authRouter.post(
   '/signin_username',
   authBodyValidation,
-  findUserByUsername,
+  authUserValidation,
+  isEmailCertified,
   signinUsername,
 );
 authRouter.post(
   '/signin_email',
   authBodyValidation,
-  findUserByEmail,
+  authUserValidation,
+  isEmailCertified,
   signinEmail,
 );
 authRouter.post(
   '/forgot_password',
   authBodyValidation,
-  findUserByEmail,
+  authUserValidation,
+  isEmailCertified,
   forgotPassword,
 );
 authRouter.post(
   '/resend_email',
   authBodyValidation,
-  findUserNotCertified,
+  authUserValidation,
+  isEmailCertified,
   resendEmail,
 );
 authRouter.patch(
   '/reinit_password',
   authBodyValidation,
-  findUserByEmail,
+  authUserValidation,
+  isEmailCertified,
   reinitPassword,
 );
 authRouter.post(
   '/validate_email',
   authBodyValidation,
   authTokenValidation,
-  findUserNotCertified,
+  authUserValidation,
+  isEmailCertified,
   validateEmail,
 );
 

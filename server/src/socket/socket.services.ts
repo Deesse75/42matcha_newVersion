@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { socketRoute } from './utils/socket.utils.js';
+import * as mysql from '../mysql/mysql.service.js';
 
 const socketsMap = new Map<number, Socket>();
 
@@ -11,6 +12,8 @@ export const manageSocket = (io: Server) => {
     let username: string | null = null;
     let sendError: boolean = false;
 
+
+    //Connection
     try {
       if (socket.handshake.query.id) id = Number(socket.handshake.query.id);
       if (!id) sendError = true;
@@ -34,13 +37,18 @@ export const manageSocket = (io: Server) => {
       socket.disconnect();
     }
 
+    //Disconnection by user
     socket.on(socketRoute.disconnect, () => {
+      const query = 'UPDATE User SET lastConnection = ? WHERE id = ?';
+      const values = [new Date(), id];
+      mysql.updateUserMysqlData(query, values);
       socketsMap.delete(id);
       socketsMap.forEach((value, key) => {
         value.emit(socketRoute.newDisconnect, id, username);
       });
     });
 
+    //request
     socket.on(socketRoute.isUserConnected, (id: number) => {
       const response: Socket | null = isSocketExist(id);
       socket.emit(socketRoute.receptIsConnected, response ? true : false);

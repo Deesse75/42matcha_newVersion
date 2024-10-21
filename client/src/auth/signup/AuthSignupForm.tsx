@@ -3,6 +3,7 @@ import {
   MdOutlineAlternateEmail,
   MdOutlineDriveFileRenameOutline,
 } from 'react-icons/md';
+import { BsCalendar2Date } from 'react-icons/bs';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { authRoute, appRedir } from '../../appConfig/appPath';
@@ -13,6 +14,7 @@ import usernameValidation, {
 } from '../../utils/inputValidation';
 import InputEye from '../../utils/InputEye';
 import generate from '../../utils/generate';
+import convertAge from '../../utils/convertAge';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -22,6 +24,7 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
   const refFirstname = useRef<HTMLInputElement>(null);
   const refLastname = useRef<HTMLInputElement>(null);
   const refUsername = useRef<HTMLInputElement>(null);
+  const refBirthdate = useRef<HTMLInputElement>(null);
   const refEmail = useRef<HTMLInputElement>(null);
   const refPassword = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
@@ -29,6 +32,7 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
     firstname: string;
     lastname: string;
     username: string;
+    birthdate: Date;
     email: string;
     password: string;
   } | null>(null);
@@ -37,10 +41,11 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
     const firstname = refFirstname.current?.value.trim() || null;
     const lastname = refLastname.current?.value.trim() || null;
     const username = refUsername.current?.value.trim() || null;
+    const birthdate = refBirthdate.current ? new Date(refBirthdate.current.value) : null;
     const email = refEmail.current?.value.trim() || null;
     const password = refPassword.current?.value.trim() || null;
 
-    if (!username || !password || !firstname || !lastname || !email) {
+    if (!username || !password || !firstname || !lastname || !email || !birthdate) {
       setMatchaNotif('Tous les champs sont requis.');
       return;
     }
@@ -63,6 +68,10 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
       );
       return;
     }
+    if (parseInt(convertAge(birthdate.toISOString())) < 18) {
+      setMatchaNotif('Vous devez avoir 18 ans ou plus pour vous inscrire.');
+      return;
+    }
     if (!passwordValidation(password)) {
       setMatchaNotif(
         'Le format du mot de passe est invalide. Voir règles de saisie de formulaire en bas de page.',
@@ -75,13 +84,14 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
       }
       return;
     }
-    setBodyRequest({ firstname, lastname, username, email, password });
+    setBodyRequest({ firstname, lastname, username, birthdate, email, password });
   };
 
   const handleClear = () => {
     if (refFirstname.current) refFirstname.current.value = '';
     if (refLastname.current) refLastname.current.value = '';
     if (refUsername.current) refUsername.current.value = '';
+    if (refBirthdate.current) refBirthdate.current.value = '';
     if (refEmail.current) refEmail.current.value = '';
     if (refPassword.current) refPassword.current.value = '';
   };
@@ -124,13 +134,13 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <div className='auth_signin_form'>
-        <div className='auth_signin_input_container'>
-          <div className='auth_signin_input_icon'>
+      <div className='auth_signup_form'>
+        <div className='auth_signup_input_container'>
+          <div className='auth_signup_input_icon'>
             <MdOutlineDriveFileRenameOutline size={30} />
           </div>
           <input
-            className='auth_signin_input_value'
+            className='auth_signup_input_value'
             type='text'
             name='signin_firstname'
             id='signin_firstname'
@@ -143,12 +153,12 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
           />
         </div>
 
-        <div className='auth_signin_input_container'>
-          <div className='auth_signin_input_icon'>
+        <div className='auth_signup_input_container'>
+          <div className='auth_signup_input_icon'>
             <MdOutlineDriveFileRenameOutline size={30} />
           </div>
           <input
-            className='auth_signin_input_value'
+            className='auth_signup_input_value'
             type='text'
             name='signin_lastname'
             id='signin_lastname'
@@ -161,12 +171,12 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
           />
         </div>
 
-        <div className='auth_signin_input_container'>
-          <div className='auth_signin_input_icon'>
+        <div className='auth_signup_input_container'>
+          <div className='auth_signup_input_icon'>
             <MdOutlineDriveFileRenameOutline size={30} />
           </div>
           <input
-            className='auth_signin_input_value'
+            className='auth_signup_input_value'
             type='text'
             name='signin_username'
             id='signin_username'
@@ -179,12 +189,30 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
           />
         </div>
 
-        <div className='auth_signin_input_container'>
-          <div className='auth_signin_input_icon'>
+        <div className='auth_signup_input_container'>
+          <div className='auth_signup_input_icon'>
+            <BsCalendar2Date />
+          </div>
+          <input
+            className='auth_signup_input_value'
+            type='date'
+            name='signin_birthdate'
+            id='signin_birthdate'
+            maxLength={30}
+            minLength={3}
+            required
+            autoComplete='off'
+            ref={refBirthdate}
+            placeholder="Date de naissance"
+          />
+        </div>
+
+        <div className='auth_signup_input_container'>
+          <div className='auth_signup_input_icon'>
             <MdOutlineAlternateEmail size={30} />
           </div>
           <input
-            className='auth_signin_input_value'
+            className='auth_signup_input_value'
             type='email'
             name='signin_email'
             id='signin_email'
@@ -195,12 +223,12 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
           />
         </div>
 
-        <div className='auth_signin_input_container'>
-          <div className='auth_signin_input_icon'>
+        <div className='auth_signup_input_container'>
+          <div className='auth_signup_input_icon'>
             <RiLockPasswordLine size={30} />
           </div>
           <input
-            className='auth_signin_input_value'
+            className='auth_signup_input_value'
             type='password'
             name='signin_password'
             id='signin_password'

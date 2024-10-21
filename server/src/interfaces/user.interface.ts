@@ -1,4 +1,6 @@
-export type FullProfileType = {
+import { MysqlUserTagsType } from "./mysql_out.interfaces.js";
+
+export type UserType = {
   id: number;
   firstname: string;
   lastname: string;
@@ -8,9 +10,9 @@ export type FullProfileType = {
   age: number;
   gender: string | null;
   orientation: string | null;
-  region: string;
-  county: string;
-  town: string;
+  region: string | null;
+  county: string | null;
+  town: string | null;
   tall: number;
   biography: string | null;
   fameRating: number;
@@ -27,23 +29,7 @@ export type FullProfileType = {
   updatedAt: string;
 };
 
-
-export type MiniProfileType = {
-  id: number;
-  username: string;
-  age: number;
-  gender: string | null;
-  orientation: string | null;
-  region: string;
-  county: string | null;
-  town: string | null;
-  photo: string | null;
-  fameRating: number;
-  lastConnection: string | null;
-};
-
-export type UserTagsType = {
-  id: number;
-  userId: number;
-  tagName: string;
-};
+export type MeType = {
+  user: UserType;
+  userTags: MysqlUserTagsType[] | null;
+}

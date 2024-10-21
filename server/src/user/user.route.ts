@@ -1,19 +1,20 @@
 import { Router } from 'express';
-import { tokenValidation } from './validation/token.validation.js';
-import { findExistingUser } from './validation/user.validation.js';
+import {
+  findExistingUser,
+  findUserTags,
+} from '../middleware/user.data.validation.js';
+import { userTokenValidation } from '../middleware/userToken.validation.js';
+import { getMe } from './user.controller.js';
 
 const userRoute = Router();
 
 userRoute.get(
-  'get_me',
-  tokenValidation,
+  '/get_me',
+  userTokenValidation,
   findExistingUser,
-  findTags,
-  findLookFor,
+  findUserTags,
   getMe,
 );
-
-
 
 //findReceiver
 export default userRoute;
