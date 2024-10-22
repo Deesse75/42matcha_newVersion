@@ -1,102 +1,71 @@
 import { FC, useEffect, useState } from 'react';
 import { MiniProfileType } from '../../../appConfig/interface';
+import { useUserInfo } from '../../../appContext/user.context';
+import { calculateDistance, communTags } from '../../../utils/sort.utils';
 
 type Props = {
-  listing: MiniProfileType[] | null;
+  currentListing: MiniProfileType[];
+  setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
+  setListingName: React.Dispatch<React.SetStateAction<string | null>>;
+  activeTab: string;
 };
 
-const SortProfiles: FC<Props> = ({ listing }) => {
-  const [ageChecked, setAgeChecked] = useState<boolean>(false);
-  const [locationChecked, setLocationChecked] = useState<boolean>(false);
-  const [tagsChecked, setTagsChecked] = useState<boolean>(false);
-  const [fameChecked, setFameChecked] = useState<boolean>(false);
-  const [reloadSort, setReloadSort] = useState<boolean>(false);
+const SortProfiles: FC<Props> = ({
+  currentListing,
+  setListing,
+  setListingName,
+  activeTab,
+}) => {
+  const me = useUserInfo();
+  const [sortSelected, setSortSelected] = useState<string>('default');
+
+  const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSortSelected(e.currentTarget.sort.value);
+  };
 
   useEffect(() => {
-    if (!reloadSort || !listing) return;
-    if (ageChecked) {
-      listing.sort((a, b) => a.age - b.age);
-      setFameChecked(false);
-      setLocationChecked(false);
-      setTagsChecked(false);
-    } else if (locationChecked) {
-      console.log('locationChecked a implementer');
-      setFameChecked(false);
-      setAgeChecked(false);
-      setTagsChecked(false);
-    } else if (tagsChecked) {
-      console.log('tagsChecked a implementer');
-      setFameChecked(false);
-      setAgeChecked(false);
-      setLocationChecked(false);
-    } else if (fameChecked) {
-      listing.sort((a, b) => b.fameRating - a.fameRating);
-      setTagsChecked(false);
-      setAgeChecked(false);
-      setLocationChecked(false);
-    }
-    setReloadSort(false);
-  }, [fameChecked, ageChecked, locationChecked, tagsChecked, reloadSort]);
+    if (sortSelected === 'default') return;
+    let sortListing: MiniProfileType[] = [];
+    if (sortSelected === 'ageUp')
+      sortListing = currentListing.sort((a, b) => a.age - b.age);
+    else if (sortSelected === 'ageDown')
+      sortListing = currentListing.sort((a, b) => b.age - a.age);
+    else if (sortSelected === 'fameRating')
+      sortListing = currentListing.sort((a, b) => b.fameRating - a.fameRating);
+    else if (sortSelected === 'location')
+      sortListing = currentListing.sort(
+        (a, b) => calculateDistance(a, me.user) - calculateDistance(b, me.user),
+      );
+    else if (sortSelected === 'tags')
+      sortListing = currentListing.sort(
+        (a, b) => communTags(a, me.user) - communTags(b, me.user),
+      );
+    else setListingName(activeTab);
+    setListing(sortListing);
+    sortListing = [];
+  }, [sortSelected]);
 
   return (
     <>
-      <div className='matcha_sort'>
-        <div className='matcha_sort_title'>Trier par : </div>
-
-            <div className='matcha_sort_option'>
-              <div className='matcha_sort_option_part'>
-                <label htmlFor='sort_age'>Age</label>
-                <input
-                  onChange={() => {
-                    setAgeChecked(!ageChecked);
-                    setReloadSort(true);
-                  }}
-                  type='checkbox'
-                  name='sort_age'
-                  id='sort_age'
-                  checked={ageChecked}
-                />
-              </div>
-              <div className='matcha_sort_option_part'>
-                <label htmlFor='sort_location'>Proximité</label>
-                <input
-                  onChange={() => {
-                    setLocationChecked(!locationChecked);
-                    setReloadSort(true);
-                  }}
-                  type='checkbox'
-                  name='sort_location'
-                  id='sort_location'
-                  checked={locationChecked}
-                />
-              </div>
-              <div className='matcha_sort_option_part'>
-                <label htmlFor='sort_fame'>Indice de popularité</label>
-                <input
-                  onChange={() => {
-                    setFameChecked(!fameChecked);
-                    setReloadSort(true);
-                  }}
-                  type='checkbox'
-                  name='sort_fame'
-                  id='sort_fame'
-                  checked={fameChecked}
-                />
-              </div>
-              <div className='matcha_sort_option_part'>
-                <label htmlFor='sort_tags'>Tags en commun</label>
-                <input
-                  onChange={() => {
-                    setTagsChecked(!tagsChecked);
-                    setReloadSort(true);
-                  }}
-                  type='checkbox'
-                  name='sort_tags'
-                  id='sort_tags'
-                  checked={tagsChecked}
-                />
-              </div>
-            </div>
+      <div className='dashboard_sort'>
+        <form onSubmit={handleClick} className='dashboard_sort_form'>
+          <select name='sort' id='sort' className='dashboard_sort_select'>
+            <option defaultValue='default'>Trier par ...</option>
+            <option value='ageUp'>Age croissant</option>
+            <option value='ageDown'>Age décroissant</option>
+            <option value='fameRating'>Indice de popularité</option>
+            <option value='location'>Proximité</option>
+            <option value='tags'>Intêret en commun</option>
+            <option value='reload'>Supprimer le tri</option>
+          </select>
+          <input
+            type='submit'
+            name='sort_submit'
+            id='sort_submit'
+            value='Trier'
+          />
+        </form>
       </div>
     </>
   );

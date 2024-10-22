@@ -27,6 +27,12 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-image: url('background/vecteezy_cartoon-couple.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
 
     .header {
       width: 100vw;

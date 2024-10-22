@@ -1,5 +1,3 @@
-import { MysqlUserTagsType } from "./mysql_out.interfaces.js";
-
 export type UserType = {
   id: number;
   firstname: string;
@@ -25,11 +23,7 @@ export type UserType = {
   ageMax: number;
   genderLookFor: string | null;
   lastConnection: string | null;
+  tags: string[] | null;
   createdAt: string;
   updatedAt: string;
 };
-
-export type MeType = {
-  user: UserType;
-  userTags: MysqlUserTagsType[] | null;
-}

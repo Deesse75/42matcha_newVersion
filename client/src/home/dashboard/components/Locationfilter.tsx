@@ -5,14 +5,14 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
-  listingName: string;
   setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
+  activeTab: string;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const Locationfilter: FC<Props> = ({
-  listingName,
   setListing,
+  activeTab,
   setMatchaNotif,
 }) => {
   const nav = useNavigate();
@@ -29,7 +29,7 @@ const Locationfilter: FC<Props> = ({
       return;
     }
     setReqData({ 
-      listingName: listingName,
+      listingName: activeTab,
       zone: zone });
   };
 
@@ -79,10 +79,10 @@ const Locationfilter: FC<Props> = ({
 
   return (
     <>
-      <div className='dashboard_filter_location'>
-        <form onSubmit={handleClick} className='dashboard_form_location'>
+      <div className='dashboard_filter'>
+        <form onSubmit={handleClick} className='dashboard_filter_form'>
           <select name='location_zone' id='location_zone'>
-            <option value='default'>Zone de filtrage</option>
+            <option defaultValue='default'>Zone de filtrage</option>
             <option value='town'>Ville</option>
             <option value='county'>Département</option>
             <option value='region'>Région</option>

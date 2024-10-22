@@ -12,7 +12,10 @@ export function convertPhoto(photo: Buffer | null): string | null {
   return `data:image/jpeg;base64,${photo.toString('base64')}`;
 }
 
-export function convertUserType(user: MysqlUserType): UserType {
+export function convertUserType(
+  user: MysqlUserType,
+  userTags: MysqlUserTagsType[] | null,
+): UserType {
   return {
     id: user.id,
     firstname: user.firstname,
@@ -38,29 +41,30 @@ export function convertUserType(user: MysqlUserType): UserType {
     ageMax: user.ageMax,
     genderLookFor: user.genderLookFor,
     lastConnection: user.lastConnection,
+    tags: userTags ? convertTags(userTags) : null,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
 }
 
-export function convertListing(
+export function convertListingProfile(
   listing: MysqlMiniUserType,
   tags: MysqlUserTagsType[] | null,
 ): ListingUserType {
   return {
-  id: listing.id,
-  username: listing.username,
-  age: listing.age,
-  gender: listing.gender ? listing.gender : null,
-  orientation: listing.orientation ? listing.orientation : null,
-  region: listing.region ? listing.region : null,
-  county: listing.county ? listing.county : null,
-  town: listing.town ? listing.town : null,
-  fameRating: listing.fameRating,
-  photo1: listing.photo1 ? convertPhoto(listing.photo1) : null,
-  tags: tags ? convertTags(tags) : null,
-  lastConnection: listing.lastConnection ? listing.lastConnection : null,
-  }
+    id: listing.id,
+    username: listing.username,
+    age: listing.age,
+    gender: listing.gender ? listing.gender : null,
+    orientation: listing.orientation ? listing.orientation : null,
+    region: listing.region ? listing.region : null,
+    county: listing.county ? listing.county : null,
+    town: listing.town ? listing.town : null,
+    fameRating: listing.fameRating,
+    photo1: listing.photo1 ? convertPhoto(listing.photo1) : null,
+    tags: tags ? convertTags(tags) : null,
+    lastConnection: listing.lastConnection ? listing.lastConnection : null,
+  };
 }
 
 export function convertTags(tags: MysqlUserTagsType[]): string[] {

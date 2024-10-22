@@ -4,7 +4,7 @@ import {
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
 import * as mysql from '../mysql/mysql.service.js';
-import { convertListing } from '../utils/convertData.js';
+import { convertListingProfile } from '../utils/convertData.js';
 import { matchaError } from '../utils/matcha_error.js';
 
 export const getListingService = async (
@@ -35,9 +35,9 @@ const addTags = async (
 ): Promise<ListingUserType[]> => {
   let newListing: ListingUserType[] = [];
   for (let i = 0; i < listing.length; i++) {
-    const query = 'SELECT * FROM UserTags WHERE id = ?';
+    const query = 'SELECT * FROM UserTags WHERE userId = ?';
     const tags = await mysql.getUserTags(query, [listing[i].id]);
-    newListing.push(convertListing(listing[i], tags));
+    newListing.push(convertListingProfile(listing[i], tags));
   }
   return newListing;
 };

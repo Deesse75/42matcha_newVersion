@@ -8,9 +8,9 @@ export type FullProfileType = {
   age: number;
   gender: string | null;
   orientation: string | null;
-  region: string;
-  county: string;
-  town: string;
+  region: string | null;
+  county: string | null;
+  town: string | null;
   tall: number;
   biography: string | null;
   fameRating: number;
@@ -23,6 +23,7 @@ export type FullProfileType = {
   ageMax: number;
   genderLookFor: string | null;
   lastConnection: string | null;
+  tags: string[] | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -34,11 +35,12 @@ export type MiniProfileType = {
   age: number;
   gender: string | null;
   orientation: string | null;
-  region: string;
+  region: string | null;
   county: string | null;
   town: string | null;
-  photo: string | null;
   fameRating: number;
+  photo1: string | null;
+  tags: string[] | null;
   lastConnection: string | null;
 };
 

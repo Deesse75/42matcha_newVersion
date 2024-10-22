@@ -5,12 +5,12 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
-  listingName: string;
   setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
+  activeTab: string;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AgeFilter: FC<Props> = ({ listingName, setListing, setMatchaNotif }) => {
+const AgeFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
   const nav = useNavigate();
   const [reqData, setReqData] = useState<{
     listingName: string;
@@ -38,7 +38,7 @@ const AgeFilter: FC<Props> = ({ listingName, setListing, setMatchaNotif }) => {
       setMatchaNotif("L'âge minimum est supérieur à l'âge maximum");
       return;
     }
-    setReqData({ listingName: listingName, ageMin: min, ageMax: max });
+    setReqData({ listingName: activeTab, ageMin: min, ageMax: max });
   };
 
   useEffect(() => {
@@ -87,15 +87,15 @@ const AgeFilter: FC<Props> = ({ listingName, setListing, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='dashboard_filter_age'>
-        <form onSubmit={handleClick} className='dashboard_form_minmax'>
+      <div className='dashboard_filter'>
+        <form onSubmit={handleClick} className='dashboard_filter_form'>
           <input
             type='number'
             min={18}
             max={120}
             name='agemin'
             id='ageMin'
-            placeholder='min'
+            placeholder='age minimum'
           />
           <input
             type='number'
@@ -103,9 +103,14 @@ const AgeFilter: FC<Props> = ({ listingName, setListing, setMatchaNotif }) => {
             max={120}
             name='agemax'
             id='ageMax'
-            placeholder='max'
+            placeholder='age maximum'
           />
-          <input type='submit' name='' id='' value='Filtrer' />
+          <input
+            type='submit'
+            name='age_filter'
+            id='age_filter'
+            value='Filtrer'
+          />
         </form>
       </div>
     </>
