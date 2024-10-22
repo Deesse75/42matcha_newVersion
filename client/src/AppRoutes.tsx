@@ -115,7 +115,15 @@ const AppRoutes: FC<Props> = ({
             />
           }
         />
-        <Route path={appRedir.profile} element={<ProfilePage />} />
+        <Route
+          path={appRedir.profile}
+          element={
+            <ProfilePage
+              setMatchaNotif={setMatchaNotif}
+              setMatchaMenuIcon={setMatchaMenuIcon}
+            />
+          }
+        />
         <Route path={appRedir.deleteProfile} element={<DeleteProfile />} />
         <Route
           path={appRedir.dashboard}

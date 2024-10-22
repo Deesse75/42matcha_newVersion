@@ -31,13 +31,6 @@ export type FakeUserType = {
   ageMinLookFor: number;
   ageMaxLookFor: number;
   genderLookFor: string | null;
-  orientationLookFor: string | null;
-  locationLookFor: string | null;
-  tallMinLookFor: number;
-  tallMaxLookFor: number;
-  withPhoto: boolean;
-  withBiography: boolean;
-  withConnectionOn: boolean;
   lastConnection: Date | null;
   createdAt: Date;
   updatedAt: Date;

@@ -7,7 +7,8 @@ import { BsCalendar2Date } from 'react-icons/bs';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { authRoute, appRedir } from '../../appConfig/appPath';
-import usernameValidation, {
+import {
+  usernameValidation,
   emailValidation,
   nameValidation,
   passwordValidation,
@@ -41,11 +42,20 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
     const firstname = refFirstname.current?.value.trim() || null;
     const lastname = refLastname.current?.value.trim() || null;
     const username = refUsername.current?.value.trim() || null;
-    const birthdate = refBirthdate.current ? new Date(refBirthdate.current.value) : null;
+    const birthdate = refBirthdate.current
+      ? new Date(refBirthdate.current.value)
+      : null;
     const email = refEmail.current?.value.trim() || null;
     const password = refPassword.current?.value.trim() || null;
 
-    if (!username || !password || !firstname || !lastname || !email || !birthdate) {
+    if (
+      !username ||
+      !password ||
+      !firstname ||
+      !lastname ||
+      !email ||
+      !birthdate
+    ) {
       setMatchaNotif('Tous les champs sont requis.');
       return;
     }
@@ -84,7 +94,14 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
       }
       return;
     }
-    setBodyRequest({ firstname, lastname, username, birthdate, email, password });
+    setBodyRequest({
+      firstname,
+      lastname,
+      username,
+      birthdate,
+      email,
+      password,
+    });
   };
 
   const handleClear = () => {
@@ -203,7 +220,7 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
             required
             autoComplete='off'
             ref={refBirthdate}
-            placeholder="Date de naissance"
+            placeholder='Date de naissance'
           />
         </div>
 

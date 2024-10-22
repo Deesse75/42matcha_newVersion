@@ -4,7 +4,7 @@ export type UserType = {
   lastname: string;
   username: string;
   email: string;
-  birthdate: string | null;
+  birthdate: string;
   age: number;
   gender: string | null;
   orientation: string | null;

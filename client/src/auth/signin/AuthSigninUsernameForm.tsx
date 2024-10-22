@@ -1,7 +1,8 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { MdOutlineDriveFileRenameOutline } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import usernameValidation, {
+import {
+  usernameValidation,
   passwordValidation,
 } from '../../utils/inputValidation';
 import { appRedir, authRoute } from '../../appConfig/appPath';

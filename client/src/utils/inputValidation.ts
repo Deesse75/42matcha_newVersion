@@ -1,4 +1,25 @@
-export default function usernameValidation(username: string): boolean {
+export default function inputValidation(
+  firstname: string | null,
+  lastname: string | null,
+  username: string | null,
+  email: string | null,
+  currentPassword: string | null,
+  newPassword: string | null,
+  birthdate: Date | null,
+): string {
+  if (!firstname && !lastname && !username && !email && !currentPassword && !newPassword && !birthdate) return 'empty';
+  if (firstname && !nameValidation(firstname)) return 'firstname';
+  if (lastname && !nameValidation(lastname)) return 'lastname';
+  if (username && !usernameValidation(username)) return 'username';
+  if (email && !emailValidation(email)) return 'email';
+  if (birthdate && !birthdateValidation(birthdate.toISOString().split('T')[0])) return 'birthdate';
+  if (currentPassword !== newPassword) return 'password';
+  if (currentPassword && !passwordValidation(currentPassword)) return 'currentPassword';
+  if (newPassword && !passwordValidation(newPassword)) return 'newPassword';
+  return 'ok';
+};
+
+export function usernameValidation(username: string): boolean {
   const regex = /^[a-zA-Z][a-zA-Z0-9_@]*$/;
   if (username.length < 3 || username.length > 30 || !regex.test(username)) {
     return false;
