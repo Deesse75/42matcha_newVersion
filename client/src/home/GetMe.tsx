@@ -54,8 +54,7 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
           nav(appRedir.errorInternal);
           return;
         }
-        me.setUser(data.me.user);
-        me.setUserTags(data.me.userTags);
+        me.setUser(data.user);
         setControlePage(false);
       } catch (error) {
         if (!isMounted) return;

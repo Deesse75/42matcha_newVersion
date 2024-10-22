@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from "react";
 import { socketRoute } from "../../../appConfig/appPath";
 import { useUserInfo } from "../../../appContext/user.context";
-import convertDate from "../../../utils/convertDate";
 import { FaCircle } from 'react-icons/fa';
+import convertDate from "../../../utils/convertDate";
 
 type Props = {
   id: number;
-  lastCo: Date | null;
+  lastCo: string | null;
 };
 
 const DisplayConnection: FC<Props> = ({ id, lastCo }) => {

@@ -19,15 +19,17 @@ const MiniProfile: FC<Props> = ({ profile, setMatchaNotif }) => {
         <div className='mini_profile_left'>
           <div className='mini_profile_left_top'>
             <img
-              src={profile.photo ? profile.photo : '/avatar/default_avatar.jpg'}
+              src={
+                profile.photo1 ? profile.photo1 : '/avatar/default_avatar.jpg'
+              }
               alt={
-                profile.photo
+                profile.photo1
                   ? 'Photo de profil personnalisée'
                   : 'Photo de profil par défaut'
               }
               style={{
-                width: '100%',
-                height: '100%',
+                width: '50px',
+                height: '50px',
                 borderRadius: '10px',
                 border: 'none',
               }}
@@ -36,7 +38,7 @@ const MiniProfile: FC<Props> = ({ profile, setMatchaNotif }) => {
           <div className='mini_profile_left_bottom'>
             <DisplayConnection
               id={profile.id}
-              lastCo={profile.lastConnection ? new Date(profile.lastConnection) : new Date()}
+              lastCo={profile.lastConnection ? profile.lastConnection : null}
             />
             <DisplayFameRating fameRating={profile.fameRating} size={20} />
           </div>
@@ -45,7 +47,15 @@ const MiniProfile: FC<Props> = ({ profile, setMatchaNotif }) => {
         <div className='mini_profile_right'>
           <div className='mini_profile_right_data'>
             <DisplayMiniUserData profile={profile} />
-            <DisplayTags id={profile.id} setMatchaNotif={setMatchaNotif} />
+            <div className='mini_user_tags'>
+              {profile.tags && (
+                <>
+                  {profile.tags.map((tag, index) => (
+                    <DisplayTags key={index as number} tag={tag} />
+                  ))}
+                </>
+              )}
+            </div>
           </div>
           <div className='mini_profile_right_interaction'>
             <DisplayInteraction

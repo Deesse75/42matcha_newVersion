@@ -1,27 +1,32 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { MiniProfileType } from '../../../appConfig/interface';
 import { appRedir, listingRoute } from '../../../appConfig/appPath';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
-  listingName: string;
   setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
+  activeTab: string;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const FameFilter: FC<Props> = ({ listingName, setListing, setMatchaNotif }) => {
+const FameFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
   const nav = useNavigate();
-  const refFame = useRef<HTMLInputElement>(null);
   const [reqData, setReqData] = useState<{
     listingName: string;
     fameMin: number;
   } | null>(null);
 
-  const handleClick = () => {
-    setReqData({ 
-      listingName: listingName,
-      fameMin: refFame.current?.value ? parseInt(refFame.current.value) : 0 
+  const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fameMin = parseInt(e.currentTarget!.fame.value) || 0;
+    if (fameMin <= 0) {
+      setMatchaNotif("L'indice de popularité doit être supérieur à 0.");
+      return;
+    }
+    setReqData({
+      listingName: activeTab,
+      fameMin: fameMin,
     });
   };
 
@@ -71,16 +76,23 @@ const FameFilter: FC<Props> = ({ listingName, setListing, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='dashboard_filter_fame'>
+      <div className='dashboard_filter'>
+        <form onSubmit={handleClick} className='dashboard_filter_form'>
           <input
-          ref={refFame}
             type='number'
             min={0}
+            required
             name='fame'
             id='fame'
-            placeholder='Supérieur à'
+            placeholder='Indice supérieur à'
           />
-          <input onClick={handleClick} type='button' name='' id='' value='Filtrer' />
+          <input
+            type='submit'
+            name='fame_filter'
+            id='fame_filter'
+            value='Filtrer'
+          />
+        </form>
       </div>
     </>
   );

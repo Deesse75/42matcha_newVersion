@@ -6,69 +6,64 @@ import Locationfilter from './Locationfilter';
 import TagsFilter from './TagsFilter';
 
 type Props = {
-  listingName: string;
   setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
+  activeTab: string;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const FilterProfiles: FC<Props> = ({
-  listingName,
   setListing,
+  activeTab,
   setMatchaNotif,
 }) => {
-  const [filterChoice, setFilterChoice] = useState<string>('age');
+  const [filterSelected, setFilterSelected] = useState<string>('default');
   const refSelect = useRef<HTMLSelectElement>(null);
   return (
     <>
-      <div className='matcha_filter'>
-        <div className='matcha_filter_title'>Filtrer les profils par : </div>
+      <div className='dashboard_filter'>
+        <div className='dashboard_filter_left'>
+          <select onChange={(e) => {setFilterSelected(e.target.value)}} ref={refSelect} name='filter_select' id='filter_select'>
+            <option defaultValue='default'>Filtrer par ...</option>
+            <option value='age'>Age</option>
+            <option value='location'>Location</option>
+            <option value='fame'>Fame</option>
+            <option value='tags'>Tags</option>
+            <option value='reload'>Supprimer le filtre</option>
+          </select>
+        </div>
 
-        <div className='matcha_filter_part'>
-          <div className='matcha_filter_part_left'>
-            <select
-              ref={refSelect}
-              onChange={() => {
-                setFilterChoice(refSelect!.current ? refSelect.current.value : 'age');
-              }}
-              name='filter_choice'
-              id='filter_choice'
-            >
-              <option value='age'>Age</option>
-              <option value='location'>Location</option>
-              <option value='fame'>Fame</option>
-              <option value='tags'>Tags</option>
-            </select>
-          </div>
-          <div className='matcha_filter_part_right'>
-            {filterChoice === 'age' && (
-              <AgeFilter
-                listingName={listingName}
-                setListing={setListing}
-                setMatchaNotif={setMatchaNotif}
-              />
-            )}
-            {filterChoice === 'location' && (
-              <Locationfilter
-                listingName={listingName}
-                setListing={setListing}
-                setMatchaNotif={setMatchaNotif}
-              />
-            )}
-            {filterChoice === 'fame' && (
-              <FameFilter
-                listingName={listingName}
-                setListing={setListing}
-                setMatchaNotif={setMatchaNotif}
-              />
-            )}
-            {filterChoice === 'tags' && (
-              <TagsFilter
-                listingName={listingName}
-                setListing={setListing}
-                setMatchaNotif={setMatchaNotif}
-              />
-            )}
-          </div>
+        <div className='dashboard_filter_right'>
+          {(filterSelected === 'default' || filterSelected === 'reload') && (
+            <div className='dashboard_filter_empty'></div>
+          )}
+          {filterSelected === 'age' && (
+            <AgeFilter
+              setListing={setListing}
+              activeTab={activeTab}
+              setMatchaNotif={setMatchaNotif}
+            />
+          )}
+          {filterSelected === 'location' && (
+            <Locationfilter
+              setListing={setListing}
+              activeTab={activeTab}
+              setMatchaNotif={setMatchaNotif}
+            />
+          )}
+          {filterSelected === 'fame' && (
+            <FameFilter
+              setListing={setListing}
+              activeTab={activeTab}
+              setMatchaNotif={setMatchaNotif}
+            />
+          )}
+          {filterSelected === 'tags' && (
+            <TagsFilter
+              setListing={setListing}
+              activeTab={activeTab}
+              setMatchaNotif={setMatchaNotif}
+            />
+          )}
         </div>
       </div>
     </>

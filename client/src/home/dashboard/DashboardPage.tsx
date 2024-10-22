@@ -8,7 +8,6 @@ import FilterProfiles from './components/FilterProfiles';
 import SortProfiles from './components/SortProfiles';
 import MiniProfile from './components/MiniProfile';
 
-
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
   setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,7 +18,8 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif, setMatchaMenuIcon }) => {
   const mark = useMenuOnOff();
   const [activeTab, setActiveTab] = useState<string>('matcha');
   const [listing, setListing] = useState<MiniProfileType[] | null>(null);
-  const [listingName, setListingName] = useState<string>('matcha');
+  const [currentListing, setCurrentListing] = useState<MiniProfileType[]>([]);
+  const [listingName, setListingName] = useState<string | null>(null);
   const [reqData, setReqData] = useState<{ listingName: string } | null>(null);
 
   useEffect(() => {
@@ -41,6 +41,7 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif, setMatchaMenuIcon }) => {
   useEffect(() => {
     if (!listingName) return;
     setReqData({ listingName: listingName });
+    setListingName(null);
   }, [listingName]);
 
   useEffect(() => {
@@ -70,12 +71,12 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif, setMatchaMenuIcon }) => {
         }
         setReqData(null);
         if (response.status !== 200) {
-          setMatchaNotif(data.message);
           setListing(null);
+          setMatchaNotif(data.message);
           return;
         }
-        setListing(data.listing);
-        console.log('listing', data.listing.length);
+        if (!data.listing) setListing([]);
+        else setListing(data.listing);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -87,6 +88,12 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif, setMatchaMenuIcon }) => {
       isMounted = false;
     };
   }, [reqData]);
+
+  useEffect(() => {
+    if (!listing) return;
+    setCurrentListing(listing);
+    setListing(null);
+  }, [listing]);
 
   return (
     <>
@@ -183,22 +190,35 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif, setMatchaMenuIcon }) => {
         </div>
 
         <div
-          className={listing ? 'dashbord_header_on' : 'dashboard_header_off'}
+          className={
+            currentListing.length
+              ? 'dashbord_header_on'
+              : 'dashboard_header_off'
+          }
         >
-          <SortProfiles listing={listing} />
-          <FilterProfiles
-            listingName={listingName}
+          <SortProfiles
+            currentListing={currentListing}
             setListing={setListing}
+            setListingName={setListingName}
+            activeTab={activeTab}
+          />
+          <FilterProfiles
+            setListing={setListing}
+            activeTab={activeTab}
             setMatchaNotif={setMatchaNotif}
           />
         </div>
 
         <div
-          className={listing ? 'dashbord_content_on' : 'dashboard_content_off'}
+          className={
+            currentListing.length
+              ? 'dashbord_content_on'
+              : 'dashboard_content_off'
+          }
         >
-          {listing && (
+          {currentListing.length && (
             <>
-              {listing.map((profile, key) => (
+              {currentListing.map((profile, key) => (
                 <MiniProfile
                   key={key as number}
                   profile={profile}
@@ -211,12 +231,8 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif, setMatchaMenuIcon }) => {
 
         <div className='dashboard_footer'>
           <div className='dashboard_footer_text'>
-            {listing
-              ? `${listing.length} profil(s) trouvé(s)`
-              : ' 0 profil trouvé'}
+            {`${currentListing.length} profil(s) trouvé(s)`}
           </div>
-        </div>
-        <div>
         </div>
       </div>
     </>

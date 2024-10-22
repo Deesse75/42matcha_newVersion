@@ -8,8 +8,8 @@ export const getMe = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const me = await userGetMe(req.body.existingUser, req.body.userTags);
-    res.status(200).json({ me: me });
+    const user = await userGetMe(req.body.existingUser, req.body.userTags);
+    res.status(200).json({ user: user });
     return;
   } catch (error) {
     matchaError.catched(error as Error, res);
