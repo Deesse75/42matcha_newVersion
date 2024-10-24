@@ -2,29 +2,26 @@ import Cookies from 'js-cookie';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir, authRoute } from '../appConfig/appPath';
+import { getLocation } from '../utils/geolocation';
 
 type Props = {
-  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const LoadingPage: FC<Props> = ({
-  setMatchaMenuOpen,
-  setMatchaMenuIcon,
   setMatchaNotif,
 }) => {
-  const [controlPage, setControlPage] = useState<boolean>(false);
+  const [init, setInit] = useState<boolean>(false);
   const nav = useNavigate();
 
   useEffect(() => {
-    setMatchaMenuOpen(false);
-    setMatchaMenuIcon(false);
-    setControlPage(true);
+    Cookies.remove('matchaOn');
+    getLocation();
+    setInit(true);
   }, []);
 
   useEffect(() => {
-    if (!controlPage) return;
+    if (!init) return;
     let isMounted = true;
     const request = async () => {
       try {
@@ -32,6 +29,7 @@ const LoadingPage: FC<Props> = ({
         const data = await response.json();
         if (!isMounted) return;
 
+        setInit(false);
         if (response.status !== 200) {
           setMatchaNotif(data.message);
           nav(appRedir.errorInternal);
@@ -49,7 +47,8 @@ const LoadingPage: FC<Props> = ({
           },
         );
 
-        nav(appRedir.signin);
+        if (Cookies.get('session')) nav(appRedir.getMe);
+        else nav(appRedir.signin);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -60,7 +59,7 @@ const LoadingPage: FC<Props> = ({
     return () => {
       isMounted = false;
     };
-  }, [controlPage]);
+  }, [init]);
 
   return (
     <>

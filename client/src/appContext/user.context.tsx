@@ -7,6 +7,9 @@ type UserContextType = {
   userSocket: Socket | null;
   setUser: React.Dispatch<React.SetStateAction<FullProfileType | null>>;
   setUserSocket: React.Dispatch<React.SetStateAction<Socket | null>>;
+
+  historySelected: string | null;
+  setHistorySelected: React.Dispatch<React.SetStateAction<string | null>>;
   deleteUserData: () => void;
 };
 
@@ -15,16 +18,20 @@ export const UserContext = createContext<UserContextType>({
   userSocket: null,
   setUser: () => {},
   setUserSocket: () => {},
+  historySelected: null,
+  setHistorySelected: () => {},
   deleteUserData: () => {},
 });
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<FullProfileType | null>(null);
   const [userSocket, setUserSocket] = useState<Socket | null>(null);
+  const [historySelected, setHistorySelected] = useState<string | null>(null);
   const deleteUserData = () => {
     if (userSocket) userSocket.disconnect();
     setUser(null);
     setUserSocket(null);
+    setHistorySelected(null);
   };
 
   return (
@@ -34,6 +41,8 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       userSocket,
       setUser,
       setUserSocket,
+      historySelected,
+      setHistorySelected,
       deleteUserData,
     }}
     >

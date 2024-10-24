@@ -3,19 +3,16 @@ import { MiniProfileType } from '../../../appConfig/interface';
 import { appRedir, listingRoute } from '../../../appConfig/appPath';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useUserInfo } from '../../../appContext/user.context';
 
 type Props = {
   setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
-  activeTab: string;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const Locationfilter: FC<Props> = ({
-  setListing,
-  activeTab,
-  setMatchaNotif,
-}) => {
+const Locationfilter: FC<Props> = ({ setListing, setMatchaNotif }) => {
   const nav = useNavigate();
+  const me = useUserInfo();
   const [reqData, setReqData] = useState<{
     listingName: string;
     zone: string;
@@ -28,9 +25,12 @@ const Locationfilter: FC<Props> = ({
       setMatchaNotif('Veuillez choisir une zone de filtrage');
       return;
     }
-    setReqData({ 
-      listingName: activeTab,
-      zone: zone });
+    if (!me.historySelected) setMatchaNotif('Requête invalide');
+    else
+      setReqData({
+        listingName: me.historySelected,
+        zone: zone,
+      });
   };
 
   useEffect(() => {

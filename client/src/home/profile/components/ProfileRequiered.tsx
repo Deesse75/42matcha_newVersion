@@ -93,18 +93,11 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
       </div>
       <form onClick={handleSubmit} className='requiered_form'>
         <div className='requiered_form_row'>
-          <div className='requiered_form_left'>Prénom</div>
-          <div className='requiered_form_middle'>
-            <input
-              className=''
-              type='text'
-              name='currentFirstname'
-              id='currentFirstname'
-              autoComplete='off'
-              value={me.user ? me.user.firstname : ''}
-            />
+          <div className='requiered_form_name'>Prénom</div>
+          <div className='requiered_form_currentValue'>
+            {me.user ? me.user.firstname : ''}
           </div>
-          <div className='requiered_form_right'>
+          <div className='requiered_form_newValue'>
             <input
               className=''
               type='text'
@@ -117,18 +110,11 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
         </div>
 
         <div className='requiered_form_row'>
-          <div className='requiered_form_left'>Nom</div>
-          <div className='requiered_form_middle'>
-            <input
-              className=''
-              type='text'
-              name='currentLastname'
-              id='currentLastname'
-              autoComplete='off'
-              value={me.user ? me.user.lastname : ''}
-            />
+          <div className='requiered_form_name'>Nom</div>
+          <div className='requiered_form_currentValue'>
+              {me.user ? me.user.lastname : ''}
           </div>
-          <div className='requiered_form_right'>
+          <div className='requiered_form_newValue'>
             <input
               className=''
               type='text'
@@ -141,18 +127,11 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
         </div>
 
         <div className='requiered_form_row'>
-          <div className='requiered_form_left'>Pseudo</div>
-          <div className='requiered_form_middle'>
-            <input
-              className=''
-              type='text'
-              name='currentUsername'
-              id='currentUsername'
-              autoComplete='off'
-              value={me.user ? me.user.username : ''}
-            />
+          <div className='requiered_form_name'>Pseudo</div>
+          <div className='requiered_form_currentValue'>
+              {me.user ? me.user.username : ''}
           </div>
-          <div className='requiered_form_right'>
+          <div className='requiered_form_newValue'>
             <input
               className=''
               type='text'
@@ -165,18 +144,11 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
         </div>
 
         <div className='requiered_form_row'>
-          <div className='requiered_form_left'>Date de naissance</div>
-          <div className='requiered_form_middle'>
-            <input
-              className=''
-              type='text'
-              name='currentBirthdate'
-              id='currentBirthdate'
-              autoComplete='off'
-              value={me.user ? me.user.birthdate : ''}
-            />
+          <div className='requiered_form_name'>Date de naissance</div>
+          <div className='requiered_form_currentValue'>
+              {me.user ? me.user.birthdate : ''}
           </div>
-          <div className='requiered_form_right'>
+          <div className='requiered_form_newValue'>
             <input
               className=''
               type='text'
@@ -189,18 +161,11 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
         </div>
 
         <div className='requiered_form_row'>
-          <div className='requiered_form_left'>Email</div>
-          <div className='requiered_form_middle'>
-            <input
-              className=''
-              type='text'
-              name='currentEmail'
-              id='currentEmail'
-              autoComplete='off'
+          <div className='requiered_form_name'>Email</div>
+          <div className='requiered_form_currentValue'>
               value={me.user ? me.user.email : ''}
-            />
           </div>
-          <div className='requiered_form_right'>
+          <div className='requiered_form_newValue'>
             <input
               className=''
               type='text'
@@ -213,8 +178,8 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
         </div>
 
         <div className='requiered_form_row'>
-          <div className='requiered_form_left'>Mot de passe</div>
-          <div className='requiered_form_middle'>
+          <div className='requiered_form_name'>Mot de passe</div>
+          <div className='requiered_form_currentValue'>
             <div className='requiered_pass'>
               <input
                 className=''
@@ -228,7 +193,7 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
               <InputEye refInput={refPass1} />
             </div>
           </div>
-          <div className='requiered_form_right'>
+          <div className='requiered_form_newValue'>
             <div className='requiered_pass'>
               <input
                 className=''

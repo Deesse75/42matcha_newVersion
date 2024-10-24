@@ -18,6 +18,8 @@ export const appRedir = {
   getMe: '/chargement',
   deleteProfile: '/suppression_profil',
   profile: '/modification_profil',
+  account: '/modification_donnees_personnelles',
+  photo: '/modification_photos',
   dashboard: '/accueil',
   chat: '/chat',
   search: '/recherche',
@@ -25,6 +27,8 @@ export const appRedir = {
   errorInternal: '/erreur_interne',
   errorServer: '/erreur_serveur',
   errorNotfound: '/page_introuvable',
+  listingMatcha: '/selection_matcha',
+  listing: '/liste_de_profils',
 };
 
 export const authRoute = {
@@ -40,6 +44,13 @@ export const authRoute = {
 
 export const userRoute = {
   getMe: `${PATH}/user/get_me`,
+  getUser: `${PATH}/user/get_user`,
+  updateName: `${PATH}/user/update_name`,
+  updateValideEmail: `${PATH}/user/update_valide_email`,
+  updatePassword: `${PATH}/user/update_password`,
+  updateEmail: `${PATH}/user/update_email`,
+  deletePhoto: `${PATH}/user/delete_photo`,
+  updatePhoto: `${PATH}/user/update_photo`,
 };
 
 export const profileRoute = {

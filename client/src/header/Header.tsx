@@ -1,36 +1,35 @@
 import { FC } from 'react';
-import Menu from './components/Menu';
+import { useUserInfo } from '../appContext/user.context';
+import { useNavigate } from 'react-router-dom';
+import { FaSignOutAlt } from 'react-icons/fa';
+import { appRedir } from '../appConfig/appPath';
 
-type Props = {
-  matchaMenuOpen: boolean;
-  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  matchaMenuIcon: boolean;
-};
+type Props = {};
 
-const Header: FC<Props> = ({
-  matchaMenuOpen,
-  setMatchaMenuOpen,
-  matchaMenuIcon,
-}) => {
+const Header: FC<Props> = ({}) => {
+  const me = useUserInfo();
+  const nav = useNavigate();
+
   return (
     <>
-      <div
-        className='header_navbar'
-        onClick={() => {
-          setMatchaMenuOpen(false);
-        }}
-      >
-        <div className='header_navbar_line'></div>
+      <div className='header_navbar'>
         <div className='header_navbar_matcha_logo'>
           <div className='header_navbar_logo'>Matcha</div>
         </div>
+
+        <div className='header_navbar_signout'>
+          {me.user && (
+            <div
+              className='signout_icon'
+              onClick={() => {
+                nav(appRedir.signout);
+              }}
+            >
+              <FaSignOutAlt size={30} />
+            </div>
+          )}
+        </div>
       </div>
-      {matchaMenuIcon && (
-        <Menu
-          matchaMenuOpen={matchaMenuOpen}
-          setMatchaMenuOpen={setMatchaMenuOpen}
-        />
-      )}
     </>
   );
 };

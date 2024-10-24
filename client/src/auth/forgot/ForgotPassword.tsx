@@ -3,6 +3,9 @@ import AuthRedirect from '../components/AuthRedirect';
 import AuthTitle from '../components/AuthTitle';
 import AuthForgotForm from './AuthForgotForm';
 import AuthReinitForm from './AuthReinitForm';
+import { useNavigate } from 'react-router-dom';
+import { appRedir } from '../../appConfig/appPath';
+import Cookies from 'js-cookie';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -11,6 +14,18 @@ type Props = {
 const ForgotPassword: FC<Props> = ({ setMatchaNotif }) => {
   const [code, setCode] = useState<boolean>(false);
   const [email, setEmail] = useState<string | null>(null);
+  const nav = useNavigate();
+
+  useEffect(() => {
+    if (Cookies.get('session')) {
+      nav(appRedir.getMe);
+      return;
+    }
+    if (!Cookies.get('matchaOn')) {
+      nav(appRedir.loading);
+      return;
+    }
+  }, []);
 
   useEffect(() => {
     if (email) setCode(true);

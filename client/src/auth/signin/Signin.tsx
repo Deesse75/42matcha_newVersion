@@ -1,8 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import AuthTitle from '../components/AuthTitle';
 import AuthSigninEmailForm from './AuthSigninEmailForm';
 import AuthRedirect from '../components/AuthRedirect';
 import AuthSigninUsernameForm from './AuthSigninUsernameForm';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import { appRedir } from '../../appConfig/appPath';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -10,6 +13,18 @@ type Props = {
 
 const Signin: FC<Props> = ({ setMatchaNotif }) => {
   const [openUsername, setOpenUsername] = useState<boolean>(true);
+  const nav = useNavigate();
+
+  useEffect(() => {
+    if (Cookies.get('session')) {
+      nav(appRedir.getMe);
+      return;
+    }
+    if (!Cookies.get('matchaOn')) {
+      nav(appRedir.loading);
+      return;
+    }
+  }, []);
 
   return (
     <>

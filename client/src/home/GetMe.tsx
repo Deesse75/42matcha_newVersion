@@ -6,41 +6,40 @@ import { useUserInfo } from '../appContext/user.context';
 import { io, Socket } from 'socket.io-client';
 
 type Props = {
-  setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
+const GetMe: FC<Props> = ({ setMatchaNotif }) => {
   const me = useUserInfo();
   const nav = useNavigate();
-  const [controlePage, setControlePage] = useState<boolean>(false);
+  const [userData, setUserData] = useState<boolean>(false);
+  const [reqData, setReqData] = useState<{
+    region: string | null;
+    county: string | null;
+    town: string | null;
+  } | null>(null);
 
   useEffect(() => {
-    setMatchaMenuIcon(false);
-
-    if (!Cookies.get('session')) {
-      nav(appRedir.signout);
-      return;
-    }
-
-    if (!Cookies.get('matchaOn')) {
-      nav(appRedir.loading);
-      return;
-    }
-    setControlePage(true);
+    me.setUser(null);
+    setReqData({
+      region: localStorage.getItem('region'),
+      county: localStorage.getItem('county'),
+      town: localStorage.getItem('town'),
+    });
   }, []);
 
   useEffect(() => {
-    if (!controlePage) return;
+    if (!reqData) return;
     let isMounted = true;
     const request = async () => {
       try {
         const response = await fetch(userRoute.getMe, {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${Cookies.get('session')}`,
           },
+          body: JSON.stringify(reqData),
         });
         const data = await response.json();
         if (!isMounted) return;
@@ -55,7 +54,8 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
           return;
         }
         me.setUser(data.user);
-        setControlePage(false);
+        setUserData(true);
+        setReqData(null);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -66,11 +66,16 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [controlePage]);
+  }, [reqData]);
 
   useEffect(() => {
+    if (!userData) return;
+    if (!me.user) {
+      setMatchaNotif('Une erreur est survenue lors de la récupération de vos données.');
+      nav(appRedir.signout);
+      return;
+    }
     if (me.userSocket) return;
-    if (!me.user) return;
     const request = async () => {
       //Connect to the socket
       const socket: Socket = io(socketRoute.path, {
@@ -83,7 +88,9 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
 
       //If connection is ok set userSocket
       socket.on(socketRoute.connected, () => {
+        setUserData(false);
         me.setUserSocket(socket);
+        nav(appRedir.dashboard);
         return;
       });
 
@@ -96,15 +103,7 @@ const GetMe: FC<Props> = ({ setMatchaMenuIcon, setMatchaNotif }) => {
       });
     };
     request();
-  }, [me.user]);
-
-  useEffect(() => {
-    if (!me.userSocket || !me.user) return;
-    if (me.user.lastConnection) {
-      nav(appRedir.dashboard);
-    }
-    else nav(appRedir.profile);
-  }, [me.userSocket]);
+  }, [userData]);
 
   return (
     <>

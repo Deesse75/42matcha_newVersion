@@ -1,20 +1,13 @@
-import Cookies from 'js-cookie';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../appConfig/appPath';
+import Cookie from 'js-cookie';
 
 type Props = {
-  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Error404: FC<Props> = ({ setMatchaMenuOpen }) => {
+const Error404: FC<Props> = ({ }) => {
   const nav = useNavigate();
-
-  useEffect(() => {
-    Cookies.remove('matchaOn');
-    Cookies.remove('session');
-    setMatchaMenuOpen(false);
-  }, []);
 
   return (
     <>
@@ -26,7 +19,9 @@ const Error404: FC<Props> = ({ setMatchaMenuOpen }) => {
         <div className='error_button_container'>
           <div
             onClick={() => {
-              nav(appRedir.signout);
+              if (Cookie.get('session'))
+              nav(appRedir.getMe);
+              else nav(appRedir.loading);
             }}
             className='error_button'
           >

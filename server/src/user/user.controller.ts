@@ -8,7 +8,13 @@ export const getMe = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const user = await userGetMe(req.body.existingUser, req.body.userTags);
+    const user = await userGetMe(
+      req.body.existingUser,
+      req.body.userTags,
+      req.body.region,
+      req.body.county,
+      req.body.town,
+    );
     res.status(200).json({ user: user });
     return;
   } catch (error) {

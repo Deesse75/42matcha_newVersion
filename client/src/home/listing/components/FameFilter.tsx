@@ -3,42 +3,34 @@ import { MiniProfileType } from '../../../appConfig/interface';
 import { appRedir, listingRoute } from '../../../appConfig/appPath';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useUserInfo } from '../../../appContext/user.context';
 
 type Props = {
   setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
-  activeTab: string;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AgeFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
+const FameFilter: FC<Props> = ({ setListing, setMatchaNotif }) => {
   const nav = useNavigate();
+  const me = useUserInfo();
   const [reqData, setReqData] = useState<{
     listingName: string;
-    ageMin: number;
-    ageMax: number;
+    fameMin: number;
   } | null>(null);
 
   const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const min = parseInt(e.currentTarget.agemin.value);
-    const max = parseInt(e.currentTarget.agemax.value);
-    if (!min || !max) {
-      setMatchaNotif('Veuillez remplir les deux champs');
+    const fameMin = parseInt(e.currentTarget!.fame.value) || 0;
+    if (fameMin <= 0) {
+      setMatchaNotif("L'indice de popularité doit être supérieur à 0.");
       return;
     }
-    if (min < 18 || min > 120) {
-      setMatchaNotif("L'âge minimum est incorrect");
-      return;
-    }
-    if (max < 18 || max > 120) {
-      setMatchaNotif("L'âge maximum est incorrect");
-      return;
-    }
-    if (min > max) {
-      setMatchaNotif("L'âge minimum est supérieur à l'âge maximum");
-      return;
-    }
-    setReqData({ listingName: activeTab, ageMin: min, ageMax: max });
+    if (!me.historySelected) setMatchaNotif('Requête invalide.');
+    else
+      setReqData({
+        listingName: me.historySelected,
+        fameMin: fameMin,
+      });
   };
 
   useEffect(() => {
@@ -46,7 +38,7 @@ const AgeFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(listingRoute.getAgeFilter, {
+        const response = await fetch(listingRoute.getFameFilter, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -91,24 +83,16 @@ const AgeFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
         <form onSubmit={handleClick} className='dashboard_filter_form'>
           <input
             type='number'
-            min={18}
-            max={120}
-            name='agemin'
-            id='ageMin'
-            placeholder='age minimum'
-          />
-          <input
-            type='number'
-            min={18}
-            max={120}
-            name='agemax'
-            id='ageMax'
-            placeholder='age maximum'
+            min={0}
+            required
+            name='fame'
+            id='fame'
+            placeholder='Indice supérieur à'
           />
           <input
             type='submit'
-            name='age_filter'
-            id='age_filter'
+            name='fame_filter'
+            id='fame_filter'
             value='Filtrer'
           />
         </form>
@@ -117,4 +101,4 @@ const AgeFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
   );
 };
 
-export default AgeFilter;
+export default FameFilter;

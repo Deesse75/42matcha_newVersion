@@ -1,25 +1,26 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authRoute, appRedir } from '../../appConfig/appPath';
+import { useUserInfo } from '../../appContext/user.context';
+import Cookies from 'js-cookie';
 
 type Props = {
-  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const ValidateLinkEmail: FC<Props> = ({
-  setMatchaMenuOpen,
-  setMatchaMenuIcon,
   setMatchaNotif,
 }) => {
   const nav = useNavigate();
-  const url = window.location.href;
+  const me = useUserInfo();
+  const [url, setUrl] = useState<string | null>(null);
   const [failedReq, setFailedReq] = useState<boolean>(false);
 
   useEffect(() => {
-    setMatchaMenuOpen(false);
-    setMatchaMenuIcon(false);
+    Cookies.remove('matchaOn');
+    Cookies.remove('session');
+    me.deleteUserData();
+    setUrl(window.location.href);
   }, []);
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const ValidateLinkEmail: FC<Props> = ({
           return;
         }
 
+        setUrl(null);
         setMatchaNotif(data.message);
         if (response.status !== 200) {
           setFailedReq(true);

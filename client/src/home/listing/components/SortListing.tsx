@@ -7,14 +7,12 @@ type Props = {
   currentListing: MiniProfileType[];
   setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
   setListingName: React.Dispatch<React.SetStateAction<string | null>>;
-  activeTab: string;
 };
 
-const SortProfiles: FC<Props> = ({
+const SortListing: FC<Props> = ({
   currentListing,
   setListing,
   setListingName,
-  activeTab,
 }) => {
   const me = useUserInfo();
   const [sortSelected, setSortSelected] = useState<string>('default');
@@ -41,7 +39,7 @@ const SortProfiles: FC<Props> = ({
       sortListing = currentListing.sort(
         (a, b) => communTags(a, me.user) - communTags(b, me.user),
       );
-    else setListingName(activeTab);
+    else setListingName(me.historySelected);
     setListing(sortListing);
     sortListing = [];
   }, [sortSelected]);
@@ -71,4 +69,4 @@ const SortProfiles: FC<Props> = ({
   );
 };
 
-export default SortProfiles;
+export default SortListing;

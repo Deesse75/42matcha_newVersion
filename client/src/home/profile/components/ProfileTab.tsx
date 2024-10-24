@@ -12,28 +12,28 @@ const ProfileTab: FC<Props> = ({ setProfileTab }) => {
           setProfileTab('requiered');
         }}
       >
-        Modifier vos données personnelles
+        Infos personnelles
       </button>
       <button
         onClick={() => {
           setProfileTab('optional');
         }}
       >
-        Compléter/Modifier les détails de votre profil
+        Infos profil
       </button>
       <button
         onClick={() => {
           setProfileTab('bio');
         }}
       >
-        Créer/Modifier votre annonce de profil
+        Votre bio
       </button>
       <button
         onClick={() => {
           setProfileTab('photo');
         }}
       >
-        Ajouter/Modifier vos photos
+        Vos photos
       </button>
       <button
         onClick={() => {
@@ -41,13 +41,6 @@ const ProfileTab: FC<Props> = ({ setProfileTab }) => {
         }}
       >
         Créer/Modifier vos centres d'intêret
-      </button>
-      <button
-        onClick={() => {
-          setProfileTab('del');
-        }}
-      >
-        Supprimer votre profil
       </button>
     </>
   );

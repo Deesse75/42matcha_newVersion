@@ -1,33 +1,29 @@
 import { FC, useEffect, useState } from 'react';
-import { MiniProfileType } from '../../../appConfig/interface';
-import { appRedir, listingRoute } from '../../../appConfig/appPath';
+import Avatar from 'react-avatar-edit';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { userRoute, appRedir } from '../../../appConfig/appPath';
 
 type Props = {
-  setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
-  activeTab: string;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  index: number;
+  setReloadProfile: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const FameFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
+const UploadPhoto: FC<Props> = ({ setMatchaNotif, index, setReloadProfile }) => {
   const nav = useNavigate();
+  const [view, setView] = useState<string>('');
   const [reqData, setReqData] = useState<{
-    listingName: string;
-    fameMin: number;
+    index: number;
+    photo: string;
   } | null>(null);
 
-  const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fameMin = parseInt(e.currentTarget!.fame.value) || 0;
-    if (fameMin <= 0) {
-      setMatchaNotif("L'indice de popularité doit être supérieur à 0.");
-      return;
-    }
-    setReqData({
-      listingName: activeTab,
-      fameMin: fameMin,
-    });
+  const handleCrop = (view: any) => {
+    setView(view);
+  };
+
+  const handleClose = () => {
+    setReqData({ index: index, photo: view });
   };
 
   useEffect(() => {
@@ -35,8 +31,8 @@ const FameFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(listingRoute.getFameFilter, {
-          method: 'POST',
+        const response = await fetch(userRoute.updatePhoto, {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${Cookies.get('session')}`,
@@ -58,10 +54,9 @@ const FameFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
         setReqData(null);
         if (response.status !== 200) {
           setMatchaNotif(data.message);
-          setListing(null);
           return;
         }
-        setListing(data.listing);
+        setReloadProfile(true);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -76,26 +71,29 @@ const FameFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='dashboard_filter'>
-        <form onSubmit={handleClick} className='dashboard_filter_form'>
-          <input
-            type='number'
-            min={0}
-            required
-            name='fame'
-            id='fame'
-            placeholder='Indice supérieur à'
-          />
-          <input
-            type='submit'
-            name='fame_filter'
-            id='fame_filter'
-            value='Filtrer'
-          />
-        </form>
+      <div className='avatar'>
+        <Avatar
+          width={335}
+          height={335}
+          label='Modifier'
+          mimeTypes='image/jpeg, image/png'
+          cropRadius={0}
+          exportAsSquare={true}
+          borderStyle={{ borderRadius: '20px' }}
+          labelStyle={{
+            fontSize: '20px',
+            cursor: 'pointer',
+            margin: '150px',
+            color: 'white',
+            backgroundColor: '#08b895',
+          }}
+          src=''
+          onCrop={handleCrop}
+          onClose={handleClose}
+        />
       </div>
     </>
   );
 };
 
-export default FameFilter;
+export default UploadPhoto;

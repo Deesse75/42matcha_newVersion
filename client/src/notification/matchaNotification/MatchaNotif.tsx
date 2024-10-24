@@ -3,14 +3,9 @@ import { FC, useEffect } from 'react';
 type Props = {
   matchaNotif: string | null;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const MatchaNotif: FC<Props> = ({
-  matchaNotif,
-  setMatchaNotif,
-  setMatchaMenuOpen,
-}) => {
+const MatchaNotif: FC<Props> = ({ matchaNotif, setMatchaNotif }) => {
   useEffect(() => {
     if (!matchaNotif) return;
 
@@ -24,12 +19,7 @@ const MatchaNotif: FC<Props> = ({
 
   return (
     <>
-      <div
-        onClick={() => {
-          setMatchaMenuOpen(false);
-        }}
-        className='matchaNotif_container'
-      >
+      <div className='matchaNotif_container'>
         {matchaNotif && <div className='matchaNotif_text'>{matchaNotif}</div>}
       </div>
     </>

@@ -1,32 +1,47 @@
 import { FC, useEffect, useState } from 'react';
 import { MiniProfileType } from '../../../appConfig/interface';
-import { useUserInfo } from '../../../appContext/user.context';
-import { listingRoute, appRedir } from '../../../appConfig/appPath';
+import { appRedir, listingRoute } from '../../../appConfig/appPath';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useUserInfo } from '../../../appContext/user.context';
 
 type Props = {
   setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
-  activeTab: string;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const TagsFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
-  const me = useUserInfo();
+const AgeFilter: FC<Props> = ({ setListing, setMatchaNotif }) => {
   const nav = useNavigate();
+  const me = useUserInfo();
   const [reqData, setReqData] = useState<{
     listingName: string;
-    tags: string[];
+    ageMin: number;
+    ageMax: number;
   } | null>(null);
 
   const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const tags = e.currentTarget.select_tag_filter.selectedOptions;
-    if (tags.length === 0) {
-      setMatchaNotif('Aucun tag selectionné.');
+    const min = parseInt(e.currentTarget.agemin.value);
+    const max = parseInt(e.currentTarget.agemax.value);
+    if (!min || !max) {
+      setMatchaNotif('Veuillez remplir les deux champs');
       return;
     }
-    setReqData({ listingName: activeTab, tags: tags });
+    if (min < 18 || min > 120) {
+      setMatchaNotif("L'âge minimum est incorrect");
+      return;
+    }
+    if (max < 18 || max > 120) {
+      setMatchaNotif("L'âge maximum est incorrect");
+      return;
+    }
+    if (min > max) {
+      setMatchaNotif("L'âge minimum est supérieur à l'âge maximum");
+      return;
+    }
+    if (!me.historySelected) setMatchaNotif('Requête invalide');
+    else
+      setReqData({ listingName: me.historySelected, ageMin: min, ageMax: max });
   };
 
   useEffect(() => {
@@ -34,7 +49,7 @@ const TagsFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(listingRoute.getTagsFilter, {
+        const response = await fetch(listingRoute.getAgeFilter, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -77,22 +92,26 @@ const TagsFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
     <>
       <div className='dashboard_filter'>
         <form onSubmit={handleClick} className='dashboard_filter_form'>
-          <select name='select_tag_filter' id='select_tag_filter' multiple size={5}>
-            <option value='default'>Filtrer en fonction de vos intêrets</option>
-            {me.user?.tags && (
-              <>
-                {me.user?.tags.map((tag, key) => (
-                  <option key={key} value={tag}>
-                    {`#${tag}`}
-                  </option>
-                ))}
-              </>
-            )}
-          </select>
           <input
-            type='button'
-            name='tag_submit'
-            id='tag_submit'
+            type='number'
+            min={18}
+            max={120}
+            name='agemin'
+            id='ageMin'
+            placeholder='age minimum'
+          />
+          <input
+            type='number'
+            min={18}
+            max={120}
+            name='agemax'
+            id='ageMax'
+            placeholder='age maximum'
+          />
+          <input
+            type='submit'
+            name='age_filter'
+            id='age_filter'
             value='Filtrer'
           />
         </form>
@@ -101,4 +120,4 @@ const TagsFilter: FC<Props> = ({ setListing, activeTab, setMatchaNotif }) => {
   );
 };
 
-export default TagsFilter;
+export default AgeFilter;

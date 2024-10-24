@@ -1,21 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppRoutes from './AppRoutes';
 import Footer from './footer/Footer';
 import Header from './header/Header';
 import MatchaNotif from './notification/matchaNotification/MatchaNotif';
+import { appRedir } from './appConfig/appPath';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function App() {
-  const [matchaMenuIcon, setMatchaMenuIcon] = useState<boolean>(false);
-  const [matchaMenuOpen, setMatchaMenuOpen] = useState<boolean>(false);
   const [matchaNotif, setMatchaNotif] = useState<string | null>(null);
+  const nav = useNavigate();
+
+    useEffect(() => {
+      if (import.meta.hot) {
+        if (Cookies.get('session')) nav(appRedir.getMe);
+        else nav(appRedir.loading);
+      }
+    }, []);
 
   return (
     <>
       <div className='header'>
         <Header
-          matchaMenuOpen={matchaMenuOpen}
-          setMatchaMenuOpen={setMatchaMenuOpen}
-          matchaMenuIcon={matchaMenuIcon}
         />
       </div>
 
@@ -23,14 +29,11 @@ function App() {
         <MatchaNotif
           matchaNotif={matchaNotif}
           setMatchaNotif={setMatchaNotif}
-          setMatchaMenuOpen={setMatchaMenuOpen}
         />
       </div>
 
       <div className='routes'>
         <AppRoutes
-          setMatchaMenuIcon={setMatchaMenuIcon}
-          setMatchaMenuOpen={setMatchaMenuOpen}
           setMatchaNotif={setMatchaNotif}
         />
       </div>

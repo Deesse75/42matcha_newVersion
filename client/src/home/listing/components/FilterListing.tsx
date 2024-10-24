@@ -7,13 +7,11 @@ import TagsFilter from './TagsFilter';
 
 type Props = {
   setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
-  activeTab: string;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const FilterProfiles: FC<Props> = ({
+const FilterListing: FC<Props> = ({
   setListing,
-  activeTab,
   setMatchaNotif,
 }) => {
   const [filterSelected, setFilterSelected] = useState<string>('default');
@@ -39,28 +37,24 @@ const FilterProfiles: FC<Props> = ({
           {filterSelected === 'age' && (
             <AgeFilter
               setListing={setListing}
-              activeTab={activeTab}
               setMatchaNotif={setMatchaNotif}
             />
           )}
           {filterSelected === 'location' && (
             <Locationfilter
               setListing={setListing}
-              activeTab={activeTab}
               setMatchaNotif={setMatchaNotif}
             />
           )}
           {filterSelected === 'fame' && (
             <FameFilter
               setListing={setListing}
-              activeTab={activeTab}
               setMatchaNotif={setMatchaNotif}
             />
           )}
           {filterSelected === 'tags' && (
             <TagsFilter
               setListing={setListing}
-              activeTab={activeTab}
               setMatchaNotif={setMatchaNotif}
             />
           )}
@@ -70,4 +64,4 @@ const FilterProfiles: FC<Props> = ({
   );
 };
 
-export default FilterProfiles;
+export default FilterListing;

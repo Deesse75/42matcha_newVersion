@@ -1,19 +1,21 @@
 import Cookies from 'js-cookie';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../appConfig/appPath';
+import { useUserInfo } from '../appContext/user.context';
 
-type Props = {
-  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+type Props = {};
 
-const Error500: FC<Props> = ({ setMatchaMenuOpen }) => {
+const Error500: FC<Props> = ({}) => {
   const nav = useNavigate();
+  const me = useUserInfo();
+  const [controlPage, setControlPage] = useState<boolean>(false);
 
   useEffect(() => {
     Cookies.remove('matchaOn');
     Cookies.remove('session');
-    setMatchaMenuOpen(false);
+    me.deleteUserData();
+    setControlPage(true);
   }, []);
 
   return (
@@ -34,24 +36,21 @@ const Error500: FC<Props> = ({ setMatchaMenuOpen }) => {
           Si le problème persiste, vous pouvez envoyer un mail à
           l'administrateur.
         </p>
-        <div className='error_button_container'>
-          <div
-            onClick={() => {
-              nav(appRedir.contact);
-            }}
-            className='error_button'
-          >
-            Nous contacter
-          </div>
-          <div
-            onClick={() => {
-              nav(appRedir.signout);
-            }}
-            className='error_button'
-          >
-            Retour à l'accueil
-          </div>
-        </div>
+        {controlPage && (
+          <>
+            <div className='error_button_container'>
+              <div
+                onClick={() => {
+                  nav(appRedir.contact);
+                }}
+                className='error_button'
+              >
+                Nous contacter
+              </div>
+              <div className='error_button'>Retour à l'accueil</div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );

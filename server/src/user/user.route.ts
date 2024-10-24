@@ -8,7 +8,7 @@ import { getMe } from './user.controller.js';
 
 const userRoute = Router();
 
-userRoute.get(
+userRoute.post(
   '/get_me',
   userTokenValidation,
   findExistingUser,

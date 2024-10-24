@@ -12,10 +12,9 @@ type ReqDataType = {
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ContactUs: FC<Props> = ({ setMatchaNotif, setMatchaMenuOpen }) => {
+const ContactUs: FC<Props> = ({ setMatchaNotif }) => {
   const nav = useNavigate();
   const [reqData, setReqData] = useState<ReqDataType | null>(null);
 
@@ -47,7 +46,6 @@ const ContactUs: FC<Props> = ({ setMatchaNotif, setMatchaMenuOpen }) => {
       nav(appRedir.loading);
       return;
     }
-    setMatchaMenuOpen(false);
   }, []);
 
   useEffect(() => {
