@@ -1,13 +1,13 @@
 import { FC, useState } from 'react';
-import ProfileTab from '../profile/components/ProfileTab';
-import ProfileDateInfo from '../profile/components/ProfileDateInfo';
-import ProfileRequiered from '../profile/components/ProfileRequiered';
+import ProfileTab from './components/ProfileTab';
+import ProfileDateInfo from './components/ProfileDateInfo';
+import ProfileRequiered from './components/ProfileRequiered';
 import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../../appConfig/appPath';
-import ProfileOptional from '../profile/components/ProfileOptional';
-import ProfileBio from '../profile/components/ProfileBio';
-import ProfilePhotos from '../profile/components/ProfilePhotos';
-import ProfileTags from '../profile/components/ProfileTags';
+import ProfileOptional from './components/ProfileOptional';
+import ProfileBio from './components/ProfileBio';
+import ProfileTags from './components/ProfileTags';
+import PhotoPage from './PhotoPage';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -39,7 +39,7 @@ const ProfilePage: FC<Props> = ({ setMatchaNotif }) => {
             <ProfileBio setMatchaNotif={setMatchaNotif} />
           )}
           {profileTab === 'photo' && (
-            <ProfilePhotos setMatchaNotif={setMatchaNotif} />
+            <PhotoPage setMatchaNotif={setMatchaNotif} />
           )}
           {profileTab === 'tags' && (
             <ProfileTags setMatchaNotif={setMatchaNotif} />

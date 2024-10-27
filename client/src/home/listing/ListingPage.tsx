@@ -87,11 +87,11 @@ const ListingPage: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <div className='history_container'>
+      <div className='listing_container'>
 
         <div
           className={
-            currentListing.length ? 'history_header_on' : 'history_header_off'
+            currentListing.length ? 'listing_header_on' : 'listing_header_off'
           }
         >
           <SortListing
@@ -107,7 +107,7 @@ const ListingPage: FC<Props> = ({ setMatchaNotif }) => {
 
         <div
           className={
-            currentListing.length ? 'history_content_on' : 'history_content_off'
+            currentListing.length ? 'listing_content_on' : 'listing_content_off'
           }
         >
           {currentListing.length && (
@@ -123,8 +123,8 @@ const ListingPage: FC<Props> = ({ setMatchaNotif }) => {
           )}
         </div>
 
-        <div className='history_footer'>
-          <div className='history_footer_text'>
+        <div className='listing_footer'>
+          <div className='listing_footer_text'>
             {`${currentListing.length} profil(s) trouvé(s)`}
           </div>
         </div>

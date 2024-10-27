@@ -1,141 +1,28 @@
-import { FC, useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { appRedir, userRoute } from '../../appConfig/appPath';
 import { useUserInfo } from '../../appContext/user.context';
 import UploadPhoto from './components/UploadPhoto';
+import DeletePhotos from './components/DeletePhotos';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  setReloadProfile: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const PhotoPage: FC<Props> = ({ setMatchaNotif, setReloadProfile }) => {
+const PhotoPage: FC<Props> = ({ setMatchaNotif }) => {
   const [index, setIndex] = useState<number>(0);
   const nav = useNavigate();
   const me = useUserInfo();
-  const [update, setUpdate] = useState<boolean>(false);
-  const [deletePhoto, setDeletePhoto] = useState<boolean>(false);
-  const [choice, setChoice] = useState<boolean>(false);
-  const [fullPhoto, setFullPhoto] = useState<boolean[]>([
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [relaodPhotos, setReloadPhotos] = useState<boolean>(false);
+  const [actionSelected, setActionSelected] = useState<string | null>(null);
+  const [action, setAction] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!me.user) return;
-    setFullPhoto([
-      me.user.photo1 ? true : false,
-      me.user.photo2 ? true : false,
-      me.user.photo3 ? true : false,
-      me.user.photo4 ? true : false,
-      me.user.photo5 ? true : false,
-    ]);
-  }, []);
-
-  const handleClick = (index: number) => {
-    setIndex(index);
-    if (!fullPhoto[index - 1]) {
-      setUpdate(true);
-    } else setChoice(true);
-  };
-
-  useEffect(() => {
-    if (!deletePhoto) return;
-    let isMounted = true;
-    const request = async () => {
-      try {
-        const response = await fetch(userRoute.deletePhoto, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
-          },
-          body: JSON.stringify({ index: index }),
-        });
-        const data = await response.json();
-        if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
-          setMatchaNotif(data.message);
-          nav(appRedir.signout);
-          return;
-        }
-        if (response.status === 500) {
-          setMatchaNotif(data.message);
-          nav(appRedir.errorInternal);
-          return;
-        }
-        setIndex(0);
-        setChoice(false);
-        if (response.status !== 200) {
-          setMatchaNotif(data.message);
-          return;
-        }
-        setReloadProfile(true);
-      } catch (error) {
-        if (!isMounted) return;
-        setMatchaNotif((error as Error).message);
-        nav(appRedir.errorInternal);
-      }
-    };
-    request();
-    return () => {
-      isMounted = false;
-    };
-  }, [deletePhoto]);
+  const handleClick = (index: number) => {};
 
   return (
     <>
-      <div className='all_photos_container'>
-        <div className='all_photos_part'>
-          {update ? (
-            <>
-              {choice ? (
-                <>
-                  <div className='photo_choice_button'>
-                    <input
-                      onClick={() => {
-                        setUpdate(true);
-                      }}
-                      type='button'
-                      name=''
-                      id=''
-                      value='Ajouter/Modifier'
-                    />
-                    <input
-                      onClick={() => {
-                        setDeletePhoto(true);
-                      }}
-                      type='button'
-                      name=''
-                      id=''
-                      value='Supprimer'
-                    />
-                    <input
-                      onClick={() => {
-                        setChoice(false);
-                      }}
-                      type='button'
-                      name=''
-                      id=''
-                      value='Annuler'
-                    />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <UploadPhoto
-                    setMatchaNotif={setMatchaNotif}
-                    index={index}
-                    setReloadProfile={setReloadProfile}
-                  />
-                </>
-              )}
-            </>
-          ) : (
+      <div className='photos_Page_container'>
+        <div className='photos_Page_section'>
+          {actionSelected === 'showPhoto' && (
             <>
               <div className='photo_section_title'>
                 <div className='photo_section_title_name'>Photo de profil</div>
@@ -147,7 +34,8 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif, setReloadProfile }) => {
               <div className='photo_section'>
                 <img
                   onClick={() => {
-                    handleClick(1);
+                    setIndex(1);
+                    setAction(true);
                   }}
                   className='photo_img'
                   src={
@@ -158,11 +46,8 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif, setReloadProfile }) => {
                 />
                 <img
                   onClick={() => {
-                    fullPhoto[1]
-                      ? handleClick(2)
-                      : setMatchaNotif(
-                          'Veuillez remplir les emplacements précédents avant celui-ci.',
-                        );
+                    setIndex(2);
+                    setAction(true);
                   }}
                   className='photo_img'
                   src={
@@ -173,11 +58,8 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif, setReloadProfile }) => {
                 />
                 <img
                   onClick={() => {
-                    fullPhoto[2]
-                      ? handleClick(3)
-                      : setMatchaNotif(
-                          'Veuillez remplir les emplacements précédents avant celui-ci.',
-                        );
+                    setIndex(3);
+                    setAction(true);
                   }}
                   className='photo_img'
                   src={
@@ -188,11 +70,8 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif, setReloadProfile }) => {
                 />
                 <img
                   onClick={() => {
-                    fullPhoto[3]
-                      ? handleClick(4)
-                      : setMatchaNotif(
-                          'Veuillez remplir les emplacements précédents avant celui-ci.',
-                        );
+                    setIndex(4);
+                    setAction(true);
                   }}
                   className='photo_img'
                   src={
@@ -203,11 +82,8 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif, setReloadProfile }) => {
                 />
                 <img
                   onClick={() => {
-                    fullPhoto[4]
-                      ? handleClick(5)
-                      : setMatchaNotif(
-                          'Veuillez remplir les emplacements précédents avant celui-ci.',
-                        );
+                    setIndex(5);
+                    setAction(true);
                   }}
                   className='photo_img'
                   src={
@@ -216,13 +92,30 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif, setReloadProfile }) => {
                       : './avatar/default_avatar.jpg'
                   }
                 />
-              </div>
-              <div className='photo_section_text'>
-                Appuyer sur un cadre pour ajouter, modifier ou supprimer une
-                photo
+                {action && (<>
+                <div onClick={() => {setActionSelected('upload'); setAction(false);}} className="photo_section_action">Ajouter/Modifier</div>
+                <div onClick={() => {setActionSelected('delete'); setAction(false);}} className="photo_section_action">Supprimer</div>
+                <div onClick={() => {setActionSelected('firstPhoto'); setAction(false);}} className="photo_section_action">Définir comme photo de profil</div>
+                <div onClick={() => {setActionSelected('showPhoto'); setAction(false);}} className="photo_section_action">Annuler</div>
+                </>)}
               </div>
             </>
           )}
+          {actionSelected === 'upload' && (
+            <>
+              <UploadPhoto
+                setMatchaNotif={setMatchaNotif}
+                index={index}
+                setReloadPhotos={setReloadPhotos}
+              />
+            </>
+          )}
+          {actionSelected === 'delete' && (
+            <>
+              <DeletePhotos />
+            </>
+          )}
+          {actionSelected === 'firstPhoto' && (<><FirstPhoto /></>)}
         </div>
       </div>
     </>

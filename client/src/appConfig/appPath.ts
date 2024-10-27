@@ -51,6 +51,7 @@ export const userRoute = {
   updateEmail: `${PATH}/user/update_email`,
   deletePhoto: `${PATH}/user/delete_photo`,
   updatePhoto: `${PATH}/user/update_photo`,
+  deleteAccount: `${PATH}/user/delete_account`,
 };
 
 export const profileRoute = {

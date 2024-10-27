@@ -1,13 +1,10 @@
 import { FC } from 'react';
 import { useUserInfo } from '../../../appContext/user.context';
-import { appRedir } from '../../../appConfig/appPath';
-import { useNavigate } from 'react-router-dom';
 
 type Props = {};
 
 const DashboardPhoto: FC<Props> = ({}) => {
   const me = useUserInfo();
-  const nav = useNavigate();
 
   return (
     <>
@@ -22,9 +19,6 @@ const DashboardPhoto: FC<Props> = ({}) => {
             alt='Photo de profil'
             style={{ width: '100px', height: '100px' }}
           />
-        </div>
-        <div className='dashboard_photo_button'>
-          <button onClick={() => {nav(appRedir.photo)}}>Ajouter/Modifier vos photos</button>
         </div>
       </div>
     </>

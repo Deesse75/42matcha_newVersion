@@ -2,21 +2,20 @@ import { FC, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../../appConfig/appPath';
-import MiniHistory from './components/MiniHistory';
 import DashboardAccountData from './components/DashboardAccountData';
 import FameScore from './components/FameScore';
 import DashboardAccountInfo from './components/DashboardAccountInfo';
 import DashboardChat from './components/DashboardChat';
 import DashboardDeleteAccount from './components/DashboardDeleteAccount';
-import DashboardProfile from './components/DashboardProfile';
 import DashboardSearch from './components/DashboardSearch';
 import DashboardPhoto from './components/DashboardPhoto';
+import DashboardProfile from './components/DashboardProfile';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const DashboardPage: FC<Props> = ({}) => {
+const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
   const nav = useNavigate();
 
   useEffect(() => {
@@ -29,9 +28,6 @@ const DashboardPage: FC<Props> = ({}) => {
   return (
     <>
       <div className='dashboard_container'>
-        <div className='dashboard_mini_history'>
-          <MiniHistory />
-        </div>
         <div className='dashboard_body'>
           <div className='dashboard_body_row'>
             <DashboardPhoto />
@@ -45,10 +41,10 @@ const DashboardPage: FC<Props> = ({}) => {
           <div className='dashboard_body_row'>
             <DashboardSearch />
             <DashboardChat />
-            </div>
+          </div>
           <div className='dashboard_body_row'>
-            <DashboardDeleteAccount />
-            </div>
+            <DashboardDeleteAccount setMatchaNotif={setMatchaNotif} />
+          </div>
         </div>
       </div>
     </>
