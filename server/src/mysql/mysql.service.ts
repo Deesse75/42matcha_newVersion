@@ -2,6 +2,7 @@ import { matchaError } from '../utils/matcha_error.js';
 import { mysqlDb } from '../mysql/mysql.config.js';
 import {
   MysqlMiniUserType,
+  MysqlUserChatType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
@@ -21,7 +22,7 @@ export async function createNewUser(newUser: CreateNewUserType): Promise<void> {
 
 export async function updateUserMysqlData(
   query: string,
-  values: any,
+  values: any[],
 ): Promise<void> {
   try {
     await mysqlDb.query(query, values);
@@ -30,9 +31,9 @@ export async function updateUserMysqlData(
   }
 }
 
-export async function getOneUserData(
+export async function getFullUserData(
   query: string,
-  values: any,
+  values: any[],
 ): Promise<MysqlUserType | null> {
   try {
     const [rows]: any = await mysqlDb.query(query, values);
@@ -42,14 +43,15 @@ export async function getOneUserData(
     throw new matchaError(500, 'Une erreur interne est survenue');
   }
 }
-export async function getManyUserData(
+
+export async function getMiniUserData(
   query: string,
-  values: any,
-): Promise<MysqlUserType[] | MysqlMiniUserType[] | null> {
+  values: any[],
+): Promise<MysqlMiniUserType | null> {
   try {
     const [rows]: any = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
-    return rows;
+    return rows[0];
   } catch (error) {
     throw new matchaError(500, 'Une erreur interne est survenue');
   }
@@ -57,7 +59,7 @@ export async function getManyUserData(
 
 export async function getUserTags(
   query: string,
-  values: any,
+  values: any[],
 ): Promise<MysqlUserTagsType[] | null> {
   try {
     const [rows]: any = await mysqlDb.query(query, values);
@@ -70,7 +72,7 @@ export async function getUserTags(
 
 export async function getListing(
   query: string,
-  values: any,
+  values: any[],
 ): Promise<MysqlMiniUserType[] | null> {
   try {
     const [rows]: any = await mysqlDb.query(query, values);
@@ -81,4 +83,28 @@ export async function getListing(
   }
 }
 
+export async function getCommonTags(
+  query: string,
+  values: any[],
+): Promise<number[] | null> {
+  try {
+    const [rows]: any = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows;
+  } catch (error) {
+    throw new matchaError(500, 'Une erreur interne est survenue');
+  }
+}
 
+export async function getUserStatChat(
+  query: string,
+  values: any[],
+): Promise<MysqlUserChatType[] | null> {
+  try {
+    const [rows]: any = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows;
+  } catch (error) {
+    throw new matchaError(500, 'Une erreur interne est survenue');
+  }
+}

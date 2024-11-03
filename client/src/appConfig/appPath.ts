@@ -29,6 +29,7 @@ export const appRedir = {
   errorNotfound: '/page_introuvable',
   listingMatcha: '/selection_matcha',
   listing: '/liste_de_profils',
+  userProfile: '/profil_utilisateur',
 };
 
 export const authRoute = {
@@ -56,8 +57,8 @@ export const userRoute = {
 
 export const profileRoute = {
   getDisplayProfile: `${PATH}/profile/get_display_profile`,
-  getDisplayTags: `${PATH}/profile/get_display_tags`,
-  getInteractions: `${PATH}/profile/get_interactions`,
+  // getDisplayTags: `${PATH}/profile/get_display_tags`,
+  // getInteractions: `${PATH}/profile/get_interactions`,
 };
 
 export const listingRoute = {
@@ -66,6 +67,16 @@ export const listingRoute = {
   getFameFilter: `${PATH}/listing/get_fame_filter`,
   getLocationFilter: `${PATH}/listing/get_location_filter`,
   getTagsFilter: `${PATH}/listing/get_tags_filter`,
+};
+
+export const searchRoute = {
+  searchUsername: `${PATH}/search/search_username`,
+  searchLocation: `${PATH}/search/search_location`,
+  searchTags: `${PATH}/search/search_tags`,
+};
+
+export const chatRoute = {
+  getChatStat: `${PATH}/chat/get_chat_stat`,
 };
 
 export const socketRoute = {

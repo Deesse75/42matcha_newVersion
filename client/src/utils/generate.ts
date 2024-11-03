@@ -1,6 +1,9 @@
 export default function generate(
-  refPassword: React.RefObject<HTMLInputElement>,
+  refPassword: React.RefObject<HTMLInputElement> | null,
 ) {
+  if (!refPassword) {
+    return;
+  }
   const passLengthRandom = [12, 14, 16];
   const letters = [
     'gQJukpEwAaChZyIbVHtUjxWnBRmGqNfOvczDKFLPlTsSXdoYMrie',

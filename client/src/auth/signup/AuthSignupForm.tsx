@@ -1,21 +1,9 @@
 import { FC, useRef, useState, useEffect } from 'react';
-import {
-  MdOutlineAlternateEmail,
-  MdOutlineDriveFileRenameOutline,
-} from 'react-icons/md';
-import { BsCalendar2Date } from 'react-icons/bs';
-import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { authRoute, appRedir } from '../../appConfig/appPath';
-import {
-  usernameValidation,
-  emailValidation,
-  nameValidation,
-  passwordValidation,
-} from '../../utils/inputValidation';
-import InputEye from '../../utils/InputEye';
-import generate from '../../utils/generate';
-import convertAge from '../../utils/convertAge';
+import AuthInputContainer, {
+  ValideAuthInput,
+} from '../components/AuthInputContainer';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -29,6 +17,14 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
   const refEmail = useRef<HTMLInputElement>(null);
   const refPassword = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
+  const [valideInput, setValideInput] = useState<ValideAuthInput>({
+    firstname: false,
+    lastname: false,
+    username: false,
+    birthdate: false,
+    email: false,
+    password: false,
+  });
   const [bodyRequest, setBodyRequest] = useState<{
     firstname: string;
     lastname: string;
@@ -42,9 +38,7 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
     const firstname = refFirstname.current?.value.trim() || null;
     const lastname = refLastname.current?.value.trim() || null;
     const username = refUsername.current?.value.trim() || null;
-    const birthdate = refBirthdate.current
-      ? new Date(refBirthdate.current.value)
-      : null;
+    const birthdate = new Date(refBirthdate!.current!.value);
     const email = refEmail.current?.value.trim() || null;
     const password = refPassword.current?.value.trim() || null;
 
@@ -59,48 +53,24 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
       setMatchaNotif('Tous les champs sont requis.');
       return;
     }
-    if (!nameValidation(firstname)) {
-      setMatchaNotif(
-        'Le format du prénom est invalide. Voir règles de saisie de formulaire en bas de page.',
-      );
-      return;
-    }
-
-    if (!nameValidation(lastname)) {
-      setMatchaNotif(
-        'Le format du nom est invalide. Voir règles de saisie de formulaire en bas de page.',
-      );
-      return;
-    }
-    if (!usernameValidation(username)) {
-      setMatchaNotif(
-        "Le format du nom d'utilisateur est invalide. Voir règles de saisie de formulaire en bas de page.",
-      );
-      return;
-    }
-    if (parseInt(convertAge(birthdate.toISOString())) < 18) {
-      setMatchaNotif('Vous devez avoir 18 ans ou plus pour vous inscrire.');
-      return;
-    }
-    if (!passwordValidation(password)) {
-      setMatchaNotif(
-        'Le format du mot de passe est invalide. Voir règles de saisie de formulaire en bas de page.',
-      );
-      if (!emailValidation(email)) {
-        setMatchaNotif(
-          "Le format de l'adresse email est invalide. Voir règles de saisie de formulaire en bas de page.",
-        );
-        return;
-      }
+    if (
+      !valideInput.firstname ||
+      !valideInput.lastname ||
+      !valideInput.username ||
+      !valideInput.birthdate ||
+      !valideInput.email ||
+      !valideInput.password
+    ) {
+      setMatchaNotif('Certains champs sont invalides.');
       return;
     }
     setBodyRequest({
-      firstname,
-      lastname,
-      username,
-      birthdate,
-      email,
-      password,
+      firstname: firstname,
+      lastname: lastname,
+      username: username,
+      birthdate: birthdate,
+      email: email,
+      password: password,
     });
   };
 
@@ -132,8 +102,8 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
           return;
         }
 
-        setBodyRequest(null);
         if (response.status !== 201) {
+          setBodyRequest(null);
           return;
         }
         nav(appRedir.signin);
@@ -151,121 +121,91 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <div className='auth_signup_form'>
-        <div className='auth_signup_input_container'>
-          <div className='auth_signup_input_icon'>
-            <MdOutlineDriveFileRenameOutline size={30} />
-          </div>
-          <input
-            className='auth_signup_input_value'
-            type='text'
-            name='signin_firstname'
-            id='signin_firstname'
-            maxLength={30}
-            minLength={3}
-            required
-            autoComplete='given-name'
-            ref={refFirstname}
-            placeholder='Prénom'
-          />
-        </div>
-
-        <div className='auth_signup_input_container'>
-          <div className='auth_signup_input_icon'>
-            <MdOutlineDriveFileRenameOutline size={30} />
-          </div>
-          <input
-            className='auth_signup_input_value'
-            type='text'
-            name='signin_lastname'
-            id='signin_lastname'
-            maxLength={30}
-            minLength={3}
-            required
-            autoComplete='family-name'
-            ref={refLastname}
-            placeholder='Nom'
-          />
-        </div>
-
-        <div className='auth_signup_input_container'>
-          <div className='auth_signup_input_icon'>
-            <MdOutlineDriveFileRenameOutline size={30} />
-          </div>
-          <input
-            className='auth_signup_input_value'
-            type='text'
-            name='signin_username'
-            id='signin_username'
-            maxLength={30}
-            minLength={3}
-            required
-            autoComplete='username'
-            ref={refUsername}
-            placeholder="Nom d'utilisateur"
-          />
-        </div>
-
-        <div className='auth_signup_input_container'>
-          <div className='auth_signup_input_icon'>
-            <BsCalendar2Date />
-          </div>
-          <input
-            className='auth_signup_input_value'
-            type='date'
-            name='signin_birthdate'
-            id='signin_birthdate'
-            maxLength={30}
-            minLength={3}
-            required
-            autoComplete='off'
-            ref={refBirthdate}
-            placeholder='Date de naissance'
-          />
-        </div>
-
-        <div className='auth_signup_input_container'>
-          <div className='auth_signup_input_icon'>
-            <MdOutlineAlternateEmail size={30} />
-          </div>
-          <input
-            className='auth_signup_input_value'
-            type='email'
-            name='signin_email'
-            id='signin_email'
-            required
-            autoComplete='email'
-            ref={refEmail}
-            placeholder='Adresse email'
-          />
-        </div>
-
-        <div className='auth_signup_input_container'>
-          <div className='auth_signup_input_icon'>
-            <RiLockPasswordLine size={30} />
-          </div>
-          <input
-            className='auth_signup_input_value'
-            type='password'
-            name='signin_password'
-            id='signin_password'
-            maxLength={30}
-            minLength={8}
-            required
-            autoComplete='off'
-            ref={refPassword}
-            placeholder='&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;'
-          />
-          <InputEye refInput={refPassword} />
-          <div
-            className='auth_input_password_generate'
-            onClick={() => {
-              generate(refPassword);
-            }}
-          >
-            Random Pass
-          </div>
-        </div>
+      <div className='auth_form'>
+        <AuthInputContainer
+          icon='name'
+          inputType='text'
+          inputName='firstname'
+          max={30}
+          min={3}
+          autoComplete='given-name'
+          refInput={refFirstname}
+          placeholder='Prénom'
+          displayEye={false}
+          displayGen={false}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
+        <AuthInputContainer
+          icon='name'
+          inputType='text'
+          inputName='lastname'
+          max={30}
+          min={3}
+          autoComplete='family-name'
+          refInput={refLastname}
+          placeholder='Nom'
+          displayEye={false}
+          displayGen={false}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
+        <AuthInputContainer
+          icon='name'
+          inputType='text'
+          inputName='username'
+          max={30}
+          min={3}
+          autoComplete='username'
+          refInput={refUsername}
+          placeholder="Nom d'utilisateur"
+          displayEye={false}
+          displayGen={false}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
+        <AuthInputContainer
+          icon='birthdate'
+          inputType='date'
+          inputName='birthdate'
+          max={-1}
+          min={-1}
+          autoComplete='off'
+          refInput={refBirthdate}
+          placeholder='Date de naissance'
+          displayEye={false}
+          displayGen={false}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
+        <AuthInputContainer
+          icon='email'
+          inputType='email'
+          inputName='email'
+          max={-1}
+          min={-1}
+          autoComplete='email'
+          refInput={refEmail}
+          placeholder='Adresse email'
+          displayEye={false}
+          displayGen={false}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
+        <AuthInputContainer
+          icon='password'
+          inputType='password'
+          inputName='password'
+          max={30}
+          min={8}
+          autoComplete='off'
+          refInput={refPassword}
+          placeholder='&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;'
+          displayEye={true}
+          displayGen={true}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
 
         <div className='auth_submit'>
           <button onClick={handleClick} className='auth_submit_button'>

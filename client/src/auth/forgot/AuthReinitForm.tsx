@@ -1,11 +1,8 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import InputCode from '../../utils/InputCode';
-import { RiLockPasswordLine } from 'react-icons/ri';
-import InputEye from '../../utils/InputEye';
-import generate from '../../utils/generate';
-import { passwordValidation } from '../../utils/inputValidation';
+import InputCode from '../components/InputCode';
 import { authRoute, appRedir } from '../../appConfig/appPath';
+import AuthInputContainer, { ValideAuthInput } from '../components/AuthInputContainer';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -19,9 +16,17 @@ const AuthReinitForm: FC<Props> = ({ setMatchaNotif, email, setEmail }) => {
     newPassword: string;
     email: string;
   } | null>(null);
+  const [valideInput, setValideInput] = useState<ValideAuthInput>({
+    firstname: false,
+    lastname: false,
+    username: false,
+    birthdate: false,
+    email: false,
+    password: false,
+  });
   const nav = useNavigate();
   const refPassword = useRef<HTMLInputElement>(null);
-  const refInput = {
+  const refInputCode = {
     ref1: useRef<HTMLInputElement>(null),
     ref2: useRef<HTMLInputElement>(null),
     ref3: useRef<HTMLInputElement>(null),
@@ -37,25 +42,25 @@ const AuthReinitForm: FC<Props> = ({ setMatchaNotif, email, setEmail }) => {
       setMatchaNotif('Veuillez entrer votre nouveau mot de passe.');
       return;
     }
-    if (!passwordValidation(newPasswordValue)) {
+    if (!valideInput.password) {
       setMatchaNotif(
-        'Le format du nouveau mot de passe est invalide. Voir règles de saisie de formulaire.',
+        'Le format du nouveau mot de passe est invalide.',
       );
       return;
     }
     if (
-      refInput.ref1.current?.value === '' &&
-      refInput.ref2.current?.value === '' &&
-      refInput.ref3.current?.value === '' &&
-      refInput.ref4.current?.value === '' &&
-      refInput.ref5.current?.value === '' &&
-      refInput.ref6.current?.value === ''
+      refInputCode.ref1.current?.value === '' &&
+      refInputCode.ref2.current?.value === '' &&
+      refInputCode.ref3.current?.value === '' &&
+      refInputCode.ref4.current?.value === '' &&
+      refInputCode.ref5.current?.value === '' &&
+      refInputCode.ref6.current?.value === ''
     ) {
-      setMatchaNotif('Veuillez remplir le code.');
+      setMatchaNotif('Veuillez renseigner le code.');
       return;
     }
 
-    const newCode: string = `${refInput.ref1.current?.value}${refInput.ref2.current?.value}${refInput.ref3.current?.value}${refInput.ref4.current?.value}${refInput.ref5.current?.value}${refInput.ref6.current?.value}`;
+    const newCode: string = `${refInputCode.ref1.current?.value}${refInputCode.ref2.current?.value}${refInputCode.ref3.current?.value}${refInputCode.ref4.current?.value}${refInputCode.ref5.current?.value}${refInputCode.ref6.current?.value}`;
     if (!newCode || newCode.length !== 6) {
       setMatchaNotif('Le code est incorrect.');
       setEmail(null);
@@ -64,7 +69,7 @@ const AuthReinitForm: FC<Props> = ({ setMatchaNotif, email, setEmail }) => {
 
     if (!email) {
       setMatchaNotif(
-        'Il y a une erreur avec votre adresse email actuelle. Veuillez recommencer.',
+        'Nous avons rencontré un problème lors de la vérification de votre adresse actuelle. Veuillez recommencer.',
       );
       setEmail(null);
       return;
@@ -78,13 +83,13 @@ const AuthReinitForm: FC<Props> = ({ setMatchaNotif, email, setEmail }) => {
 
   const handleClear = () => {
     if (refPassword.current) refPassword.current.value = '';
-    if (refInput.ref1.current) refInput.ref1.current.value = '';
-    if (refInput.ref2.current) refInput.ref2.current.value = '';
-    if (refInput.ref3.current) refInput.ref3.current.value = '';
-    if (refInput.ref4.current) refInput.ref4.current.value = '';
-    if (refInput.ref5.current) refInput.ref5.current.value = '';
-    if (refInput.ref6.current) refInput.ref6.current.value = '';
-    if (refInput.ref7.current) refInput.ref7.current.value = '';
+    if (refInputCode.ref1.current) refInputCode.ref1.current.value = '';
+    if (refInputCode.ref2.current) refInputCode.ref2.current.value = '';
+    if (refInputCode.ref3.current) refInputCode.ref3.current.value = '';
+    if (refInputCode.ref4.current) refInputCode.ref4.current.value = '';
+    if (refInputCode.ref5.current) refInputCode.ref5.current.value = '';
+    if (refInputCode.ref6.current) refInputCode.ref6.current.value = '';
+    if (refInputCode.ref7.current) refInputCode.ref7.current.value = '';
   };
 
   useEffect(() => {
@@ -131,33 +136,33 @@ const AuthReinitForm: FC<Props> = ({ setMatchaNotif, email, setEmail }) => {
         <div className='auth_reinit_number'>
           <InputCode
             id={1}
-            currentRef={refInput.ref1}
-            nextRef={refInput.ref2}
+            currentRef={refInputCode.ref1}
+            nextRef={refInputCode.ref2}
           />
           <InputCode
             id={2}
-            currentRef={refInput.ref2}
-            nextRef={refInput.ref3}
+            currentRef={refInputCode.ref2}
+            nextRef={refInputCode.ref3}
           />
           <InputCode
             id={3}
-            currentRef={refInput.ref3}
-            nextRef={refInput.ref4}
+            currentRef={refInputCode.ref3}
+            nextRef={refInputCode.ref4}
           />
           <InputCode
             id={4}
-            currentRef={refInput.ref4}
-            nextRef={refInput.ref5}
+            currentRef={refInputCode.ref4}
+            nextRef={refInputCode.ref5}
           />
           <InputCode
             id={5}
-            currentRef={refInput.ref5}
-            nextRef={refInput.ref6}
+            currentRef={refInputCode.ref5}
+            nextRef={refInputCode.ref6}
           />
           <InputCode
             id={6}
-            currentRef={refInput.ref6}
-            nextRef={refInput.ref7}
+            currentRef={refInputCode.ref6}
+            nextRef={refInputCode.ref7}
           />
         </div>
 
@@ -165,32 +170,20 @@ const AuthReinitForm: FC<Props> = ({ setMatchaNotif, email, setEmail }) => {
           Entrez votre nouveau mot de passe
         </div>
 
-        <div className='auth_reinit_input_container'>
-          <div className='auth_reinit_input_icon'>
-            <RiLockPasswordLine size={30} />
-          </div>
-          <input
-            className='auth_reinit_input_value'
-            type='password'
-            name='reinit_password'
-            id='reinit_password'
-            maxLength={30}
-            minLength={8}
-            required
-            autoComplete='off'
-            ref={refPassword}
-            placeholder='&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;'
-          />
-          <InputEye refInput={refPassword} />
-          <div
-            className='reinit_input_password_generate'
-            onClick={() => {
-              generate(refPassword);
-            }}
-          >
-            Random Pass
-          </div>
-        </div>
+        <AuthInputContainer
+          icon='password'
+          inputType='newPassword'
+          inputName='newPassword'
+          max={30}
+          min={8}
+          autoComplete='off'
+          refInput={refPassword}
+          placeholder='&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;'
+          displayEye={true}
+          displayGen={true}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
 
         <div className='auth_submit'>
           <button onClick={handleClick} className='auth_submit_button'>

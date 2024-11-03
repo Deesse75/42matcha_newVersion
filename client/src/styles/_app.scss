@@ -1,0 +1,60 @@
+.header {
+  width: 100vw;
+  height: 90px;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  position: fixed;
+  background-color: $color_nuance_white1;
+  @import './header';
+}
+
+.matcha_notification {
+  width: 100vw;
+  height: 45px;
+  margin-top: 40px;
+  display: flex;
+  justify-content: end;
+  z-index: 2000;
+  @import './matcha_notification';
+}
+
+.routes {
+  width: 100%;
+  display: flex;
+  padding: 0;
+  box-sizing: border-box;
+  margin-top: 5px;
+  // flex-grow: 1;
+  .wait_to_charge {
+    font-size: 18px;
+    font-family: 'Playwrite NG Modern', sans-serif;
+    font-weight: bold;
+    color: $color_pal_navy;
+  }
+  .route_menu {
+    width: 15%;
+    min-width: 200px;
+    position: fixed;
+  }
+  .route_path {
+    background-image: url('background/vecteezy_cartoon-couple.jpg');
+    background-repeat: no-repeat;
+    background-size: 80%;
+    background-position: end;
+    background-attachment: fixed;
+    background-position-x: 200%;
+    margin-left: 15%;
+    width: 85%;
+    min-height: 83vh;
+    display: flex;
+    @import './auth';
+    @import './dashboard';
+  }
+}
+
+.footer {
+  width: 100%;
+  height: 50px;
+  background-color: $color_pal_yellow;
+}

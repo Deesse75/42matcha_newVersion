@@ -1,14 +1,8 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { MdOutlineAlternateEmail } from 'react-icons/md';
-import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-import {
-  emailValidation,
-  passwordValidation,
-} from '../../utils/inputValidation';
 import { appRedir, authRoute } from '../../appConfig/appPath';
 import Cookies from 'js-cookie';
-import InputEye from '../../utils/InputEye';
+import AuthInputContainer, { ValideAuthInput } from '../components/AuthInputContainer';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -18,6 +12,14 @@ const AuthSigninEmailForm: FC<Props> = ({ setMatchaNotif }) => {
   const refEmail = useRef<HTMLInputElement>(null);
   const refPassword = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
+  const [valideInput, setValideInput] = useState<ValideAuthInput>({
+    firstname: false,
+    lastname: false,
+    username: false,
+    birthdate: false,
+    email: false,
+    password: false,
+  });
   const [bodyRequest, setBodyRequest] = useState<{
     email: string;
     password: string;
@@ -31,20 +33,12 @@ const AuthSigninEmailForm: FC<Props> = ({ setMatchaNotif }) => {
       setMatchaNotif('Tous les champs sont requis.');
       return;
     }
-    if (!emailValidation(email)) {
-      setMatchaNotif(
-        "Le format de l'adresse email est invalide. Voir règles de saisie de formulaire en bas de page.",
-      );
-      return;
-    }
-    if (!passwordValidation(password)) {
-      setMatchaNotif(
-        'Le format du mot de passe est invalide. Voir règles de saisie de formulaire en bas de page.',
-      );
-      return;
-    }
-    setBodyRequest({ email, password });
-  };
+      if (!valideInput.email || !valideInput.password) {
+        setMatchaNotif('Certains champs sont invalides.');
+        return;
+      }
+      setBodyRequest({ email: email, password: password });
+};
 
   const handleClear = () => {
     if (refEmail.current) refEmail.current.value = '';
@@ -97,42 +91,35 @@ const AuthSigninEmailForm: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <div className='auth_signin_form'>
-        <div className='auth_signin_input_container'>
-          <div className='auth_signin_input_icon'>
-            <MdOutlineAlternateEmail size={30} />
-          </div>
-          <input
-            className='auth_signin_input_value'
-            type='email'
-            name='signin_email'
-            id='signin_email'
-            required
-            autoComplete='email'
-            ref={refEmail}
-            placeholder='Adresse email'
-          />
-        </div>
-
-        <div className='auth_signin_input_container'>
-          <div className='auth_signin_input_icon'>
-            <RiLockPasswordLine size={30} />
-          </div>
-          <input
-            className='auth_signin_input_value'
-            type='password'
-            name='signin_email__password'
-            id='signin_email__password'
-            maxLength={30}
-            minLength={8}
-            required
-            autoComplete='off'
-            ref={refPassword}
-            placeholder='&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;'
-          />
-          <InputEye refInput={refPassword} />
-        </div>
-
+      <div className='auth_form'>
+        <AuthInputContainer
+          icon='email'
+          inputType='email'
+          inputName='email'
+          max={-1}
+          min={-1}
+          autoComplete='email'
+          refInput={refEmail}
+          placeholder='Adresse email'
+          displayEye={false}
+          displayGen={false}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
+        <AuthInputContainer
+          icon='password'
+          inputType='password'
+          inputName='password'
+          max={30}
+          min={8}
+          autoComplete='off'
+          refInput={refPassword}
+          placeholder='&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;'
+          displayEye={true}
+          displayGen={false}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
         <div className='auth_submit'>
           <button onClick={handleClick} className='auth_submit_button'>
             Se connecter

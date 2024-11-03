@@ -7,9 +7,6 @@ type Props = {
 const AuthTitle: FC<Props> = ({ title }) => {
   return (
     <>
-      <div className='auth_page_title_container'>
-        <div className='auth_page_title'>{title}</div>
-      </div>
     </>
   );
 };

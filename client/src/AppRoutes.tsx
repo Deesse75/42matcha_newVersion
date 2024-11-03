@@ -14,7 +14,6 @@ import Attribution from './footer/components/Attribution';
 import ContactUs from './footer/components/ContactUs';
 import Legacy from './footer/components/Legacy';
 import ProfilePage from './home/account/ProfilePage';
-import DeleteProfile from './home/account/DeleteProfile';
 import DashboardPage from './home/dashboard/DashboardPage';
 import ChatPage from './home/chat/ChatPage';
 import SearchPage from './home/search/SearchPage';
@@ -23,6 +22,8 @@ import Signout from './home/Signout';
 import AccountPage from './home/account/AccountPage';
 import ListingPage from './home/listing/ListingPage';
 import PhotoPage from './home/account/PhotoPage';
+import DisplayProfileUser from './home/display/DisplayProfileUser';
+import DeleteAccount from './home/account/DeleteAccount';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -76,7 +77,10 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
           path={appRedir.profile}
           element={<ProfilePage setMatchaNotif={setMatchaNotif} />}
         />
-        <Route path={appRedir.deleteProfile} element={<DeleteProfile />} />
+        <Route
+          path={appRedir.deleteProfile}
+          element={<DeleteAccount setMatchaNotif={setMatchaNotif} />}
+        />
         <Route
           path={appRedir.dashboard}
           element={<DashboardPage setMatchaNotif={setMatchaNotif} />}
@@ -98,6 +102,10 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
         <Route
           path={appRedir.photo}
           element={<PhotoPage setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route
+          path={appRedir.userProfile}
+          element={<DisplayProfileUser setMatchaNotif={setMatchaNotif} />}
         />
         <Route path='/*' element={<Error404 />} />
       </Routes>

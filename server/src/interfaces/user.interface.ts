@@ -27,3 +27,18 @@ export type UserType = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type MiniUserType = {
+  id: number;
+  username: string;
+  age: number;
+  gender: string | null;
+  orientation: string | null;
+  region: string | null;
+  county: string | null;
+  town: string | null;
+  fameRating: number;
+  photo1: string | null;
+  lastConnection: string | null;
+  tags: string[] | null;
+};

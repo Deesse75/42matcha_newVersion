@@ -12,10 +12,11 @@ const AuthRedirect: FC<Props> = ({ selectedPage }) => {
   return (
     <>
       <div className='auth_redirect_container'>
-        {selectedPage === 'signin' && (
-          <>
-            <div className='auth_redirect_part'>
+        <div className='auth_redirect_part'>
+          {selectedPage === 'signin' && (
+            <>
               <button
+              className='auth_redirect_button'
                 onClick={() => {
                   nav(appRedir.signup);
                 }}
@@ -23,6 +24,7 @@ const AuthRedirect: FC<Props> = ({ selectedPage }) => {
                 Vous n'avez pas encore de compte
               </button>
               <button
+              className='auth_redirect_button'
                 onClick={() => {
                   nav(appRedir.resend);
                 }}
@@ -30,19 +32,19 @@ const AuthRedirect: FC<Props> = ({ selectedPage }) => {
                 Vous souhaitez valider votre adresse email
               </button>
               <button
+              className='auth_redirect_button'
                 onClick={() => {
                   nav(appRedir.forgotPassword);
                 }}
               >
                 Vous avez oublié votre mot de passe
               </button>
-            </div>
-          </>
-        )}
-        {selectedPage === 'signup' && (
-          <>
-            <div className='auth_redirect_part'>
+            </>
+          )}
+          {selectedPage === 'signup' && (
+            <>
               <button
+              className='auth_redirect_button'
                 onClick={() => {
                   nav(appRedir.signin);
                 }}
@@ -50,6 +52,7 @@ const AuthRedirect: FC<Props> = ({ selectedPage }) => {
                 Vous avez déjà un compte
               </button>
               <button
+              className='auth_redirect_button'
                 onClick={() => {
                   nav(appRedir.resend);
                 }}
@@ -57,41 +60,40 @@ const AuthRedirect: FC<Props> = ({ selectedPage }) => {
                 Vous souhaitez valider votre adresse email
               </button>
               <button
+              className='auth_redirect_button'
                 onClick={() => {
                   nav(appRedir.forgotPassword);
                 }}
               >
                 Vous avez oublié votre mot de passe
               </button>
-            </div>
-          </>
-        )}
-        {selectedPage === 'resend' && (
-          <>
-            <div className='auth_redirect_part'>
+            </>
+          )}
+          {selectedPage === 'resend' && (
+            <>
               <button
+              className='auth_redirect_button'
                 onClick={() => {
                   nav(appRedir.signin);
                 }}
               >
                 Retour à la page de connexion
               </button>
-            </div>
-          </>
-        )}
-        {selectedPage === 'forgotPassword' && (
-          <>
-            <div className='auth_redirect_part'>
+            </>
+          )}
+          {selectedPage === 'forgotPassword' && (
+            <>
               <button
+              className='auth_redirect_button'
                 onClick={() => {
                   nav(appRedir.signin);
                 }}
               >
                 Retour à la page de connexion
               </button>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </>
   );

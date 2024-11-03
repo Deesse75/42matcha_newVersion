@@ -50,5 +50,11 @@ export type MysqlUserTagsType = {
   tagName: string;
 };
 
-
+export type MysqlUserChatType = {
+  id: number;
+  senderId: number;
+  receiverId: number;
+  message: string;
+  createdAt: string;
+};
 

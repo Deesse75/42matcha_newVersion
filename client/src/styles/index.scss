@@ -1,20 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+NG+Modern:wght@100..400');
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
 @import './variable';
 @import './mixin';
 
-@import './app';
-@import './auth';
-@import './error';
-@import './footer';
-@import './header';
-@import './home';
 
 body {
   margin: 0;
   padding: 0;
   width: 100vw;
-  min-width: 350px;
   min-height: 100vh;
+  display: flex;
   color: $color_pal_navy;
   &::-webkit-scrollbar {
     display: none;
@@ -26,34 +21,6 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    background-image: url('background/vecteezy_cartoon-couple.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-
-
-    .header {
-      width: 100vw;
-      height: 110px;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-      position: fixed;
-    }
-
-    .routes {
-      width: 100%;
-      display: flex;
-      margin-top: 110px;
-      padding: 0;
-      box-sizing: border-box;
-      flex-grow: 1;
-    }
-
-    .footer {
-      width: 100%;
-    }
+    @import './app';
   }
 }

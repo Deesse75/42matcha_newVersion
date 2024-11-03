@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { useUserInfo } from '../../../appContext/user.context';
-import InputEye from '../../../utils/InputEye';
+import InputEye from '../../../auth/components/InputEye';
 import generate from '../../../utils/generate';
 import inputValidation from '../../../utils/inputValidation';
 
@@ -112,7 +112,7 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
         <div className='requiered_form_row'>
           <div className='requiered_form_name'>Nom</div>
           <div className='requiered_form_currentValue'>
-              {me.user ? me.user.lastname : ''}
+            {me.user ? me.user.lastname : ''}
           </div>
           <div className='requiered_form_newValue'>
             <input
@@ -129,7 +129,7 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
         <div className='requiered_form_row'>
           <div className='requiered_form_name'>Pseudo</div>
           <div className='requiered_form_currentValue'>
-              {me.user ? me.user.username : ''}
+            {me.user ? me.user.username : ''}
           </div>
           <div className='requiered_form_newValue'>
             <input
@@ -146,7 +146,7 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
         <div className='requiered_form_row'>
           <div className='requiered_form_name'>Date de naissance</div>
           <div className='requiered_form_currentValue'>
-              {me.user ? me.user.birthdate : ''}
+            {me.user ? me.user.birthdate : ''}
           </div>
           <div className='requiered_form_newValue'>
             <input
@@ -163,7 +163,7 @@ const ProfileRequiered: FC<Props> = ({ setMatchaNotif }) => {
         <div className='requiered_form_row'>
           <div className='requiered_form_name'>Email</div>
           <div className='requiered_form_currentValue'>
-              value={me.user ? me.user.email : ''}
+            value={me.user ? me.user.email : ''}
           </div>
           <div className='requiered_form_newValue'>
             <input

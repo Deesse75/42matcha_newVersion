@@ -9,6 +9,8 @@ import { manageSocket } from './socket/socket.services.js';
 import authRouter from './auth/auth.route.js';
 import userRouter from './user/user.route.js';
 import listingRouter from './listing/listing.route.js';
+import searchRouter from './search/search.route.js';
+import chatRouter from './chat/chat.route.js';
 
 //configure environment
 dotenv.config();
@@ -62,7 +64,8 @@ app.use('/user', userRouter);
 // app.use('/profile', profileRouter);
 // app.use('/action', actionRouter);
 app.use('/listing', listingRouter);
-// app.use('/search', searchRouter);
+app.use('/search', searchRouter);
+app.use('/chat', chatRouter);
 app.use('/*', (req: Request, res: Response) => {
   res.status(404).json({
     message: "La ressource que vous essayez d'atteindre n'existe pas",

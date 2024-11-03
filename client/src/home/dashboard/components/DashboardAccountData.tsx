@@ -11,17 +11,17 @@ const DashboardAccountData: FC<Props> = ({}) => {
 
   return (
     <>
-      <div className='dashboard_profile_container'>
-        <div className='dashboard_profile_data'>
+      <div className='dashboard_account'>
+        <div className='dashboard_account_data'>
           {me.user ? (
             <>
-              <div className='dashboard_profile_data_row'>
+              <div className='dashboard_account_data_row_1'>
                 {`${me.user.username},`}
               </div>
-              <div className='dashboard_profile_data_row'>
+              <div className='dashboard_account_data_row'>
                 {`${me.user.firstname} ${me.user.lastname}, ${me.user.age} ans`}
               </div>
-              <div className='dashboard_profile_data_row'>
+              <div className='dashboard_account_data_row'>
                 {me.user.region
                   ? `${me.user.region}, ${me.user.county}, ${me.user.town}`
                   : 'Erreur localisation'}
@@ -29,14 +29,13 @@ const DashboardAccountData: FC<Props> = ({}) => {
             </>
           ) : (
             <>
-              <div className='dashboard_profile_data_error'>
-                Erreur de chargement
-              </div>
+              <div className=''>Erreur de chargement</div>
             </>
           )}
         </div>
-        <div className='dashboard_profile_data_submit'>
+        <div className='dashboard_account_data_submit'>
           <button
+            className='dashboard_account_data_submit_button'
             onClick={() => {
               nav(appRedir.account);
             }}

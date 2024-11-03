@@ -1,7 +1,6 @@
 import { FC, useEffect } from 'react';
 import AuthResendForm from './AuthResendForm';
 import AuthRedirect from '../components/AuthRedirect';
-import AuthTitle from '../components/AuthTitle';
 import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../../appConfig/appPath';
 import Cookies from 'js-cookie';
@@ -26,9 +25,11 @@ const ResendLinkEmail: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <AuthTitle title='Recevoir un lien de confirmation' />
-      <AuthResendForm setMatchaNotif={setMatchaNotif} />
-      <AuthRedirect selectedPage='resend' />
+      <div className='auth_container'>
+        <div className='auth_title'>Recevoir un lien de confirmation</div>
+        <AuthResendForm setMatchaNotif={setMatchaNotif} />
+        <AuthRedirect selectedPage='resend' />
+      </div>
     </>
   );
 };

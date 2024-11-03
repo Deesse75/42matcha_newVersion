@@ -29,7 +29,6 @@ export const signup = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  console.log('controller signup');
   try {
     await authSignup(
       req.body.firstname,

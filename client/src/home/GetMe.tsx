@@ -13,7 +13,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
   const me = useUserInfo();
   const nav = useNavigate();
   const [userData, setUserData] = useState<boolean>(false);
-  const [reqData, setReqData] = useState<{
+  const [bodyRequest, setBodyRequest] = useState<{
     region: string | null;
     county: string | null;
     town: string | null;
@@ -21,7 +21,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
 
   useEffect(() => {
     me.setUser(null);
-    setReqData({
+    setBodyRequest({
       region: localStorage.getItem('region'),
       county: localStorage.getItem('county'),
       town: localStorage.getItem('town'),
@@ -29,7 +29,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
   }, []);
 
   useEffect(() => {
-    if (!reqData) return;
+    if (!bodyRequest) return;
     let isMounted = true;
     const request = async () => {
       try {
@@ -39,7 +39,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${Cookies.get('session')}`,
           },
-          body: JSON.stringify(reqData),
+          body: JSON.stringify(bodyRequest),
         });
         const data = await response.json();
         if (!isMounted) return;
@@ -55,7 +55,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
         }
         me.setUser(data.user);
         setUserData(true);
-        setReqData(null);
+        setBodyRequest(null);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -66,7 +66,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [reqData]);
+  }, [bodyRequest]);
 
   useEffect(() => {
     if (!userData) return;

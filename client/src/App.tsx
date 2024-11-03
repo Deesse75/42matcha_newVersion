@@ -7,10 +7,12 @@ import { appRedir } from './appConfig/appPath';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import MenuMatcha from './home/menu/MenuMatcha';
+import { useUserInfo } from './appContext/user.context';
 
 function App() {
   const [matchaNotif, setMatchaNotif] = useState<string | null>(null);
   const nav = useNavigate();
+  const me = useUserInfo();
 
   useEffect(() => {
     if (import.meta.hot) {
@@ -25,7 +27,7 @@ function App() {
         <Header />
       </div>
 
-      <div className='system_notification'>
+      <div className='matcha_notification'>
         <MatchaNotif
           matchaNotif={matchaNotif}
           setMatchaNotif={setMatchaNotif}
@@ -34,7 +36,7 @@ function App() {
 
       <div className='routes'>
         <div className='route_menu'>
-          <MenuMatcha />
+          {me.user && me.userSocket && <MenuMatcha />}
         </div>
         <div className='route_path'>
           <AppRoutes setMatchaNotif={setMatchaNotif} />
@@ -46,6 +48,6 @@ function App() {
       </div>
     </>
   );
-}
+};
 
 export default App;

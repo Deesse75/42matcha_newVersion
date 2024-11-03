@@ -1,6 +1,5 @@
 import { FC, useEffect } from 'react';
 import AuthRedirect from '../components/AuthRedirect';
-import AuthTitle from '../components/AuthTitle';
 import AuthSignupForm from './AuthSignupForm';
 import { appRedir } from '../../appConfig/appPath';
 import Cookies from 'js-cookie';
@@ -26,9 +25,11 @@ const Signup: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <AuthTitle title='Inscription' />
-      <AuthSignupForm setMatchaNotif={setMatchaNotif} />
-      <AuthRedirect selectedPage='signup' />
+      <div className='auth_container'>
+        <div className='auth_title'>Inscription</div>
+        <AuthSignupForm setMatchaNotif={setMatchaNotif} />
+        <AuthRedirect selectedPage='signup' />
+      </div>
     </>
   );
 };

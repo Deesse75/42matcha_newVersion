@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react';
-import AuthTitle from '../components/AuthTitle';
 import AuthSigninEmailForm from './AuthSigninEmailForm';
 import AuthRedirect from '../components/AuthRedirect';
 import AuthSigninUsernameForm from './AuthSigninUsernameForm';
@@ -28,24 +27,29 @@ const Signin: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <AuthTitle title='Connexion' />
+      <div className='auth_container'>
+        <div className='auth_title'>Connexion</div>
 
-      <button
-        onClick={() => {
-          setOpenUsername(!openUsername);
-        }}
-        className='auth_page_signin_username_button'
-      >
-        {openUsername
-          ? "Se connecter avec l'adresse email"
-          : "Se connecter avec le nom d'utilisateur"}
-      </button>
-      {openUsername ? (
-        <AuthSigninUsernameForm setMatchaNotif={setMatchaNotif} />
-      ) : (
-        <AuthSigninEmailForm setMatchaNotif={setMatchaNotif} />
-      )}
-      <AuthRedirect selectedPage='signin' />
+        <div className='auth_signin_connect_choice'>
+          <button
+            onClick={() => {
+              setOpenUsername(!openUsername);
+            }}
+            className='auth_signin_connect_choice_button'
+          >
+            {openUsername
+              ? 'Connecte toi avec ton adresse email'
+              : "Connecte toi avec ton nom d'utilisateur"}
+          </button>
+        </div>
+
+        {openUsername ? (
+          <AuthSigninUsernameForm setMatchaNotif={setMatchaNotif} />
+        ) : (
+          <AuthSigninEmailForm setMatchaNotif={setMatchaNotif} />
+        )}
+        <AuthRedirect selectedPage='signin' />
+      </div>
     </>
   );
 };

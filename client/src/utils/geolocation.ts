@@ -17,8 +17,8 @@ async function setLocation(url: string): Promise<void> {
     if (!response.ok) throw new Error('error');
     const data = await response.json();
     localStorage.setItem('region', data.address.state);
-    localStorage.setItem('county', data.address.county);
-    localStorage.setItem('town', data.address.town);
+    localStorage.setItem('county', data.address.county || data.address.city);
+    localStorage.setItem('town', data.address.city || data.address.village);
   } catch (error) {
     throw error;
   }

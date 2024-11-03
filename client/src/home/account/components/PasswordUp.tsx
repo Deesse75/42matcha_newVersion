@@ -5,7 +5,7 @@ import { LuSave } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import { userRoute, appRedir } from '../../../appConfig/appPath';
 import generate from '../../../utils/generate';
-import InputEye from '../../../utils/InputEye';
+import InputEye from '../../../auth/components/InputEye';
 import { passwordValidation } from '../../../utils/inputValidation';
 
 type Props = {

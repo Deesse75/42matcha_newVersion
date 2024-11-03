@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { IoClose } from 'react-icons/io5';
 import { userRoute, appRedir } from '../../../appConfig/appPath';
-import InputCode from '../../../utils/InputCode';
+import InputCode from '../../../auth/components/InputCode';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;

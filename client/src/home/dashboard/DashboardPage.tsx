@@ -6,7 +6,6 @@ import DashboardAccountData from './components/DashboardAccountData';
 import FameScore from './components/FameScore';
 import DashboardAccountInfo from './components/DashboardAccountInfo';
 import DashboardChat from './components/DashboardChat';
-import DashboardDeleteAccount from './components/DashboardDeleteAccount';
 import DashboardSearch from './components/DashboardSearch';
 import DashboardPhoto from './components/DashboardPhoto';
 import DashboardProfile from './components/DashboardProfile';
@@ -28,23 +27,21 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
   return (
     <>
       <div className='dashboard_container'>
-        <div className='dashboard_body'>
-          <div className='dashboard_body_row'>
-            <DashboardPhoto />
-            <DashboardAccountData />
-            <DashboardAccountInfo />
-            <FameScore />
-          </div>
-          <div className='dashboard_body_row'>
-            <DashboardProfile />
-          </div>
-          <div className='dashboard_body_row'>
-            <DashboardSearch />
-            <DashboardChat />
-          </div>
-          <div className='dashboard_body_row'>
-            <DashboardDeleteAccount setMatchaNotif={setMatchaNotif} />
-          </div>
+        <div className='dashboard_account_container'>
+          <DashboardPhoto />
+          <DashboardAccountData />
+          <FameScore />
+          <DashboardAccountInfo />
+        </div>
+        <div className='dashboard_profile_container'>
+          <DashboardProfile />
+        </div>
+        <div className='dashboard_other_container'>
+          <DashboardSearch setMatchaNotif={setMatchaNotif} />
+          <DashboardChat setMatchaNotif={setMatchaNotif} />
+        </div>
+        <div onClick={() => {nav(appRedir.deleteProfile)}} className='dashboard_delete'>
+          Supprimer le compte
         </div>
       </div>
     </>

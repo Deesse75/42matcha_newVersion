@@ -1,137 +1,34 @@
-import { ListingUserType } from '../interfaces/listing.interfaces.js';
 import {
   MysqlMiniUserType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
+import { MiniUserType } from '../interfaces/user.interface.js';
 import * as mysql from '../mysql/mysql.service.js';
-import { convertListingProfile } from '../utils/convertData.js';
+import { convertListingMiniUser } from '../utils/convertData.js';
 import { matchaError } from '../utils/matcha_error.js';
+import { matchaRet, matchRet, viewRet, likeRet, visitedRet, likedRet, bannedRet } from './listing.utils.js';
 
 export const getListingService = async (
   user: MysqlUserType,
   listingName: string,
-): Promise<ListingUserType[] | null> => {
+): Promise<MiniUserType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {
     if (listingName === 'matcha') ret = matchaRet(user);
-    else if (listingName === 'match') ret = matchRet(user.id);
-    else if (listingName === 'view') ret = viewRet(user.id);
-    else if (listingName === 'like') ret = likeRet(user.id);
-    else if (listingName === 'visited') ret = visitedRet(user.id);
-    else if (listingName === 'liked') ret = likedRet(user.id);
-    else if (listingName === 'banned') ret = bannedRet(user.id);
+    else if (listingName === 'match') ret = matchRet(user);
+    else if (listingName === 'view') ret = viewRet(user);
+    else if (listingName === 'like') ret = likeRet(user);
+    else if (listingName === 'visited') ret = visitedRet(user);
+    else if (listingName === 'liked') ret = likedRet(user);
+    else if (listingName === 'banned') ret = bannedRet(user);
     else throw new matchaError(400, 'Requête invalide');
     listing = await mysql.getListing(ret.query, ret.values);
     if (!listing) return null;
-    return addTags(listing);
+    return convertListingMiniUser(listing);
   } catch (error) {
     throw error;
   }
-};
-
-const addTags = async (
-  listing: MysqlMiniUserType[],
-): Promise<ListingUserType[]> => {
-  let newListing: ListingUserType[] = [];
-  for (let i = 0; i < listing.length; i++) {
-    const query = 'SELECT * FROM UserTags WHERE userId = ?';
-    const tags = await mysql.getUserTags(query, [listing[i].id]);
-    newListing.push(convertListingProfile(listing[i], tags));
-  }
-  return newListing;
-};
-
-const matchaRet = (user: MysqlUserType): { query: string; values: any } => {
-  let values: any = [];
-  let query: string = `
-    SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
-    FROM User 
-    WHERE id != ?`;
-  values.push(user.id);
-
-  const ageMin: number = user.ageMin ? user.ageMin : 18;
-  const ageMax: number = user.ageMax ? user.ageMax : 120;
-  query += ` AND (age BETWEEN ? AND ?) `;
-  values.push(ageMin, ageMax);
-
-  const gender: string | null = user.gender ? user.gender : null;
-  const orientation: string | null = user.orientation ? user.orientation : null;
-  const genderLookFor: string | null = user.genderLookFor
-    ? user.genderLookFor
-    : null;
-
-  return { query, values };
-};
-
-const matchRet = (id: number): { query: string; values: any } => {
-  const query = `
-    SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection FROM User 
-    WHERE id != ?
-    AND id IN 
-    (SELECT senderId FROM LikeTable WHERE receiverId = ? 
-    AND senderId IN 
-    (SELECT receiverId FROM LikeTable WHERE senderId = ?));
-  `;
-  const values = [id, id, id];
-  return { query, values };
-};
-
-const viewRet = (id: number): { query: string; values: any } => {
-  const query = `
-    SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection FROM User 
-    WHERE id != ?
-    AND id IN 
-    (SELECT senderId FROM ViewHistory WHERE receiverId = ?);
-  `;
-  const values = [id, id];
-  return { query, values };
-};
-
-const likeRet = (id: number): { query: string; values: any } => {
-  const query = `
-    SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection FROM User 
-    WHERE id != ?
-    AND id IN 
-    (SELECT senderId FROM LikeHistory WHERE receiverId = ?);
-  `;
-  const values = [id, id];
-  return { query, values };
-};
-
-const visitedRet = (id: number): { query: string; values: any } => {
-  const query = `
-    SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection FROM User 
-    WHERE id != ?
-    AND id IN 
-    (SELECT receiverId FROM ViewHistory WHERE senderId = ?);
-  `;
-  const values = [id, id];
-  return { query, values };
-};
-
-const likedRet = (id: number): { query: string; values: any } => {
-  const query = `
-    SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection FROM User 
-    WHERE id != ?
-    AND id IN 
-    (SELECT receiverId FROM LikeHistory WHERE senderId = ?);
-  `;
-  const values = [id, id];
-  return { query, values };
-};
-
-const bannedRet = (id: number): { query: string; values: any } => {
-  const query = `
-    SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection FROM User 
-    WHERE id != ?
-    AND id IN 
-    (SELECT receiverId FROM BanHistory WHERE senderId = ?)
-    AND id NOT IN 
-    (SELECT senderId FROM BanHistory WHERE receiverId = ?);
-  `;
-  const values = [id, id, id];
-  return { query, values };
 };
 
 export const listingAgeFilter = async (
@@ -139,22 +36,22 @@ export const listingAgeFilter = async (
   listingName: string,
   ageMin: number,
   ageMax: number,
-): Promise<ListingUserType[] | null> => {
+): Promise<MiniUserType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {
     if (listingName === 'matcha') ret = matchaRet(user);
-    else if (listingName === 'match') ret = matchRet(user.id);
-    else if (listingName === 'view') ret = viewRet(user.id);
-    else if (listingName === 'like') ret = likeRet(user.id);
-    else if (listingName === 'visited') ret = visitedRet(user.id);
-    else if (listingName === 'liked') ret = likedRet(user.id);
+    else if (listingName === 'match') ret = matchRet(user);
+    else if (listingName === 'view') ret = viewRet(user);
+    else if (listingName === 'like') ret = likeRet(user);
+    else if (listingName === 'visited') ret = visitedRet(user);
+    else if (listingName === 'liked') ret = likedRet(user);
     else throw new matchaError(400, 'Requête invalide');
     ret.query += ` AND (age BETWEEN ? AND ?) `;
     ret.values.push(ageMin, ageMax);
     listing = await mysql.getListing(ret.query, ret.values);
     if (!listing) return null;
-    return addTags(listing);
+    return convertListingMiniUser(listing);
   } catch (error) {
     throw error;
   }
@@ -164,22 +61,22 @@ export const listingFameFilter = async (
   user: MysqlUserType,
   listingName: string,
   fameMin: number,
-): Promise<ListingUserType[] | null> => {
+): Promise<MiniUserType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {
     if (listingName === 'matcha') ret = matchaRet(user);
-    else if (listingName === 'match') ret = matchRet(user.id);
-    else if (listingName === 'view') ret = viewRet(user.id);
-    else if (listingName === 'like') ret = likeRet(user.id);
-    else if (listingName === 'visited') ret = visitedRet(user.id);
-    else if (listingName === 'liked') ret = likedRet(user.id);
+    else if (listingName === 'match') ret = matchRet(user);
+    else if (listingName === 'view') ret = viewRet(user);
+    else if (listingName === 'like') ret = likeRet(user);
+    else if (listingName === 'visited') ret = visitedRet(user);
+    else if (listingName === 'liked') ret = likedRet(user);
     else throw new matchaError(400, 'Requête invalide');
     ret.query += ` AND fameRating >= ? `;
     ret.values.push(fameMin);
     listing = await mysql.getListing(ret.query, ret.values);
     if (!listing) return null;
-    return addTags(listing);
+    return convertListingMiniUser(listing);
   } catch (error) {
     throw error;
   }
@@ -189,16 +86,16 @@ export const listingLocationFilter = async (
   user: MysqlUserType,
   listingName: string,
   zone: string,
-): Promise<ListingUserType[] | null> => {
+): Promise<MiniUserType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {
     if (listingName === 'matcha') ret = matchaRet(user);
-    else if (listingName === 'match') ret = matchRet(user.id);
-    else if (listingName === 'view') ret = viewRet(user.id);
-    else if (listingName === 'like') ret = likeRet(user.id);
-    else if (listingName === 'visited') ret = visitedRet(user.id);
-    else if (listingName === 'liked') ret = likedRet(user.id);
+    else if (listingName === 'match') ret = matchRet(user);
+    else if (listingName === 'view') ret = viewRet(user);
+    else if (listingName === 'like') ret = likeRet(user);
+    else if (listingName === 'visited') ret = visitedRet(user);
+    else if (listingName === 'liked') ret = likedRet(user);
     else throw new matchaError(400, 'Requête invalide');
     if (zone === 'region') {
       ret.query += ` AND region = ? `;
@@ -212,7 +109,7 @@ export const listingLocationFilter = async (
     } else throw new matchaError(400, 'Requête invalide');
     listing = await mysql.getListing(ret.query, ret.values);
     if (!listing) return null;
-    return addTags(listing);
+    return convertListingMiniUser(listing);
   } catch (error) {
     throw error;
   }
@@ -222,21 +119,21 @@ export const listingTagsFilter = async (
   user: MysqlUserType,
   listingName: string,
   tag: string[],
-): Promise<ListingUserType[] | null> => {
+): Promise<MiniUserType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {
     if (listingName === 'matcha') ret = matchaRet(user);
-    else if (listingName === 'match') ret = matchRet(user.id);
-    else if (listingName === 'view') ret = viewRet(user.id);
-    else if (listingName === 'like') ret = likeRet(user.id);
-    else if (listingName === 'visited') ret = visitedRet(user.id);
-    else if (listingName === 'liked') ret = likedRet(user.id);
+    else if (listingName === 'match') ret = matchRet(user);
+    else if (listingName === 'view') ret = viewRet(user);
+    else if (listingName === 'like') ret = likeRet(user);
+    else if (listingName === 'visited') ret = visitedRet(user);
+    else if (listingName === 'liked') ret = likedRet(user);
     else throw new matchaError(400, 'Requête invalide');
 
     listing = await mysql.getListing(ret.query, ret.values);
     if (!listing) return null;
-    return addTags(listing);
+    return convertListingMiniUser(listing);
   } catch (error) {
     throw error;
   }

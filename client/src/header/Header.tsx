@@ -12,22 +12,25 @@ const Header: FC<Props> = ({}) => {
 
   return (
     <>
-      <div className='header_navbar'>
-        <div className='header_navbar_matcha_logo'>
-          <div className='header_navbar_logo'>Matcha</div>
-        </div>
+      <div className='header_container'>
+        <div className='header_line'></div>
+        <div className='header_icons'>
+          <div className='header_logo'>
+            <div className='header_logo_matcha'>Matcha</div>
+          </div>
 
-        <div className='header_navbar_signout'>
-          {me.user && (
-            <div
-              className='signout_icon'
-              onClick={() => {
-                nav(appRedir.signout);
-              }}
-            >
-              <FaSignOutAlt size={30} />
-            </div>
-          )}
+          <div className={me.user ? 'header_signout_on' : 'header_signout_off'}>
+            {me.user && (
+              <div
+                className='header_signout_icon'
+                onClick={() => {
+                  nav(appRedir.signout);
+                }}
+              >
+                <FaSignOutAlt size={30} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>

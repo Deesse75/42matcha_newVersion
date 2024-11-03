@@ -1,4 +1,5 @@
 import { FC, useEffect } from 'react';
+import { IoIosClose } from 'react-icons/io';
 
 type Props = {
   matchaNotif: string | null;
@@ -11,7 +12,7 @@ const MatchaNotif: FC<Props> = ({ matchaNotif, setMatchaNotif }) => {
 
     const notifCount = setTimeout(() => {
       setMatchaNotif(null);
-    }, 5000);
+    }, 7000);
     return () => {
       clearTimeout(notifCount);
     };
@@ -19,9 +20,20 @@ const MatchaNotif: FC<Props> = ({ matchaNotif, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='matchaNotif_container'>
-        {matchaNotif && <div className='matchaNotif_text'>{matchaNotif}</div>}
-      </div>
+      {matchaNotif && (
+        <>
+          <div className='matcha_notif_container'>
+            <div className='matcha_notif_message'>
+              {matchaNotif && (
+                <div className='matcha_notif_text'>{matchaNotif}</div>
+              )}
+              <div onClick={() => {setMatchaNotif(null)}} className='matcha_notif_close'>
+                <IoIosClose size={24} />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

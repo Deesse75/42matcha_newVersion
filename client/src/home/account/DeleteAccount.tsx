@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userRoute, appRedir } from '../../../appConfig/appPath';
+import { userRoute, appRedir } from '../../appConfig/appPath';
 import Cookies from 'js-cookie';
 
 type Props = {

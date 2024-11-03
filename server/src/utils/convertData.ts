@@ -1,10 +1,10 @@
-import { ListingUserType } from '../interfaces/listing.interfaces.js';
 import {
   MysqlMiniUserType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
-import { UserType } from '../interfaces/user.interface.js';
+import { MiniUserType, UserType } from '../interfaces/user.interface.js';
+import * as mysql from '../mysql/mysql.service.js';
 
 export function convertPhoto(photo: Buffer | null): string | null {
   if (!photo) return null;
@@ -12,7 +12,7 @@ export function convertPhoto(photo: Buffer | null): string | null {
   return `data:image/jpeg;base64,${photo.toString('base64')}`;
 }
 
-export function convertUserType(
+export function convertFullUserType(
   user: MysqlUserType,
   userTags: MysqlUserTagsType[] | null,
 ): UserType {
@@ -47,10 +47,22 @@ export function convertUserType(
   };
 }
 
-export function convertListingProfile(
+export async function convertListingMiniUser(
+  listing: MysqlMiniUserType[],
+): Promise<MiniUserType[]> {
+  let newListing: MiniUserType[] = [];
+  for (let i = 0; i < listing.length; i++) {
+    const query = 'SELECT * FROM UserTags WHERE userId = ?';
+    const tags = await mysql.getUserTags(query, [listing[i].id]);
+    newListing.push(convertMiniUserType(listing[i], tags));
+  }
+  return newListing;
+};
+
+export function convertMiniUserType(
   listing: MysqlMiniUserType,
   tags: MysqlUserTagsType[] | null,
-): ListingUserType {
+): MiniUserType {
   return {
     id: listing.id,
     username: listing.username,
@@ -62,11 +74,12 @@ export function convertListingProfile(
     town: listing.town ? listing.town : null,
     fameRating: listing.fameRating,
     photo1: listing.photo1 ? convertPhoto(listing.photo1) : null,
-    tags: tags ? convertTags(tags) : null,
     lastConnection: listing.lastConnection ? listing.lastConnection : null,
+    tags: tags ? convertTags(tags) : null,
   };
 }
 
 export function convertTags(tags: MysqlUserTagsType[]): string[] {
   return tags.map((tag) => tag.tagName);
 }
+

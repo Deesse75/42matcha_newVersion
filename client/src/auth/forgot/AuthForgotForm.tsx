@@ -1,8 +1,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { MdOutlineAlternateEmail } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { emailValidation } from '../../utils/inputValidation';
 import { appRedir, authRoute } from '../../appConfig/appPath';
+import AuthInputContainer, { ValideAuthInput } from '../components/AuthInputContainer';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -12,6 +11,14 @@ type Props = {
 const AuthForgotForm: FC<Props> = ({ setMatchaNotif, setEmail }) => {
   const refEmail = useRef<HTMLInputElement>(null);
   const [currentEmail, setCurrentEmail] = useState<string | null>(null);
+  const [valideInput, setValideInput] = useState<ValideAuthInput>({
+    firstname: true,
+    lastname: true,
+    username: true,
+    birthdate: true,
+    email: false,
+    password: true,
+  });
   const nav = useNavigate();
 
   const handleClick = () => {
@@ -21,10 +28,8 @@ const AuthForgotForm: FC<Props> = ({ setMatchaNotif, setEmail }) => {
       setMatchaNotif("Veuillez remplir l'adresse email.");
       return;
     }
-    if (!emailValidation(email)) {
-      setMatchaNotif(
-        "Le format de l'adresse email est invalide. Voir règles de saisie de formulaire en bas de page.",
-      );
+    if (!valideInput.email) {
+      setMatchaNotif('Adresse email invalide.');
       return;
     }
     setCurrentEmail(email);
@@ -42,7 +47,7 @@ const AuthForgotForm: FC<Props> = ({ setMatchaNotif, setEmail }) => {
         const response = await fetch(authRoute.forgotPassword, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: currentEmail }),
+          body: JSON.stringify({email: currentEmail}),
         });
         const data = await response.json();
         if (!isMounted) return;
@@ -59,6 +64,7 @@ const AuthForgotForm: FC<Props> = ({ setMatchaNotif, setEmail }) => {
         }
 
         setEmail(currentEmail);
+        setCurrentEmail(null);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -73,26 +79,25 @@ const AuthForgotForm: FC<Props> = ({ setMatchaNotif, setEmail }) => {
 
   return (
     <>
-      <div className='auth_resend_form'>
-        <div className='auth_resend_input_container'>
-          <div className='auth_resend_input_icon'>
-            <MdOutlineAlternateEmail size={30} />
-          </div>
-          <input
-            className='auth_resend_input_value'
-            type='email'
-            name='resend_email'
-            id='resend_email'
-            required
-            autoComplete='email'
-            ref={refEmail}
-            placeholder='Adresse email'
-          />
-        </div>
+      <div className='auth_form'>
+        <AuthInputContainer
+          icon='email'
+          inputType='email'
+          inputName='email'
+          max={-1}
+          min={-1}
+          autoComplete='email'
+          refInput={refEmail}
+          placeholder='Adresse email'
+          displayEye={false}
+          displayGen={false}
+          valideInput={valideInput}
+          setValideInput={setValideInput}
+        />
 
         <div className='auth_submit'>
           <button onClick={handleClick} className='auth_submit_button'>
-            Envoyer
+            Recevoir un lien
           </button>
           <button onClick={handleClear} className='auth_submit_button'>
             Effacer

@@ -8,18 +8,16 @@ const DashboardPhoto: FC<Props> = ({}) => {
 
   return (
     <>
-      <div className='dashboard_photo_container'>
-        <div className='dashboard_photo_img'>
+      <div className='dashboard_photo'>
           <img
+          className='dashboard_photo_img'
             src={
               me.user && me.user.photo1
                 ? me.user.photo1
                 : '/avatar/default_avatar.jpg'
             }
             alt='Photo de profil'
-            style={{ width: '100px', height: '100px' }}
           />
-        </div>
       </div>
     </>
   );

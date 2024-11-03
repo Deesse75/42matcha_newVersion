@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import AuthRedirect from '../components/AuthRedirect';
-import AuthTitle from '../components/AuthTitle';
 import AuthForgotForm from './AuthForgotForm';
 import AuthReinitForm from './AuthReinitForm';
 import { useNavigate } from 'react-router-dom';
@@ -34,21 +33,26 @@ const ForgotPassword: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <AuthTitle title='Réinitialisation du mot de passe' />
-      {code ? (
-        <>
-          <AuthReinitForm
-            setMatchaNotif={setMatchaNotif}
-            email={email}
-            setEmail={setEmail}
-          />
-        </>
-      ) : (
-        <>
-          <AuthForgotForm setMatchaNotif={setMatchaNotif} setEmail={setEmail} />
-        </>
-      )}
-      <AuthRedirect selectedPage='forgotPassword' />
+      <div className='auth_container'>
+        <div className='auth_title'>Réinitialisation du mot de passe</div>
+        {code ? (
+          <>
+            <AuthReinitForm
+              setMatchaNotif={setMatchaNotif}
+              email={email}
+              setEmail={setEmail}
+            />
+          </>
+        ) : (
+          <>
+            <AuthForgotForm
+              setMatchaNotif={setMatchaNotif}
+              setEmail={setEmail}
+            />
+          </>
+        )}
+        <AuthRedirect selectedPage='forgotPassword' />
+      </div>
     </>
   );
 };
