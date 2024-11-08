@@ -10,17 +10,21 @@ type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const FilterListing: FC<Props> = ({
-  setListing,
-  setMatchaNotif,
-}) => {
+const FilterListing: FC<Props> = ({ setListing, setMatchaNotif }) => {
   const [filterSelected, setFilterSelected] = useState<string>('default');
   const refSelect = useRef<HTMLSelectElement>(null);
   return (
     <>
       <div className='dashboard_filter'>
         <div className='dashboard_filter_left'>
-          <select onChange={(e) => {setFilterSelected(e.target.value)}} ref={refSelect} name='filter_select' id='filter_select'>
+          <select
+            onChange={(e) => {
+              setFilterSelected(e.target.value);
+            }}
+            ref={refSelect}
+            name='filter_select'
+            id='filter_select'
+          >
             <option defaultValue='default'>Filtrer par ...</option>
             <option value='age'>Age</option>
             <option value='location'>Location</option>

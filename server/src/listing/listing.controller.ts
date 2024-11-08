@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { matchaError } from '../utils/matcha_error.js';
-import { getListingService, listingAgeFilter, listingFameFilter, listingLocationFilter, listingTagsFilter } from './listing.services.js';
+import {
+  getListingService,
+  listingAgeFilter,
+  listingFameFilter,
+  listingLocationFilter,
+  listingTagsFilter,
+} from './listing.services.js';
 
 export const getListing = async (
   req: Request,

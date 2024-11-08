@@ -86,7 +86,10 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
           element={<DashboardPage setMatchaNotif={setMatchaNotif} />}
         />
         <Route path={appRedir.chat} element={<ChatPage />} />
-        <Route path={appRedir.search} element={<SearchPage />} />
+        <Route
+          path={appRedir.search}
+          element={<SearchPage setMatchaNotif={setMatchaNotif} />}
+        />
         <Route
           path={appRedir.history}
           element={<HistoryPage setMatchaNotif={setMatchaNotif} />}

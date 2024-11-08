@@ -61,15 +61,18 @@ const DashboardMatchEdit: FC<Props> = ({ profile, setMatchaNotif }) => {
       isMounted = false;
     };
   }, [id]);
+
   return (
     <>
-      <div key={profile.id} className='dashboard_match_edit_container'>
-        <div className='dashboard_match_edit_username'>{profile.username}</div>
+      <div key={profile.id} className='dashboard_chat_section_one_content'>
+        <div className='dashboard_chat_section_one_content_username'>
+          {profile.username}
+        </div>
         <button
           onClick={() => {
             setId(profile.id);
           }}
-          className='dashboard_match_edit_button'
+          className='dashboard_chat_section_one_content_button'
         >
           Voir
         </button>
@@ -78,7 +81,7 @@ const DashboardMatchEdit: FC<Props> = ({ profile, setMatchaNotif }) => {
             me.setActiveChatId(profile.id);
             nav(appRedir.chat);
           }}
-          className='dashboard_match_edit_button'
+          className='dashboard_chat_section_one_content_button'
         >
           Discuter
         </button>

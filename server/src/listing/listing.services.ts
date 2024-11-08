@@ -2,11 +2,25 @@ import {
   MysqlMiniUserType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
-import { MiniUserType } from '../interfaces/user.interface.js';
+import {
+  MiniUserType,
+  UnseenMessageType,
+} from '../interfaces/user.interface.js';
 import * as mysql from '../mysql/mysql.service.js';
-import { convertListingMiniUser } from '../utils/convertData.js';
+import {
+  convertListingMiniUser,
+  convertUnseenMessageListing,
+} from '../utils/convertData.js';
 import { matchaError } from '../utils/matcha_error.js';
-import { matchaRet, matchRet, viewRet, likeRet, visitedRet, likedRet, bannedRet } from './listing.utils.js';
+import {
+  matchaRet,
+  matchRet,
+  viewRet,
+  likeRet,
+  visitedRet,
+  likedRet,
+  bannedRet,
+} from './listing.utils.js';
 
 export const getListingService = async (
   user: MysqlUserType,

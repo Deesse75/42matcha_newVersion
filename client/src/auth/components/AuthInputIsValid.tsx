@@ -17,7 +17,7 @@ const AuthInputIsValid: FC<Props> = ({ isValid, isInvalid, type }) => {
       <div className='auth_input_icon_container'>
         {isValid && (
           <div className='auth_input_display_icon'>
-            <GiCheckMark size={20} style={{ color: 'green' }} />
+            <GiCheckMark size={15} style={{ color: 'green' }} />
           </div>
         )}
         {isInvalid && (
@@ -31,7 +31,7 @@ const AuthInputIsValid: FC<Props> = ({ isValid, isInvalid, type }) => {
               }}
               className='auth_input_display_icon'
             >
-              <MdErrorOutline size={20} style={{ color: 'red' }} />
+              <MdErrorOutline size={15} style={{ color: 'red' }} />
             </div>
             {rulesOn && (
               <div className='auth_input_display_icon_rules'>

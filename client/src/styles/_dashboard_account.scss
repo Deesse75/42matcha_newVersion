@@ -93,24 +93,37 @@
   }
 }
 
-.dashboard_account_info {
+.dashboard_info {
   width: 25%;
   height: 90%;
   display: flex;
   flex-direction: column;
-  justify-content: end;
-
-  .dashboard_account_info_row {
+  color: $color_nuance_grey3;
+  .dashboard_chat_stat {
     width: 100%;
-    height: 20px;
+    height: 50%;
     display: flex;
-    justify-content: end;
-    color: $color_nuance_grey3;
-    .dashboard_account_info_row_text {
-      width: 60%;
-    }
-    .dashboard_account_info_row_value {
-      width: 30%;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .dashboard_account_info {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .dashboard_account_info_row {
+      width: 100%;
+      height: 20px;
+      display: flex;
+      .dashboard_account_info_row_text {
+        width: 60%;
+      }
+      .dashboard_account_info_row_value {
+        width: 30%;
+      }
     }
   }
 }

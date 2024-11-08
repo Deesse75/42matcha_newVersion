@@ -49,3 +49,20 @@ export type UserTagsType = {
   userId: number;
   tagName: string;
 };
+
+export type UnseenMessageType = {
+  id: number;
+  senderId: number;
+  senderUsername: string;
+  message: string;
+};
+
+export type SearchAdvanceRequestType = {
+  ageMin: number;
+  ageMax: number;
+  gender: string | null;
+  orientation: string | null;
+  tallMin: number;
+  tallMax: number;
+  advancePhoto: boolean;
+};

@@ -23,7 +23,7 @@ const SearchByUsername: FC<Props> = ({ setMatchaNotif }) => {
       return;
     }
     if (!usernameValidation(username)) {
-      setMatchaNotif("Le format du nom entré n'est pas valide");
+      setMatchaNotif("Le format du nom d'utilisateur entré n'est pas valide");
       return;
     }
     setUsername(username);

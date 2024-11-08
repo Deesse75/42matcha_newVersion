@@ -1,19 +1,14 @@
-import { FC, useEffect, useState } from 'react';
-import { MiniProfileType } from '../../../appConfig/interface';
-import { useUserInfo } from '../../../appContext/user.context';
-import { calculateDistance, communTags } from '../../../utils/sort.utils';
+import { FC, useEffect, useState } from "react";
+import { MiniProfileType } from "../../../appConfig/interface";
+import { useUserInfo } from "../../../appContext/user.context";
+import { calculateDistance, communTags } from "../../../utils/sort.utils";
 
 type Props = {
-  currentListing: MiniProfileType[];
-  setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
+  listing: MiniProfileType[] | null;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const SortListing: FC<Props> = ({
-  currentListing,
-  setListing,
-  setMatchaNotif,
-}) => {
+const SearchSort: FC<Props> = ({listing, setMatchaNotif}) => {
   const me = useUserInfo();
   const [sortSelected, setSortSelected] = useState<string>('default');
 
@@ -29,30 +24,30 @@ const SortListing: FC<Props> = ({
 
   useEffect(() => {
     if (sortSelected === 'default') return;
+    if (!listing) return;
     let sortListing: MiniProfileType[] = [];
     if (sortSelected === 'ageUp')
-      sortListing = currentListing.sort((a, b) => a.age - b.age);
+      sortListing = listing.sort((a, b) => a.age - b.age);
     else if (sortSelected === 'ageDown')
-      sortListing = currentListing.sort((a, b) => b.age - a.age);
+      sortListing = listing.sort((a, b) => b.age - a.age);
     else if (sortSelected === 'fameRating')
-      sortListing = currentListing.sort((a, b) => b.fameRating - a.fameRating);
+      sortListing = listing.sort((a, b) => b.fameRating - a.fameRating);
     else if (sortSelected === 'location')
-      sortListing = currentListing.sort(
+      sortListing = listing.sort(
         (a, b) => calculateDistance(a, me.user) - calculateDistance(b, me.user),
       );
     else if (sortSelected === 'tags')
-      sortListing = currentListing.sort(
+      sortListing = listing.sort(
         (a, b) => communTags(a, me.user) - communTags(b, me.user),
       );
-    setListing(sortListing);
+    me.setSearchResult(sortListing);
     sortListing = [];
   }, [sortSelected]);
-
   return (
     <>
-      <div className='dashboard_sort'>
-        <form onSubmit={handleClick} className='dashboard_sort_form'>
-          <select name='sort' id='sort' className='dashboard_sort_select'>
+      <div className='search_sort_container'>
+        <form onSubmit={handleClick} className='search_sort_form'>
+          <select name='sort' id='sort' className='search_sort_select'>
             <option defaultValue='default'>Trier par ...</option>
             <option value='ageUp'>Age croissant</option>
             <option value='ageDown'>Age décroissant</option>
@@ -71,6 +66,6 @@ const SortListing: FC<Props> = ({
       </div>
     </>
   );
-};
+}
 
-export default SortListing;
+export default SearchSort

@@ -11,11 +11,6 @@ const DashboardDeleteAccount: FC<Props> = ({ setMatchaNotif }) => {
   const [action, setAction] = useState(false);
   const nav = useNavigate();
 
-  const handleClick = (value: string) => {
-    if (value === 'yes') setAction(true);
-    else nav(appRedir.account);
-  };
-
   useEffect(() => {
     if (!action) return;
     let isMounted = true;
@@ -56,31 +51,33 @@ const DashboardDeleteAccount: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <div className='delete_container'>
+      <div className='delete_account_container'>
         {action ? (
           <>
             <div className='wait_to_charge'>Chargement en cours ...</div>
           </>
         ) : (
           <>
-            <div className='title'>
-              <h1>Suppression du compte</h1>
-            </div>
-            <div className='delete_button'>
-              <button
-                onClick={() => {
-                  handleClick('yes');
-                }}
-              >
-                Confirmer
-              </button>
-              <button
-                onClick={() => {
-                  handleClick('no');
-                }}
-              >
-                Accueil
-              </button>
+            <div className='delete_account_confirmation'>
+              <div className='delete_account_title'>
+                <h1>Veuillez confirmer la suppression du compte</h1>
+              </div>
+              <div className='delete_account_button'>
+                <button
+                  onClick={() => {
+                    setAction(true);
+                  }}
+                >
+                  Confirmer
+                </button>
+                <button
+                  onClick={() => {
+                    nav(appRedir.dashboard);
+                  }}
+                >
+                  Retour à l'accueil
+                </button>
+              </div>
             </div>
           </>
         )}

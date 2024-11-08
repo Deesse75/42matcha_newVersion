@@ -3,8 +3,13 @@ import {
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
-import { MiniUserType, UserType } from '../interfaces/user.interface.js';
+import {
+  MiniUserType,
+  UnseenMessageType,
+  UserType,
+} from '../interfaces/user.interface.js';
 import * as mysql from '../mysql/mysql.service.js';
+import { matchaError } from './matcha_error.js';
 
 export function convertPhoto(photo: Buffer | null): string | null {
   if (!photo) return null;
@@ -57,7 +62,7 @@ export async function convertListingMiniUser(
     newListing.push(convertMiniUserType(listing[i], tags));
   }
   return newListing;
-};
+}
 
 export function convertMiniUserType(
   listing: MysqlMiniUserType,
@@ -83,3 +88,28 @@ export function convertTags(tags: MysqlUserTagsType[]): string[] {
   return tags.map((tag) => tag.tagName);
 }
 
+export async function convertUnseenMessageListing(
+  listing: { id: number; senderId: number; message: string }[],
+): Promise<UnseenMessageType[]> {
+  const query = `
+    SELECT username 
+    FROM User 
+    WHERE id = ?
+  `;
+  try {
+    const newListing: UnseenMessageType[] = [];
+    for (let i = 0; i < listing.length; i++) {
+      const username = await mysql.getUsername(query, [listing[i].senderId]);
+      if (!username) throw new matchaError(500, 'Erreur interne');
+      newListing.push({
+        id: listing[i].id,
+        senderId: listing[i].senderId,
+        senderUsername: username,
+        message: listing[i].message,
+      });
+    }
+    return newListing;
+  } catch (error) {
+    throw error;
+  }
+}

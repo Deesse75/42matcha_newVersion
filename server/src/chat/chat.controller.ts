@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { matchaError } from '../utils/matcha_error.js';
-import { getChatStatService } from './chat.services.js';
+import {
+  getChatStatService,
+  getUnseenMessageService,
+} from './chat.services.js';
 
 export const getChatStat = async (
   req: Request,
@@ -15,6 +18,20 @@ export const getChatStat = async (
         nbMess: stat.nbMess,
         lastMess: stat.lastMess,
       });
+    return;
+  } catch (error) {
+    matchaError.catched(error as Error, res);
+  }
+};
+
+export const getUnseenMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const unseenList = await getUnseenMessageService(req.body.existingUser);
+    res.status(200).json({ unseenList: unseenList });
     return;
   } catch (error) {
     matchaError.catched(error as Error, res);

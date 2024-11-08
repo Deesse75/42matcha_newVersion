@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { matchaError } from '../utils/matcha_error.js';
-import { searchLocationService, searchUsernameService, searchTagsService } from './search.services.js';
+import {
+  searchLocationService,
+  searchUsernameService,
+  searchTagsService,
+  searchAdvanceService,
+} from './search.services.js';
+import { exist } from 'joi';
 
 export const searchLocation = async (
   req: Request,
@@ -8,9 +14,7 @@ export const searchLocation = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const searchResult = await searchLocationService(
-      req.body.existingUser,
-    );
+    const searchResult = await searchLocationService(req.body.existingUser);
     res.status(200).json({ searchResult: searchResult });
     return;
   } catch (error) {
@@ -44,6 +48,23 @@ export const searchTags = async (
     const searchResult = await searchTagsService(
       req.body.userTags,
       req.body.existingUser,
+    );
+    res.status(200).json({ searchResult: searchResult });
+    return;
+  } catch (error) {
+    matchaError.catched(error as Error, res);
+  }
+};
+
+export const searchAdvance = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const searchResult = await searchAdvanceService(
+      req.body.existingUser,
+      req.body.searchRequest,
     );
     res.status(200).json({ searchResult: searchResult });
     return;

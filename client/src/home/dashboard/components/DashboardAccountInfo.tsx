@@ -19,19 +19,19 @@ const DashboardAccountInfo: FC<Props> = ({}) => {
           </div>
         </div>
         <div className='dashboard_account_info_row'>
-          <div className='dashboard_account_info_row_text'>
-            Compte modifié le :
-          </div>
+          <div className='dashboard_account_info_row_text'>Modifié le :</div>
           <div className='dashboard_account_info_row_value'>
             {me.user ? convertDate(me.user.updatedAt) : ''}
           </div>
         </div>
         <div className='dashboard_account_info_row'>
           <div className='dashboard_account_info_row_text'>
-            Dernière connexion le :
+            Dernière connexion :
           </div>
           <div className='dashboard_account_info_row_value'>
-            {(me.user && me.user.lastConnection) ? convertDate(me.user.lastConnection) : ''}
+            {me.user && me.user.lastConnection
+              ? convertDate(me.user.lastConnection)
+              : ''}
           </div>
         </div>
       </div>

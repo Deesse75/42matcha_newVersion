@@ -27,7 +27,6 @@ export const matchaRet = (
 export const matchRet = (
   user: MysqlUserType,
 ): { query: string; values: any[] } => {
-  console.log('MATCH_RET');
   const query = `
   SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
   FROM User 
@@ -39,7 +38,7 @@ export const matchRet = (
   ORDER BY 
   CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
   CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
-  CASE WHEN region = ? THEN 1 ELSE 0 END DESC;
+  CASE WHEN region = ? THEN 1 ELSE 0 END DESC
   `;
   const values = [
     user.id,

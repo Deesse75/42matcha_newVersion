@@ -97,7 +97,7 @@ const ListingPage: FC<Props> = ({ setMatchaNotif }) => {
           <SortListing
             currentListing={currentListing}
             setListing={setListing}
-            setListingName={setListingName}
+            setMatchaNotif={setMatchaNotif}
           />
           <FilterListing
             setListing={setListing}

@@ -173,10 +173,10 @@ export async function insertFakeLike() {
   try {
     const rows: any = await mysqlDb.query('SELECT * FROM LikeHistory LIMIT 1');
     if (rows[0].length > 0) return;
-    if (!fs.existsSync('./src/mysql/fakeData/mysql_like.json')) return;
+    if (!fs.existsSync('./src/mysql/fake_like.json')) return;
     const query = `INSERT INTO LikeHistory SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync('./src/mysql/fakeData/mysql_like.json', 'utf8'),
+      fs.readFileSync('./src/mysql/fake_like.json', 'utf8'),
     );
     fakeData.forEach(async (item: FakeActionType) => {
       await mysqlDb.query(query, item);

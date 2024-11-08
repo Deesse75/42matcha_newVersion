@@ -69,7 +69,8 @@ const DashboardChatStat: FC<Props> = ({ setMatchaNotif }) => {
               Nombre total de messages rédigés : {nbMess > 0 ? nbMess : 'aucun'}
             </div>
             <div className='dashboard_chat_stat_text'>
-              {nbMess > 0 ? `Dernier message écrit le : ${convertDate(lastMess)}` : ''}
+              Dernier message écrit le :{' '}
+              {nbMess > 0 ? ` ${convertDate(lastMess)}` : ''}
             </div>
           </>
         )}

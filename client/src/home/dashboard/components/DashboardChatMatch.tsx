@@ -4,6 +4,7 @@ import { appRedir, listingRoute } from '../../../appConfig/appPath';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import DashboardMatchEdit from './DashboardMatchEdit';
+import { RxReload } from 'react-icons/rx';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -11,6 +12,7 @@ type Props = {
 
 const DashboardChatMatch: FC<Props> = ({ setMatchaNotif }) => {
   const [errMess, setErrMess] = useState<string>('');
+  const [loaded, setLoaded] = useState<boolean>(false);
   const [listing, setListing] = useState<MiniProfileType[] | null>(null);
   const [currentListing, setCurrentListing] = useState<MiniProfileType[]>([]);
   const nav = useNavigate();
@@ -22,6 +24,7 @@ const DashboardChatMatch: FC<Props> = ({ setMatchaNotif }) => {
   }, [listing]);
 
   useEffect(() => {
+    if (loaded) return;
     let isMounted = true;
     const request = async () => {
       try {
@@ -51,7 +54,7 @@ const DashboardChatMatch: FC<Props> = ({ setMatchaNotif }) => {
           return;
         }
         setListing(data.listing);
-        console.log(data.listing);
+        setLoaded(true);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -62,28 +65,52 @@ const DashboardChatMatch: FC<Props> = ({ setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [loaded]);
 
   return (
     <>
-      <div className='dashboard_match_container'>
-        <div className='dashboard_match_title'>Match</div>
-        <div className="dasboard_match_users">
-          {errMess ? (
+      <div className='dashboard_chat_section'>
+        <div className='dashboard_chat_section_title'>Match</div>
+        <div className='dashboard_chat_section_reload'>
+          <div
+            onClick={() => {
+              setLoaded(false);
+            }}
+            className='dashboard_chat_section_reload_icon'
+          >
+            <RxReload size={20} />
+          </div>
+        </div>
+        <div className='dashboard_chat_section_content'>
+          {loaded ? (
             <>
-              <div>{errMess}</div>
+              {errMess ? (
+                <>
+                  <div>{errMess}</div>
+                </>
+              ) : (
+                <>
+                  {currentListing.length > 0 ? (
+                    currentListing.map((profile, index) => (
+                      <DashboardMatchEdit
+                        profile={profile}
+                        key={index as number}
+                        setMatchaNotif={setMatchaNotif}
+                      />
+                    ))
+                  ) : (
+                    <>
+                      <div className='dashboard_matcha_empty'>
+                        Auncun profil
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
             </>
           ) : (
             <>
-
-              {currentListing.length > 0 &&
-                currentListing.map((profile, index) => (
-                  <DashboardMatchEdit
-                  profile={profile}
-                  key={index as number}
-                  setMatchaNotif={setMatchaNotif}
-                  />
-                ))}
+              <div className='dashboard_match_load'>Chargement en cours</div>
             </>
           )}
         </div>

@@ -42,3 +42,11 @@ export type MiniUserType = {
   lastConnection: string | null;
   tags: string[] | null;
 };
+
+export type UnseenMessageType = {
+  id: number;
+  senderId: number;
+  senderUsername: string;
+  message: string;
+};
+

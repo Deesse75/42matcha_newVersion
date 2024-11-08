@@ -47,7 +47,14 @@ const Error500: FC<Props> = ({}) => {
               >
                 Nous contacter
               </div>
-              <div className='error_button'>Retour à l'accueil</div>
+              <div
+                onClick={() => {
+                  nav(appRedir.signout);
+                }}
+                className='error_button'
+              >
+                Retour à l'accueil
+              </div>
             </div>
           </>
         )}

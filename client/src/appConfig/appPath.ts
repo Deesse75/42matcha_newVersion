@@ -73,10 +73,14 @@ export const searchRoute = {
   searchUsername: `${PATH}/search/search_username`,
   searchLocation: `${PATH}/search/search_location`,
   searchTags: `${PATH}/search/search_tags`,
+  searchAdvance: `${PATH}/search/search_advance`,
+  searchAgeFilter: `${PATH}/search/search_age_filter`,
 };
 
 export const chatRoute = {
   getChatStat: `${PATH}/chat/get_chat_stat`,
+  markMessageSeen: `${PATH}/chat/mark_message_seen`,
+  getUnseenMessage: `${PATH}/chat/get_unseen_message`,
 };
 
 export const socketRoute = {

@@ -1,13 +1,12 @@
 import {
-  MysqlMiniUserType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
+import { SearchRequestType } from '../interfaces/search.interfaces.js';
 import { MiniUserType } from '../interfaces/user.interface.js';
 import * as mysql from '../mysql/mysql.service.js';
 import {
   convertListingMiniUser,
-  convertMiniUserType,
 } from '../utils/convertData.js';
 
 export const searchLocationService = async (
@@ -45,7 +44,7 @@ export const searchUsernameService = async (
     ORDER BY
     CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
     CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
-    CASE WHEN region = ? THEN 1 ELSE 0 END DESC;
+    CASE WHEN region = ? THEN 1 ELSE 0 END DESC
     `;
   const values: any = [
     user.id,
@@ -54,9 +53,12 @@ export const searchUsernameService = async (
     user.county,
     user.region,
   ];
+  console.log('searchUsernameService 1');
   try {
     const listing = await mysql.getListing(query, values);
+    console.log('searchUsernameService getListing');
     if (!listing) return null;
+    console.log('searchUsernameService go convertListingMiniUser');
     return convertListingMiniUser(listing);
   } catch (error) {
     throw error;
@@ -76,86 +78,41 @@ export const searchTagsService = async (
   }
 };
 
-// export const searchLastCoService = async (
-//   user: MysqlUserType,
-//   lastCo: number,
-// ): Promise<MiniUserType[] | null> => {
-//   const currentDate = Date.now();
-//   const delay = (lastCo + 1) * 24 * 60 * 60 * 1000;
-//   const limitDate = currentDate - delay;
-//   try {
-//     return await mysql.searchByLastCo(user.id, new Date(limitDate));
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+export const searchAdvanceService = async (
+  user: MysqlUserType,
+  searchRequest: SearchRequestType,
+): Promise<MiniUserType[] | null> => {
+  let query: string = `
+  SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
+  FROM User 
+  WHERE id != ?
+  AND age BETWEEN ? AND ?
+  AND tall BETWEEN ? AND ?
+  `;
+  let values: any[] = [user.id, searchRequest.ageMin, searchRequest.ageMax, searchRequest.tallMin, searchRequest.tallMax];
+  if (searchRequest.gender) {
+    query += ' AND gender = ? ';
+    values.push(searchRequest.gender);
+  }
+  if (searchRequest.orientation) {
+    query += ' AND orientation = ? ';
+    values.push(searchRequest.orientation);
+  }
+  if (searchRequest.advancePhoto)
+    query += ' AND photo1 IS NOT NULL ';
+  query += `
+    ORDER BY
+    CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
+    CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
+    CASE WHEN region = ? THEN 1 ELSE 0 END DESC;
+  `;
+  try {
+    const listing = await mysql.getListing(query, values);
+    if (!listing) return null;
+    return convertListingMiniUser(listing);
+  } catch (error) {
+    throw error;
+  }
+};
 
-// export const searchMultiService = async (
-//   id: number,
-//   ageMin: number | null,
-//   ageMax: number | null,
-//   gender: string | null,
-//   orientation: string | null,
-//   region: string | null,
-//   tallMin: number | null,
-//   tallMax: number | null,
-//   withPhoto: boolean | null,
-//   withBio: boolean | null,
-//   connected: boolean | null,
-// ): Promise<MysqlMiniProfileType[] | null> => {
-//   let query: string = `SELECT userId, username, age, gender, orientation, region, photo1 FROM Profile WHERE id != ?`;
-//   let values: any = [id];
-//   if (ageMin && ageMax) {
-//     query += ' AND age BETWEEN ? AND ?';
-//     values.push(ageMin);
-//     values.push(ageMax);
-//   }
-//   if (!ageMin && ageMax) {
-//     query += ' AND age <= ?';
-//     values.push(ageMax);
-//   }
-//   if (ageMin && !ageMax) {
-//     query += ' AND age >= ?';
-//     values.push(ageMin);
-//   }
-//   if (gender) {
-//     query += ' AND gender = ?';
-//     values.push(gender);
-//   }
-//   if (orientation) {
-//     query += ' AND orientation = ?';
-//     values.push(orientation);
-//   }
-//   if (region) {
-//     query += ' AND region = ?';
-//     values.push(region);
-//   }
-//   if (tallMin && tallMax) {
-//     query += ' AND tall BETWEEN ? AND ?';
-//     values.push(tallMin);
-//     values.push(tallMax);
-//   }
-//   if (!tallMin && tallMax) {
-//     query += ' AND tall <= ?';
-//     values.push(tallMax);
-//   }
-//   if (tallMin && !tallMax) {
-//     query += ' AND tall >= ?';
-//     values.push(tallMin);
-//   }
-//   if (withPhoto) {
-//     query += ' AND photo1 IS NOT NULL';
-//   }
-//   if (withBio) {
-//     query += ' AND bio IS NOT NULL';
-//   }
-//   query +=
-//     ' AND id NOT IN (SELECT * FROM BanTable WHERE senderId = ? OR receiverId = ?)';
-//   values.push(id);
-//   values.push(id);
-//   try {
-//     return await mysql.searchMulti(query, values);
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+

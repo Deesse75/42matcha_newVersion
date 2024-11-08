@@ -55,6 +55,7 @@ export type MysqlUserChatType = {
   senderId: number;
   receiverId: number;
   message: string;
+  readed: boolean;
   createdAt: string;
 };
 

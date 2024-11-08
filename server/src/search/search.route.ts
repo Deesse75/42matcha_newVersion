@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { userTokenValidation } from '../middleware/userToken.validation.js';
-import { findExistingUser, findUserTags } from '../middleware/user.data.validation.js';
-import { searchUsername, searchLocation, searchTags } from './search.controller.js';
+import { findExistingUser, findUserTags, searchRequestValidation } from '../middleware/user.data.validation.js';
+import { searchBodyValidation } from '../middleware/search.body.validation.js';
+import { searchAdvance, searchLocation, searchTags, searchUsername } from './search.controller.js';
 
 const searchRouter = Router();
 
@@ -27,11 +28,13 @@ searchRouter.get(
   searchTags,
 );
 
-// searchRouter.patch(
-//   '/search_multi',
-//   userTokenValidation,
-//   findExistingUser,
-//   searchMulti,
-// );
+searchRouter.post(
+  '/search_advance',
+  searchBodyValidation,
+  userTokenValidation,
+  searchRequestValidation,
+  findExistingUser,
+  searchAdvance,
+);
 
 export default searchRouter;

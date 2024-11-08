@@ -1,20 +1,19 @@
 import { FC, useEffect, useState } from 'react';
-import { appRedir, listingRoute } from '../../../appConfig/appPath';
+import { appRedir, searchRoute } from '../../../appConfig/appPath';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useUserInfo } from '../../../appContext/user.context';
-import { MiniProfileType } from '../../../appConfig/interface';
+import { SearchAdvanceRequestType } from '../../../appConfig/interface';
 
 type Props = {
-  setListing: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AgeFilter: FC<Props> = ({ setListing, setMatchaNotif }) => {
+const SearchAgeFilter: FC<Props> = ({ setMatchaNotif }) => {
   const nav = useNavigate();
   const me = useUserInfo();
-  const [reqData, setReqData] = useState<{
-    listingName: string;
+  const [bodyRequest, setBodyRequest] = useState<{
+    searchRequest: SearchAdvanceRequestType;
     ageMin: number;
     ageMax: number;
   } | null>(null);
@@ -23,6 +22,10 @@ const AgeFilter: FC<Props> = ({ setListing, setMatchaNotif }) => {
     e.preventDefault();
     const min = e.currentTarget.agemin.value;
     const max = e.currentTarget.agemax.value;
+    if (!me.searchRequest) {
+      setMatchaNotif('Veuillez effectuer une recherche');
+      return;
+    }
     if (!min && !max) {
       setMatchaNotif('Veuillez renseigner un âge minimum et/ou maximum');
       return;
@@ -39,27 +42,25 @@ const AgeFilter: FC<Props> = ({ setListing, setMatchaNotif }) => {
       setMatchaNotif("L'âge minimum est supérieur à l'âge maximum");
       return;
     }
-    if (!me.historySelected) setMatchaNotif('Requête invalide');
-    else
-      setReqData({
-        listingName: me.historySelected,
-        ageMin: min ? parseInt(min) : 18,
-        ageMax: max ? parseInt(max) : 120,
-      });
+    setBodyRequest({
+      searchRequest: me.searchRequest,
+      ageMin: min ? parseInt(min) : 18,
+      ageMax: max ? parseInt(max) : 120,
+    });
   };
 
   useEffect(() => {
-    if (!reqData) return;
+    if (!bodyRequest) return;
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(listingRoute.getAgeFilter, {
+        const response = await fetch(searchRoute.searchAgeFilter, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${Cookies.get('session')}`,
           },
-          body: JSON.stringify(reqData),
+          body: JSON.stringify(bodyRequest),
         });
         const data = await response.json();
         if (!isMounted) return;
@@ -73,13 +74,12 @@ const AgeFilter: FC<Props> = ({ setListing, setMatchaNotif }) => {
           nav(appRedir.errorInternal);
           return;
         }
-        setReqData(null);
+        setBodyRequest(null);
         if (response.status !== 200) {
           setMatchaNotif(data.message);
-          setListing(null);
           return;
         }
-        setListing(data.listing);
+        me.setSearchResult(data.listing);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -90,7 +90,7 @@ const AgeFilter: FC<Props> = ({ setListing, setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [reqData]);
+  }, [bodyRequest]);
 
   return (
     <>
@@ -124,4 +124,4 @@ const AgeFilter: FC<Props> = ({ setListing, setMatchaNotif }) => {
   );
 };
 
-export default AgeFilter;
+export default SearchAgeFilter;

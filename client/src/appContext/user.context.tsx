@@ -1,6 +1,6 @@
 import { useState, useContext, createContext } from "react";
 import { Socket } from "socket.io-client";
-import { FullProfileType, MiniProfileType } from "../appConfig/interface";
+import { FullProfileType, MiniProfileType, SearchAdvanceRequestType } from "../appConfig/interface";
 
 type UserContextType = {
   user: FullProfileType | null;
@@ -10,6 +10,8 @@ type UserContextType = {
 
   searchResult: MiniProfileType[] | null;
   setSearchResult: React.Dispatch<React.SetStateAction<MiniProfileType[] | null>>;
+  searchRequest: SearchAdvanceRequestType | null;
+  setSearchRequest: React.Dispatch<React.SetStateAction<SearchAdvanceRequestType | null>>;
 
   activeChatId: number;
   setActiveChatId: React.Dispatch<React.SetStateAction<number>>;
@@ -28,9 +30,11 @@ export const UserContext = createContext<UserContextType>({
   setUser: () => {},
   setUserSocket: () => {},
   searchResult: null,
+  setSearchResult: () => {},
+  searchRequest: null,
+  setSearchRequest: () => {},
   activeChatId: 0,
   setActiveChatId: () => {},
-  setSearchResult: () => {},
   profileData: null,
   setProfileData: () => {},
   historySelected: null,
@@ -42,6 +46,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<FullProfileType | null>(null);
   const [userSocket, setUserSocket] = useState<Socket | null>(null);
   const [searchResult, setSearchResult] = useState<MiniProfileType[] | null>(null);
+  const [searchRequest, setSearchRequest] = useState<SearchAdvanceRequestType | null>(null);
   const [activeChatId, setActiveChatId] = useState<number>(0);
   const [profileData, setProfileData] = useState<FullProfileType | null>(null);
   const [historySelected, setHistorySelected] = useState<string | null>(null);
@@ -50,6 +55,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
     setUserSocket(null);
     setSearchResult(null);
+    setSearchRequest(null);
     setActiveChatId(0);
     setProfileData(null);
     setHistorySelected(null);
@@ -64,6 +70,8 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setUserSocket,
       searchResult,
       setSearchResult,
+      searchRequest,
+      setSearchRequest,
       activeChatId,
       setActiveChatId,
       profileData,

@@ -9,6 +9,7 @@ import DashboardChat from './components/DashboardChat';
 import DashboardSearch from './components/DashboardSearch';
 import DashboardPhoto from './components/DashboardPhoto';
 import DashboardProfile from './components/DashboardProfile';
+import DashboardChatStat from './components/DashboardChatStat';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -31,7 +32,10 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
           <DashboardPhoto />
           <DashboardAccountData />
           <FameScore />
-          <DashboardAccountInfo />
+          <div className='dashboard_info'>
+            <DashboardAccountInfo />
+            <DashboardChatStat setMatchaNotif={setMatchaNotif} />
+          </div>
         </div>
         <div className='dashboard_profile_container'>
           <DashboardProfile />
@@ -39,9 +43,6 @@ const DashboardPage: FC<Props> = ({ setMatchaNotif }) => {
         <div className='dashboard_other_container'>
           <DashboardSearch setMatchaNotif={setMatchaNotif} />
           <DashboardChat setMatchaNotif={setMatchaNotif} />
-        </div>
-        <div onClick={() => {nav(appRedir.deleteProfile)}} className='dashboard_delete'>
-          Supprimer le compte
         </div>
       </div>
     </>

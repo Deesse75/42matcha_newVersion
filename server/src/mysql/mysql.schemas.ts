@@ -86,6 +86,7 @@ export const chatHistorySchema = `
     senderId INT NOT NULL,
     receiverId INT NOT NULL,
     message TEXT NOT NULL,
+    readed BOOLEAN DEFAULT FALSE,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (senderId) REFERENCES User(id) ON DELETE CASCADE,
     FOREIGN KEY (receiverId) REFERENCES User(id) ON DELETE CASCADE
