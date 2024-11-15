@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { matchaError } from '../utils/matcha_error.js';
-import { userGetMe } from './user.service.js';
 
 export const getMe = async (
   req: Request,
@@ -8,11 +7,7 @@ export const getMe = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const user = await userGetMe(
-      req.body.existingUser,
-      req.body.tags,
-    );
-    res.status(200).json({ user: user });
+    res.status(200).json({ user: req.body.existingUser, userTags: req.body.tags });
     return;
   } catch (error) {
     matchaError.catched(error as Error, res);

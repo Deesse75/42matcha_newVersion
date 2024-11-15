@@ -1,5 +1,5 @@
 import {
-  MysqlUserChatType,
+  MysqlChatMessageType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
 import { UnseenMessageType } from '../interfaces/user.interface.js';
@@ -7,7 +7,7 @@ import { convertUnseenMessageListing } from '../utils/convertData.js';
 import * as mysql from '../mysql/mysql.service.js';
 
 export const getChatStatService = async (
-  statChat: MysqlUserChatType[] | null,
+  statChat: MysqlChatMessageType[] | null,
 ): Promise<{ nbMess: number; lastMess: string } | null> => {
   try {
     if (!statChat) return null;

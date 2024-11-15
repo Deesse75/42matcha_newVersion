@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from 'react';
-import { UserTagsType } from '../../../appConfig/interface';
 import { userRoute, appRedir } from '../../../appConfig/appPath';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { UserTagsFrontType } from '../../../appConfig/interface';
 
 type Props = {
-  tag: UserTagsType;
+  tag: UserTagsFrontType;
   key: number;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
   setReloadTags: React.Dispatch<React.SetStateAction<boolean>>;
@@ -77,7 +77,9 @@ const EditOneTag: FC<Props> = ({ tag, setMatchaNotif, setReloadTags }) => {
         >
           {`#${tag.tagName} `}
         </div>
-        {delText && !deleteTag && <div className='one_tag_delete_text'>Supprimer ?</div>}
+        {delText && !deleteTag && (
+          <div className='one_tag_delete_text'>Supprimer ?</div>
+        )}
         {deleteTag && (
           <>
             <div className='one_tag_delete_confirm'>

@@ -38,7 +38,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
           return;
         }
         me.setUser(data.user);
-        me.setUserTags(data.tags);
+        me.setUserTags(data.userTags);
         setUserIsLoaded(true);
       } catch (error) {
         if (!isMounted) return;

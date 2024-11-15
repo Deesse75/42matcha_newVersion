@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
-import { MiniProfileType } from '../../appConfig/interface';
+import { MiniProfileFrontType } from '../../appConfig/interface';
 
 type Props = {
-  profile: MiniProfileType;
+  profile: MiniProfileFrontType;
 };
 
 const DisplayMiniUserData: FC<Props> = ({ profile }) => {

@@ -2,7 +2,7 @@ import { matchaError } from '../utils/matcha_error.js';
 import { mysqlDb } from '../mysql/mysql.config.js';
 import {
   MysqlMiniUserType,
-  MysqlUserChatType,
+  MysqlChatMessageType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
@@ -125,7 +125,7 @@ export async function getCommonTags(
 export async function getUserStatChat(
   query: string,
   values: any[],
-): Promise<MysqlUserChatType[] | null> {
+): Promise<MysqlChatMessageType[] | null> {
   try {
     const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;

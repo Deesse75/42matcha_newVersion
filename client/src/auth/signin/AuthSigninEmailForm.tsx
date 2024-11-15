@@ -2,7 +2,9 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir, authRoute } from '../../appConfig/appPath';
 import Cookies from 'js-cookie';
-import AuthInputContainer, { ValideAuthInput } from '../components/AuthInputContainer';
+import AuthInputContainer, {
+  ValideAuthInput,
+} from '../components/AuthInputContainer';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -23,6 +25,9 @@ const AuthSigninEmailForm: FC<Props> = ({ setMatchaNotif }) => {
   const [bodyRequest, setBodyRequest] = useState<{
     email: string;
     password: string;
+    region: string | null;
+    county: string | null;
+    town: string | null;
   } | null>(null);
 
   const handleClick = () => {
@@ -33,12 +38,18 @@ const AuthSigninEmailForm: FC<Props> = ({ setMatchaNotif }) => {
       setMatchaNotif('Tous les champs sont requis.');
       return;
     }
-      if (!valideInput.email || !valideInput.password) {
-        setMatchaNotif('Certains champs sont invalides.');
-        return;
-      }
-      setBodyRequest({ email: email, password: password });
-};
+    if (!valideInput.email || !valideInput.password) {
+      setMatchaNotif('Certains champs sont invalides.');
+      return;
+    }
+    setBodyRequest({
+      email: email,
+      password: password,
+      region: localStorage.getItem('region'),
+      county: localStorage.getItem('county'),
+      town: localStorage.getItem('town'),
+    });
+  };
 
   const handleClear = () => {
     if (refEmail.current) refEmail.current.value = '';
@@ -64,8 +75,8 @@ const AuthSigninEmailForm: FC<Props> = ({ setMatchaNotif }) => {
           return;
         }
 
+        setBodyRequest(null);
         if (response.status !== 200) {
-          setBodyRequest(null);
           setMatchaNotif(data.message);
           return;
         }

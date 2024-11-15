@@ -11,7 +11,6 @@ import ResendLinkEmail from './auth/resend/ResendLinkEmail';
 import Error500 from './error/Error500';
 import Error404 from './error/Error404';
 import ContactUs from './footer/components/ContactUs';
-import HistoryPage from './0aSupprimer/home/listing/ListingPage';
 import Signout from './home/Signout';
 import AccountPage from './home/account/AccountPage';
 import DeleteAccount from './home/account/DeleteAccount';
@@ -79,10 +78,6 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
         <Route
           path={appRedir.search}
           element={<SearchPage setMatchaNotif={setMatchaNotif} />}
-        />
-        <Route
-          path={appRedir.history}
-          element={<HistoryPage setMatchaNotif={setMatchaNotif} />}
         />
         <Route
           path={appRedir.account}

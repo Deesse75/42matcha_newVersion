@@ -1,4 +1,4 @@
-export type UserType = {
+export type UserBackType = {
   id: number;
   firstname: string;
   lastname: string;
@@ -17,44 +17,19 @@ export type UserType = {
   tall: number;
   biography: string | null;
   fameRating: number;
-  photo: Buffer | null;
+  photo: string | null;
   lastConnection: string | null;
-  tags: string[] | null;
   createdAt: string;
   updatedAt: string;
 };
 
-export type MiniUserType = {
-  id: number;
-  username: string;
-  age: number;
-  gender: string | null;
-  orientation: string | null;
-  region: string | null;
-  county: string | null;
-  town: string | null;
-  fameRating: number;
-  photo: Buffer | null;
-  lastConnection: string | null;
-  tags: string[] | null;
-};
-
-export type UserPhotosType = {
-  id: number;
-  userId: number;
-  photo2: Buffer | null;
-  photo3: Buffer | null;
-  photo4: Buffer | null;
-  photo5: Buffer | null;
-};
-
-export type UserTagsType = {
+export type UserTagsBackType = {
   id: number;
   userId: number;
   tagName: string;
 };
 
-export type UserLookForType = {
+export type UserLookForBackType = {
   id: number;
   userId: number;
   ageMin: number;
@@ -65,7 +40,7 @@ export type UserLookForType = {
   withPhoto: boolean;
 };
 
-export type UserLastSearchType = {
+export type UserLastSearchBackType = {
   id: number;
   userId: number;
   ageMin: number;
@@ -79,7 +54,14 @@ export type UserLastSearchType = {
   fameRatingMin: number;
 };
 
-export type UserChatType = {
+export type UserNotifBackType = {
+  id: number;
+  userId: number;
+  message: string;
+  createdAt: string;
+};
+
+export type ChatMessageBackType = {
   id: number;
   senderId: number;
   receiverId: number;
@@ -88,10 +70,50 @@ export type UserChatType = {
   createdAt: string;
 };
 
-export type UserNotifType = {
+export type FullProfileBackType = {
+  id: number;
+  username: string;
+  age: number;
+  gender: string | null;
+  orientation: string | null;
+  region: string | null;
+  county: string | null;
+  town: string | null;
+  tall: number;
+  biography: string | null;
+  fameRating: number;
+  photo1: string | null;
+  photo2: string | null;
+  photo3: string | null;
+  photo4: string | null;
+  photo5: string | null;
+  lastConnection: string | null;
+  tags: string[] | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type MiniProfileBackType = {
+  id: number;
+  username: string;
+  age: number;
+  gender: string | null;
+  orientation: string | null;
+  region: string | null;
+  county: string | null;
+  town: string | null;
+  fameRating: number;
+  photo: string | null;
+  lastConnection: string | null;
+  tags: string[] | null;
+};
+
+export type PhotosPlusBackType = {
   id: number;
   userId: number;
-  message: string;
-  createdAt: string;
+  photo2: string | null;
+  photo3: string | null;
+  photo4: string | null;
+  photo5: string | null;
 };
 

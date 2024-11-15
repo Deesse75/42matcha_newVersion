@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  contactUs,
   forgotPassword,
   initializeDatabase,
   reinitPassword,
@@ -70,5 +71,7 @@ authRouter.post(
   isEmailCertified,
   validateEmail,
 );
+
+authRouter.post('/contact_us', authBodyValidation, contactUs,);
 
 export default authRouter;

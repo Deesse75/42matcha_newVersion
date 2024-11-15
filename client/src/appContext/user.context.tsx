@@ -1,32 +1,36 @@
 import { useState, useContext, createContext } from 'react';
 import { Socket } from 'socket.io-client';
 import {
-  UserType,
-  UserTagsType,
-  PhotosPlusType,
-  UserLastSearchType,
-  UserNotifType,
-  UserLookForType,
+  PhotosPlusFrontType,
+  UserFrontType,
+  UserLastSearchFrontType,
+  UserLookForFrontType,
+  UserNotifFrontType,
+  UserTagsFrontType,
 } from '../appConfig/interface';
 
 type UserContextType = {
-  user: UserType | null;
-  userTags: UserTagsType[] | null;
-  userPhotosPlus: PhotosPlusType | null;
-  userLookFor: UserLookForType | null;
-  userLastSearch: UserLastSearchType | null;
-  userNotif: UserNotifType[] | null;
+  user: UserFrontType | null;
+  userTags: UserTagsFrontType[] | null;
+  userPhotosPlus: PhotosPlusFrontType | null;
+  userLookFor: UserLookForFrontType | null;
+  userLastSearch: UserLastSearchFrontType | null;
+  userNotif: UserNotifFrontType[] | null;
   userSocket: Socket | null;
-  setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
-  setUserTags: React.Dispatch<React.SetStateAction<UserTagsType[] | null>>;
+  setUser: React.Dispatch<React.SetStateAction<UserFrontType | null>>;
+  setUserTags: React.Dispatch<React.SetStateAction<UserTagsFrontType[] | null>>;
   setUserPhotosPlus: React.Dispatch<
-    React.SetStateAction<PhotosPlusType | null>
+    React.SetStateAction<PhotosPlusFrontType | null>
   >;
-  setUserLookFor: React.Dispatch<React.SetStateAction<UserLookForType | null>>;
+  setUserLookFor: React.Dispatch<
+    React.SetStateAction<UserLookForFrontType | null>
+  >;
   setUserLastSearch: React.Dispatch<
-    React.SetStateAction<UserLastSearchType | null>
+    React.SetStateAction<UserLastSearchFrontType | null>
   >;
-  setUserNotif: React.Dispatch<React.SetStateAction<UserNotifType[] | null>>;
+  setUserNotif: React.Dispatch<
+    React.SetStateAction<UserNotifFrontType[] | null>
+  >;
   setUserSocket: React.Dispatch<React.SetStateAction<Socket | null>>;
   deleteUserData: () => void;
 };
@@ -50,15 +54,16 @@ export const UserContext = createContext<UserContextType>({
 });
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserType | null>(null);
-  const [userTags, setUserTags] = useState<UserTagsType[] | null>(null);
-  const [userPhotosPlus, setUserPhotosPlus] = useState<PhotosPlusType | null>(
+  const [user, setUser] = useState<UserFrontType | null>(null);
+  const [userTags, setUserTags] = useState<UserTagsFrontType[] | null>(null);
+  const [userPhotosPlus, setUserPhotosPlus] =
+    useState<PhotosPlusFrontType | null>(null);
+  const [userLookFor, setUserLookFor] = useState<UserLookForFrontType | null>(
     null,
   );
-  const [userLookFor, setUserLookFor] = useState<UserLookForType | null>(null);
   const [userLastSearch, setUserLastSearch] =
-    useState<UserLastSearchType | null>(null);
-  const [userNotif, setUserNotif] = useState<UserNotifType[] | null>(null);
+    useState<UserLastSearchFrontType | null>(null);
+  const [userNotif, setUserNotif] = useState<UserNotifFrontType[] | null>(null);
   const [userSocket, setUserSocket] = useState<Socket | null>(null);
   const deleteUserData = () => {
     if (userSocket) userSocket.disconnect();

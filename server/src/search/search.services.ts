@@ -3,7 +3,7 @@ import {
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
 import { SearchRequestType } from '../interfaces/search.interfaces.js';
-import { MiniUserType } from '../interfaces/user.interface.js';
+import { MiniProfileBackType } from '../interfaces/user.interface.js';
 import * as mysql from '../mysql/mysql.service.js';
 import {
   convertListingMiniUser,
@@ -11,7 +11,7 @@ import {
 
 export const searchLocationService = async (
   user: MysqlUserType,
-): Promise<MiniUserType[] | null> => {
+): Promise<MiniProfileBackType[] | null> => {
   const query: string = `
     SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
     FROM User 
@@ -34,7 +34,7 @@ export const searchLocationService = async (
 export const searchUsernameService = async (
   user: MysqlUserType,
   username: string,
-): Promise<MiniUserType[] | null> => {
+): Promise<MiniProfileBackType[] | null> => {
   // const usernameValue = `%${username}%`;
   const query: string = `
   SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
@@ -68,7 +68,7 @@ export const searchUsernameService = async (
 export const searchTagsService = async (
   user: MysqlUserType,
   tags: MysqlUserTagsType,
-): Promise<MiniUserType[] | null> => {
+): Promise<MiniProfileBackType[] | null> => {
   const query: string = '';
   const values: any = [];
   try {
@@ -81,7 +81,7 @@ export const searchTagsService = async (
 export const searchAdvanceService = async (
   user: MysqlUserType,
   searchRequest: SearchRequestType,
-): Promise<MiniUserType[] | null> => {
+): Promise<MiniProfileBackType[] | null> => {
   let query: string = `
   SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
   FROM User 

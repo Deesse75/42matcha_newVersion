@@ -2,7 +2,9 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { appRedir, authRoute } from '../../appConfig/appPath';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import AuthInputContainer, { ValideAuthInput } from '../components/AuthInputContainer';
+import AuthInputContainer, {
+  ValideAuthInput,
+} from '../components/AuthInputContainer';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -23,6 +25,9 @@ const AuthSigninUsernameForm: FC<Props> = ({ setMatchaNotif }) => {
   const [bodyRequest, setBodyRequest] = useState<{
     username: string;
     password: string;
+    region: string | null;
+    county: string| null;
+    town: string | null;
   } | null>(null);
 
   const handleClick = () => {
@@ -37,7 +42,13 @@ const AuthSigninUsernameForm: FC<Props> = ({ setMatchaNotif }) => {
       setMatchaNotif('Certains champs sont invalides.');
       return;
     }
-    setBodyRequest({ username: username, password: password });
+    setBodyRequest({
+      username: username,
+      password: password,
+      region: localStorage.getItem('region'),
+      county: localStorage.getItem('county'),
+      town: localStorage.getItem('town'),
+    });
   };
 
   const handleClear = () => {
@@ -64,8 +75,8 @@ const AuthSigninUsernameForm: FC<Props> = ({ setMatchaNotif }) => {
           return;
         }
 
+        setBodyRequest(null);
         if (response.status !== 200) {
-          setBodyRequest(null);
           setMatchaNotif(data.message);
           return;
         }

@@ -147,3 +147,20 @@ export const authReinitPassword = async (
     throw error;
   }
 };
+
+export const authContactUs = (
+  contactName: string,
+  contactEmail: string,
+  subject: string,
+  text: string,
+): void => {
+  const sendText = `Message reçu de ${contactName} - ${contactEmail}</br></br>Objet : ${subject}</br></br>${text}`;
+  const title = 'Administrateur Matcha';
+  const mailTo = process.env.MAILER_EMAIL || '';
+  try {
+    mailer.sendNewEmail(mailTo, title, sendText);
+  } catch (error) {
+    throw error;
+  }
+};
+

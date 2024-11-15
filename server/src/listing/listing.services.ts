@@ -3,7 +3,7 @@ import {
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
 import {
-  MiniUserType,
+  MiniProfileBackType,
   UnseenMessageType,
 } from '../interfaces/user.interface.js';
 import * as mysql from '../mysql/mysql.service.js';
@@ -25,7 +25,7 @@ import {
 export const getListingService = async (
   user: MysqlUserType,
   listingName: string,
-): Promise<MiniUserType[] | null> => {
+): Promise<MiniProfileBackType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {
@@ -50,7 +50,7 @@ export const listingAgeFilter = async (
   listingName: string,
   ageMin: number,
   ageMax: number,
-): Promise<MiniUserType[] | null> => {
+): Promise<MiniProfileBackType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {
@@ -75,7 +75,7 @@ export const listingFameFilter = async (
   user: MysqlUserType,
   listingName: string,
   fameMin: number,
-): Promise<MiniUserType[] | null> => {
+): Promise<MiniProfileBackType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {
@@ -100,7 +100,7 @@ export const listingLocationFilter = async (
   user: MysqlUserType,
   listingName: string,
   zone: string,
-): Promise<MiniUserType[] | null> => {
+): Promise<MiniProfileBackType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {
@@ -133,7 +133,7 @@ export const listingTagsFilter = async (
   user: MysqlUserType,
   listingName: string,
   tag: string[],
-): Promise<MiniUserType[] | null> => {
+): Promise<MiniProfileBackType[] | null> => {
   let ret: { query: string; values: any };
   let listing: MysqlMiniUserType[] | null = null;
   try {

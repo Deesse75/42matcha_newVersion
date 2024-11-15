@@ -102,8 +102,8 @@ const AuthSignupForm: FC<Props> = ({ setMatchaNotif }) => {
           return;
         }
 
+        setBodyRequest(null);
         if (response.status !== 201) {
-          setBodyRequest(null);
           return;
         }
         nav(appRedir.signin);

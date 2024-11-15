@@ -1,4 +1,4 @@
-export type UserType = {
+export type UserFrontType = {
   id: number;
   firstname: string;
   lastname: string;
@@ -23,7 +23,54 @@ export type UserType = {
   updatedAt: string;
 };
 
-export type FullProfileType = {
+export type UserTagsFrontType = {
+  id: number;
+  userId: number;
+  tagName: string;
+};
+
+export type UserLookForFrontType = {
+  id: number;
+  userId: number;
+  ageMin: number;
+  ageMax: number;
+  tallMin: number;
+  tallMax: number;
+  gender: string | null;
+  withPhoto: boolean;
+};
+
+export type UserLastSearchFrontType = {
+  id: number;
+  userId: number;
+  ageMin: number;
+  ageMax: number;
+  tallMin: number;
+  tallMax: number;
+  gender: string | null;
+  orientation: string | null;
+  withPhoto: boolean;
+  withBio: boolean;
+  fameRatingMin: number;
+};
+
+export type UserNotifFrontType = {
+  id: number;
+  userId: number;
+  message: string;
+  createdAt: string;
+};
+
+export type ChatMessageFrontType = {
+  id: number;
+  senderId: number;
+  receiverId: number;
+  message: string;
+  readed: boolean;
+  createdAt: string;
+};
+
+export type FullProfileFrontType = {
   id: number;
   username: string;
   age: number;
@@ -46,7 +93,7 @@ export type FullProfileType = {
   updatedAt: string;
 };
 
-export type MiniProfileType = {
+export type MiniProfileFrontType = {
   id: number;
   username: string;
   age: number;
@@ -61,24 +108,7 @@ export type MiniProfileType = {
   tags: string[] | null;
 };
 
-export type UserTagsType = {
-  id: number;
-  userId: number;
-  tagName: string;
-};
-
-export type UserLookForType = {
-  id: number;
-  userId: number;
-  ageMin: number;
-  ageMax: number;
-  tallMin: number;
-  tallMax: number;
-  gender: string | null;
-  withPhoto: boolean;
-};
-
-export type PhotosPlusType = {
+export type PhotosPlusFrontType = {
   id: number;
   userId: number;
   photo2: string | null;
@@ -87,26 +117,6 @@ export type PhotosPlusType = {
   photo5: string | null;
 };  
 
-export type UserLastSearchType = {
-  id: number;
-  userId: number;
-  ageMin: number;
-  ageMax: number;
-  tallMin: number;
-  tallMax: number;
-  gender: string | null;
-  orientation: string | null;
-  withPhoto: boolean;
-  withBio: boolean;
-  fameRatingMin: number;
-};
-
-export type UserNotifType = {
-  id: number;
-  userId: number;
-  message: string;
-  createdAt: string;
-};
 
 export type OpenChatListType = {
   userId: number;

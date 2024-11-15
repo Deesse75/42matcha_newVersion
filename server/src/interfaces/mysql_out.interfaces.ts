@@ -37,7 +37,7 @@ export type MysqlMiniUserType = {
   lastConnection: string | null;
 };
 
-export type MysqlPhotosType = {
+export type MysqlPhotosPlusType = {
   id: number;
   userId: number;
   photo2: Buffer | null;
@@ -77,7 +77,7 @@ export type MysqlLastSearchType = {
   fameRatingMin: number;
 };
 
-export type MysqlUserChatType = {
+export type MysqlChatMessageType = {
   id: number;
   senderId: number;
   receiverId: number;

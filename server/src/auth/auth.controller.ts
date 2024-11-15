@@ -1,6 +1,7 @@
 import { matchaError } from '../utils/matcha_error.js';
 import { Response, Request, NextFunction } from 'express';
 import {
+  authContactUs,
   authForgotPassword,
   authInitDatabase,
   authReinitPassword,
@@ -150,3 +151,19 @@ export const reinitPassword = async (
     return matchaError.catched(error as Error, res);
   }
 };
+
+export const contactUs = async (req: Request, res: Response) => {
+  try {
+    authContactUs(
+      req.body.contactName,
+      req.body.contactEmail,
+      req.body.subject,
+      req.body.text,
+    );
+    res.status(200).json({ message: 'Message envoyé avec succès.' });
+    return;
+  } catch (error) {
+    return matchaError.catched(error as Error, res);
+  }
+};
+

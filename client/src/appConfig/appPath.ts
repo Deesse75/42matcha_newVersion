@@ -21,6 +21,23 @@ export const appRedir = {
   errorNotfound: '/page_introuvable',
   getMe: '/chargement',
   deleteAccount: '/suppression_du_compte',
+};
+
+  export const authRoute = {
+    init: `${PATH}/auth/init`,
+    signup: `${PATH}/auth/signup`,
+    signinUsername: `${PATH}/auth/signin_username`,
+    signinEmail: `${PATH}/auth/signin_Email`,
+    forgotPassword: `${PATH}/auth/forgot_password`,
+    resendLinkEmail: `${PATH}/auth/resend_email`,
+    reinitPassword: `${PATH}/auth/reinit_password`,
+    ValidateLinkEmail: `${PATH}/auth/validate_email`,
+    contactUs: `${PATH}/auth/contact_us`,
+  };
+
+export const mailerRoute = {
+  contactUs: `${PATH}/mailer/contactUs`,
+};
 
 
   
@@ -32,18 +49,6 @@ export const appRedir = {
   // listingMatcha: '/selection_matcha',
   // listing: '/liste_de_profils',
   // userProfile: '/profil_utilisateur',
-};
-
-export const authRoute = {
-  init: `${PATH}/auth/init`,
-  signinUsername: `${PATH}/auth/signin_username`,
-  signinEmail: `${PATH}/auth/signin_Email`,
-  signup: `${PATH}/auth/signup`,
-  resendLinkEmail: `${PATH}/auth/resend_email`,
-  forgotPassword: `${PATH}/auth/forgot_password`,
-  reinitPassword: `${PATH}/auth/reinit_password`,
-  ValidateLinkEmail: `${PATH}/auth/validate_email`,
-};
 
 export const userRoute = {
   getMe: `${PATH}/user/get_me`,
@@ -77,9 +82,9 @@ export const listingRoute = {
 
 export const searchRoute = {
   searchMulti: `${PATH}/search/search_multi`,
-  // searchUsername: `${PATH}/search/search_username`,
-  // searchLocation: `${PATH}/search/search_location`,
-  // searchTags: `${PATH}/search/search_tags`,
+  searchUsername: `${PATH}/search/search_username`,
+  searchLocation: `${PATH}/search/search_location`,
+  searchTags: `${PATH}/search/search_tags`,
   // searchAgeFilter: `${PATH}/search/search_age_filter`,
 };
 
@@ -107,11 +112,6 @@ export const socketRoute = {
   receptDislike: 'receptDislike', // {senderUsername: string}
   receptBan: 'receptBan', //vide
 };
-
-export const mailerRoute = {
-  contactUs: `${PATH}/mailer/contactUs`,
-};
-
 export const actionRoute = {
   getInteractions: `${PATH}/action/get_interactions`,
 };

@@ -1,18 +1,15 @@
 import { FC, useEffect, useState } from 'react';
 import { useMemory } from '../../appContext/memory.context';
 import { useUserInfo } from '../../appContext/user.context';
-import { MiniProfileType } from '../../appConfig/interface';
+import { MiniProfileFrontType } from '../../appConfig/interface';
 import { calculateDistance, communTags } from '../../utils/sort.utils';
 
 type Props = {
-  listing: MiniProfileType[] | null;
+  listing: MiniProfileFrontType[] | null;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const SortListing: FC<Props> = ({
-  listing,
-  setMatchaNotif,
-}) => {
+const SortListing: FC<Props> = ({ listing, setMatchaNotif }) => {
   const memo = useMemory();
   const me = useUserInfo();
   const [sortSelected, setSortSelected] = useState<string>('default');
@@ -30,7 +27,7 @@ const SortListing: FC<Props> = ({
   useEffect(() => {
     if (sortSelected === 'default') return;
     if (!listing) return;
-    let sortListing: MiniProfileType[] = [];
+    let sortListing: MiniProfileFrontType[] = [];
     if (sortSelected === 'ageUp')
       sortListing = listing.sort((a, b) => a.age - b.age);
     else if (sortSelected === 'ageDown')

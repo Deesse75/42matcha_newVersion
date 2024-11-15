@@ -259,6 +259,47 @@ const validateEmailSchema = Joi.object({
     'objet.unknown': 'La requete est invalide.',
   });
 
+export const contactSchema = Joi.object({
+  contactName: Joi.string()
+    .empty()
+    .required()
+    .messages({
+      'string.empty': 'Le nom de contact ne doit pas être vide',
+      'string.pattern.base':
+        'Le format du nom de contact est invalide. Voir les règles de saisie',
+      'any.required': 'Le nom de contact est requis.',
+    }),
+  contactEmail: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      maxDomainSegments: 3,
+      tlds: { allow: ['com', 'fr'] },
+    })
+    .empty()
+    .required()
+    .messages({
+      'string.email':
+        "Le format de l'adresse email est invalide. Voir les règles de saisie",
+      'string.empty': "L'adresse email ne doit pas être vide",
+      'any.required': "L'adresse email est requise.",
+    }),
+  subject: Joi.string().empty().max(100).required().messages({
+    'string.empty': "L'objet du message ne doit pas être vide",
+    'string.max': "L'objet du message ne doit pas dépasser 100 caractères",
+    'any.required': "L'objet du message est requis.",
+  }),
+  text: Joi.string().empty().max(955).required().messages({
+    'string.empty': 'Le message ne doit pas être vide',
+    'string.max': 'Le message ne doit pas dépasser 955 caractères',
+    'any.required': 'Le message est requis.',
+  }),
+})
+  .unknown(false)
+  .messages({
+    'object.unknown': 'Certains champs dans la requête ne sont pas autorisés.',
+  });
+
+
 const schemaMap: { [key: string]: Joi.ObjectSchema } = {
   '/signin_username': signinUsernameSchema,
   '/signin_Email': signinEmailSchema,
@@ -267,6 +308,7 @@ const schemaMap: { [key: string]: Joi.ObjectSchema } = {
   '/validate_email': validateEmailSchema,
   '/reinit_password': reinitPasswordSchema,
   '/resend_email': resendEmailSchema,
+  '/contact_us': contactSchema,
 };
 
 export const authBodyValidation = async (

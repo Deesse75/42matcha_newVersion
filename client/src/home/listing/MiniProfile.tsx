@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { MiniProfileType } from '../../appConfig/interface';
+import { MiniProfileFrontType } from '../../appConfig/interface';
 import DisplayConnection from './DisplayConnection';
 import DisplayInteraction from './DisplayInteraction';
 import DisplayFameRating from './DisplayFameRating';
@@ -8,7 +8,7 @@ import DisplayTags from './DisplayTags';
 
 type Props = {
   key: number;
-  profile: MiniProfileType;
+  profile: MiniProfileFrontType;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
@@ -19,9 +19,7 @@ const MiniProfile: FC<Props> = ({ profile, setMatchaNotif }) => {
         <div className='mini_profile_left'>
           <div className='mini_profile_left_top'>
             <img
-              src={
-                profile.photo ? profile.photo : '/avatar/default_avatar.jpg'
-              }
+              src={profile.photo ? profile.photo : '/avatar/default_avatar.jpg'}
               alt={
                 profile.photo
                   ? 'Photo de profil personnalisée'

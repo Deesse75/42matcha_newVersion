@@ -17,7 +17,7 @@ const MicroMatchList: FC<Props> = ({
 }) => {
   const [reloadListing, setReloadListing] = useState<boolean>(false);
   const [listing, setListing] = useState<
-    { id: number; username: string }[] | null
+    { userId: number; username: string }[] | null
   >(null);
   const nav = useNavigate();
 

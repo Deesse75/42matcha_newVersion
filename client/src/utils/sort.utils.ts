@@ -1,8 +1,12 @@
-import { UserType, MiniProfileType, UserTagsType } from '../appConfig/interface';
+import {
+  UserFrontType,
+  MiniProfileFrontType,
+  UserTagsFrontType,
+} from '../appConfig/interface';
 
 export function calculateDistance(
-  profile: MiniProfileType,
-  user: UserType | null,
+  profile: MiniProfileFrontType,
+  user: UserFrontType | null,
 ): number {
   if (!user) return 0;
   if (profile.town === user.town) return 3;
@@ -12,10 +16,11 @@ export function calculateDistance(
 }
 
 export function communTags(
-  profile: MiniProfileType,
-  tags: UserTagsType[] | null,
+  profile: MiniProfileFrontType,
+  tags: UserTagsFrontType[] | null,
 ): number {
   if (!tags || !profile.tags) return 0;
   const userTagName = tags.map((tag) => tag.tagName);
-  return userTagName.filter((tagName) => profile.tags!.includes(tagName)).length;
+  return userTagName.filter((tagName) => profile.tags!.includes(tagName))
+    .length;
 }
