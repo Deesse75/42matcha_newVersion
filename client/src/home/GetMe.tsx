@@ -12,34 +12,18 @@ type Props = {
 const GetMe: FC<Props> = ({ setMatchaNotif }) => {
   const me = useUserInfo();
   const nav = useNavigate();
-  const [userData, setUserData] = useState<boolean>(false);
-  const [bodyRequest, setBodyRequest] = useState<{
-    region: string | null;
-    county: string | null;
-    town: string | null;
-  } | null>(null);
+  const [userIsLoaded, setUserIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    me.setUser(null);
-    setBodyRequest({
-      region: localStorage.getItem('region'),
-      county: localStorage.getItem('county'),
-      town: localStorage.getItem('town'),
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!bodyRequest) return;
     let isMounted = true;
     const request = async () => {
       try {
         const response = await fetch(userRoute.getMe, {
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${Cookies.get('session')}`,
           },
-          body: JSON.stringify(bodyRequest),
         });
         const data = await response.json();
         if (!isMounted) return;
@@ -54,8 +38,8 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
           return;
         }
         me.setUser(data.user);
-        setUserData(true);
-        setBodyRequest(null);
+        me.setUserTags(data.tags);
+        setUserIsLoaded(true);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -66,10 +50,10 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [bodyRequest]);
+  }, []);
 
   useEffect(() => {
-    if (!userData) return;
+    if (!userIsLoaded) return;
     if (!me.user) {
       setMatchaNotif('Une erreur est survenue lors de la récupération de vos données.');
       nav(appRedir.signout);
@@ -88,9 +72,9 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
 
       //If connection is ok set userSocket
       socket.on(socketRoute.connected, () => {
-        setUserData(false);
+        setUserIsLoaded(false);
         me.setUserSocket(socket);
-        nav(appRedir.dashboard);
+        nav(appRedir.account);
         return;
       });
 
@@ -103,7 +87,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
       });
     };
     request();
-  }, [userData]);
+  }, [userIsLoaded]);
 
   return (
     <>

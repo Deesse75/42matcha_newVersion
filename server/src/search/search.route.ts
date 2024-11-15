@@ -1,8 +1,17 @@
 import { Router } from 'express';
 import { userTokenValidation } from '../middleware/userToken.validation.js';
-import { findExistingUser, findUserTags, searchRequestValidation } from '../middleware/user.data.validation.js';
+import {
+  findExistingUser,
+  findTags,
+  searchRequestValidation,
+} from '../middleware/user.data.validation.js';
 import { searchBodyValidation } from '../middleware/search.body.validation.js';
-import { searchAdvance, searchLocation, searchTags, searchUsername } from './search.controller.js';
+import {
+  searchAdvance,
+  searchLocation,
+  searchTags,
+  searchUsername,
+} from './search.controller.js';
 
 const searchRouter = Router();
 
@@ -24,7 +33,7 @@ searchRouter.get(
   '/search_tags',
   userTokenValidation,
   findExistingUser,
-  findUserTags,
+  findTags,
   searchTags,
 );
 

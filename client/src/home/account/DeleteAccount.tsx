@@ -2,14 +2,31 @@ import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userRoute, appRedir } from '../../appConfig/appPath';
 import Cookies from 'js-cookie';
+import { useSelectMenu } from '../../appContext/selectMenu.context';
+import { useUserInfo } from '../../appContext/user.context';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const DashboardDeleteAccount: FC<Props> = ({ setMatchaNotif }) => {
+const DeleteAccount: FC<Props> = ({ setMatchaNotif }) => {
   const [action, setAction] = useState(false);
   const nav = useNavigate();
+  const menu = useSelectMenu();
+  const me = useUserInfo();
+
+  useEffect(() => {
+    menu.setAllMenuOff();
+
+    if (!Cookies.get('matchaOn')) {
+      nav(appRedir.loading);
+      return;
+    }
+    if (!Cookies.get('session') || !me.user) {
+      nav(appRedir.getMe);
+      return;
+    }
+  }, []);
 
   useEffect(() => {
     if (!action) return;
@@ -86,4 +103,4 @@ const DashboardDeleteAccount: FC<Props> = ({ setMatchaNotif }) => {
   );
 };
 
-export default DashboardDeleteAccount;
+export default DeleteAccount;

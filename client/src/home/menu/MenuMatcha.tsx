@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../../appConfig/appPath';
-import { useUserInfo } from '../../appContext/user.context';
+import { useSelectMenu } from '../../appContext/selectMenu.context';
 
 type Props = {};
 
 const MenuMatcha: FC<Props> = ({}) => {
   const nav = useNavigate();
-  const me = useUserInfo();
+  const menu = useSelectMenu();
 
   return (
     <>
@@ -27,15 +27,7 @@ const MenuMatcha: FC<Props> = ({}) => {
             }}
             className='menu_title'
           >
-            Données personnelles
-          </div>
-          <div
-            onClick={() => {
-              nav(appRedir.profile);
-            }}
-            className='menu_title'
-          >
-            Profil
+            Mon profil
           </div>
           <div
             onClick={() => {
@@ -43,7 +35,7 @@ const MenuMatcha: FC<Props> = ({}) => {
             }}
             className='menu_title'
           >
-            Rechercher
+            Rechercher des profils
           </div>
           <div
             onClick={() => {
@@ -51,13 +43,13 @@ const MenuMatcha: FC<Props> = ({}) => {
             }}
             className='menu_title'
           >
-            Chat
+            Accéder au Chat
           </div>
           <div className='menu_history'>
             <div
               onClick={() => {
-                me.setHistorySelected('matcha');
-                nav(appRedir.listing);
+                menu.setHistorySelected('matcha');
+                nav(appRedir.history);
               }}
               className='menu_title'
             >
@@ -65,66 +57,74 @@ const MenuMatcha: FC<Props> = ({}) => {
             </div>
             <div
               onClick={() => {
-                me.setHistorySelected('match');
-                nav(appRedir.listing);
+                menu.setHistorySelected('match');
+                nav(appRedir.history);
               }}
               className='menu_title'
             >
-              Matchs
+              Mes matchs
             </div>
             <div
               onClick={() => {
-                me.setHistorySelected('view');
-                nav(appRedir.listing);
+                menu.setHistorySelected('view');
+                nav(appRedir.history);
               }}
               className='menu_title'
             >
-              Visites reçues
+              Mes visites reçues
             </div>
             <div
               onClick={() => {
-                me.setHistorySelected('like');
-                nav(appRedir.listing);
+                menu.setHistorySelected('like');
+                nav(appRedir.history);
               }}
               className='menu_title'
             >
-              Likes reçus
+              Mes likes reçus
             </div>
             <div
               onClick={() => {
-                me.setHistorySelected('visited');
-                nav(appRedir.listing);
+                menu.setHistorySelected('visited');
+                nav(appRedir.history);
               }}
               className='menu_title'
             >
-              Profils visités
+              Les profils visités
             </div>
             <div
               onClick={() => {
-                me.setHistorySelected('liked');
-                nav(appRedir.listing);
+                menu.setHistorySelected('liked');
+                nav(appRedir.history);
               }}
               className='menu_title'
             >
-              Profils likés
+              Les profils likés
             </div>
             <div
               onClick={() => {
-                me.setHistorySelected('banned');
-                nav(appRedir.listing);
+                menu.setHistorySelected('banned');
+                nav(appRedir.history);
               }}
               className='menu_title'
             >
-              Profils Bloqués
+              Les profils bloqués
             </div>
+          </div>
+          <div
+            className='menu_contact'
+            onClick={() => {
+              nav(appRedir.contact);
+            }}
+          >
+            Nous contacter
           </div>
           <div
             className='menu_delete'
             onClick={() => {
-              nav(appRedir.deleteProfile);
+              nav(appRedir.deleteAccount);
             }}
           >
-            Supprimer le compte
+            Supprimer mon profil
           </div>
         </div>
       </div>

@@ -32,9 +32,9 @@ export const matchRet = (
   FROM User 
   WHERE id != ?
   AND id IN 
-  (SELECT senderId FROM LikeHistory WHERE receiverId = ? 
+  (SELECT senderId FROM LikeTable WHERE receiverId = ? 
   AND senderId IN 
-  (SELECT receiverId FROM LikeHistory WHERE senderId = ?))
+  (SELECT receiverId FROM LikeTable WHERE senderId = ?))
   ORDER BY 
   CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
   CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
@@ -59,7 +59,7 @@ export const viewRet = (
     FROM User 
     WHERE id != ?
     AND id IN 
-    (SELECT senderId FROM ViewHistory WHERE receiverId = ?)
+    (SELECT senderId FROM ViewTable WHERE receiverId = ?)
     ORDER BY 
     CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
     CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
@@ -77,7 +77,7 @@ export const likeRet = (
     FROM User 
     WHERE id != ?
     AND id IN 
-    (SELECT senderId FROM LikeHistory WHERE receiverId = ?)
+    (SELECT senderId FROM LikeTable WHERE receiverId = ?)
     ORDER BY 
     CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
     CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
@@ -95,7 +95,7 @@ export const visitedRet = (
     FROM User 
     WHERE id != ?
     AND id IN 
-    (SELECT receiverId FROM ViewHistory WHERE senderId = ?)
+    (SELECT receiverId FROM ViewTable WHERE senderId = ?)
     ORDER BY 
     CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
     CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
@@ -113,7 +113,7 @@ export const likedRet = (
     FROM User 
     WHERE id != ?
     AND id IN 
-    (SELECT receiverId FROM LikeHistory WHERE senderId = ?)
+    (SELECT receiverId FROM LikeTable WHERE senderId = ?)
     ORDER BY 
     CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
     CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
@@ -131,9 +131,9 @@ export const bannedRet = (
     FROM User 
     WHERE id != ?
     AND id IN 
-    (SELECT receiverId FROM BanHistory WHERE senderId = ?)
+    (SELECT receiverId FROM BanTable WHERE senderId = ?)
     AND id NOT IN 
-    (SELECT senderId FROM BanHistory WHERE receiverId = ?)
+    (SELECT senderId FROM BanTable WHERE receiverId = ?)
     ORDER BY 
     CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
     CASE WHEN county = ? THEN 1 ELSE 0 END DESC,

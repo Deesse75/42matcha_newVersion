@@ -36,7 +36,6 @@ const LoadingPage: FC<Props> = ({
           return;
         }
 
-        //If server up set cookie
         Cookies.set(
           'matchaOn',
           'a90ea0c9c22cb0c8f8645fe01ff458fdc9ae48a71ae5a461a0f8ea0ab57a3745',

@@ -6,9 +6,9 @@ import MatchaNotif from './notification/matchaNotification/MatchaNotif';
 import { appRedir } from './appConfig/appPath';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import MenuMatcha from './home/menu/MenuMatcha';
 import { useUserInfo } from './appContext/user.context';
 import HomeNotification from './notification/homeNotification/HomeNotification';
+import MenuMatcha from './home/menu/MenuMatcha';
 
 function App() {
   const [matchaNotif, setMatchaNotif] = useState<string | null>(null);
@@ -36,21 +36,27 @@ function App() {
       </div>
 
       <div className='routes'>
-        {!me.user && (
+        {me.user ? (
           <>
-            <div className='route_bgc'></div>
+            <div className='route_bgc_user'></div>
+          </>
+        ) : (
+          <>
+            <div className='route_bgc_auth'></div>
           </>
         )}
         <div className='route_menu'>
-          {me.user && me.userSocket && (
+          {me.user && (
             <>
               <MenuMatcha />
-              <HomeNotification />
             </>
           )}
         </div>
         <div className='route_path'>
           <AppRoutes setMatchaNotif={setMatchaNotif} />
+        </div>
+        <div className='route_notification'>
+          <HomeNotification />
         </div>
       </div>
 

@@ -12,7 +12,6 @@ export const manageSocket = (io: Server) => {
     let username: string | null = null;
     let sendError: boolean = false;
 
-
     //Connection
     try {
       if (socket.handshake.query.id) id = Number(socket.handshake.query.id);
@@ -41,7 +40,7 @@ export const manageSocket = (io: Server) => {
     socket.on(socketRoute.disconnect, () => {
       const query = 'UPDATE User SET lastConnection = ? WHERE id = ?';
       const values = [new Date(), id];
-      mysql.updateUserMysqlData(query, values);
+      mysql.updateUserData(query, values);
       socketsMap.delete(id);
       socketsMap.forEach((value, key) => {
         value.emit(socketRoute.newDisconnect, id, username);
@@ -54,20 +53,29 @@ export const manageSocket = (io: Server) => {
       socket.emit(socketRoute.receptIsConnected, response ? true : false);
     });
 
-    socket.on(socketRoute.sendView, (senderUsername: string, receiverId: number) => {
-      const response: Socket | null = isSocketExist(receiverId);
-      if (response) response.emit(socketRoute.receptView, senderUsername);
-    });
+    socket.on(
+      socketRoute.sendView,
+      (senderUsername: string, receiverId: number) => {
+        const response: Socket | null = isSocketExist(receiverId);
+        if (response) response.emit(socketRoute.receptView, senderUsername);
+      },
+    );
 
-    socket.on(socketRoute.sendLike, (senderUsername: string, receiverId: number) => {
-      const response: Socket | null = isSocketExist(receiverId);
-      if (response) response.emit(socketRoute.receptLike, senderUsername);
-    });
+    socket.on(
+      socketRoute.sendLike,
+      (senderUsername: string, receiverId: number) => {
+        const response: Socket | null = isSocketExist(receiverId);
+        if (response) response.emit(socketRoute.receptLike, senderUsername);
+      },
+    );
 
-    socket.on(socketRoute.sendDislike, (senderUsername: string, receiverId: number) => {
-      const response: Socket | null = isSocketExist(receiverId);
-      if (response) response.emit(socketRoute.receptDislike, senderUsername);
-    });
+    socket.on(
+      socketRoute.sendDislike,
+      (senderUsername: string, receiverId: number) => {
+        const response: Socket | null = isSocketExist(receiverId);
+        if (response) response.emit(socketRoute.receptDislike, senderUsername);
+      },
+    );
 
     socket.on(socketRoute.sendBan, (receiverId: number) => {
       const response: Socket | null = isSocketExist(receiverId);

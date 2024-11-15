@@ -3,15 +3,18 @@ import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../appConfig/appPath';
 import { useUserInfo } from '../appContext/user.context';
+import { useSelectMenu } from '../appContext/selectMenu.context';
 
 type Props = {};
 
 const Error500: FC<Props> = ({}) => {
   const nav = useNavigate();
   const me = useUserInfo();
+  const menu = useSelectMenu();
   const [controlPage, setControlPage] = useState<boolean>(false);
 
   useEffect(() => {
+    menu.setAllMenuOff();
     Cookies.remove('matchaOn');
     Cookies.remove('session');
     me.deleteUserData();
@@ -53,7 +56,7 @@ const Error500: FC<Props> = ({}) => {
                 }}
                 className='error_button'
               >
-                Retour à l'accueil
+                Retour à la page d'accueil
               </div>
             </div>
           </>

@@ -13,12 +13,10 @@ export const findExistingUser = async (
       req.body.payloadToken.id,
     ]);
     if (!existingUser) {
-      res
-        .status(400)
-        .json({
-          message:
-            'Une erreur est survenue lors de la récupération de vos données.',
-        });
+      res.status(400).json({
+        message:
+          'Une erreur est survenue lors de la récupération de vos données.',
+      });
       return;
     }
     req.body.existingUser = existingUser;
@@ -28,16 +26,14 @@ export const findExistingUser = async (
   }
 };
 
-export const findUserTags = async (
+export const findTags = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const query = 'SELECT * FROM UserTags WHERE userId = ?';
+  const query = 'SELECT * FROM Tags WHERE userId = ?';
   try {
-    req.body.userTags = await mysqlReq.getUserTags(query, [
-      req.body.payloadToken.id,
-    ]);
+    req.body.tags = await mysqlReq.getTags(query, [req.body.payloadToken.id]);
     return next();
   } catch (error) {
     matchaError.catched(error as Error, res);
@@ -49,7 +45,7 @@ export const findChatStatUser = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const query = 'SELECT * FROM ChatHistory WHERE senderId = ?';
+  const query = 'SELECT * FROM ChatTable WHERE senderId = ?';
   try {
     req.body.statChat = await mysqlReq.getUserStatChat(query, [
       req.body.payloadToken.id,
@@ -89,7 +85,7 @@ export const searchRequestValidation = (
     tallMax > 120 ||
     tallMin > tallMax
   ) {
-    res.status(400).json({ message: "La taille est incorrect." });
+    res.status(400).json({ message: 'La taille est incorrect.' });
     return;
   }
   req.body.searchRequest = {

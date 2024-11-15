@@ -57,8 +57,8 @@ export async function convertListingMiniUser(
 ): Promise<MiniUserType[]> {
   let newListing: MiniUserType[] = [];
   for (let i = 0; i < listing.length; i++) {
-    const query = 'SELECT * FROM UserTags WHERE userId = ?';
-    const tags = await mysql.getUserTags(query, [listing[i].id]);
+    const query = 'SELECT * FROM Tags WHERE userId = ?';
+    const tags = await mysql.getTags(query, [listing[i].id]);
     newListing.push(convertMiniUserType(listing[i], tags));
   }
   return newListing;

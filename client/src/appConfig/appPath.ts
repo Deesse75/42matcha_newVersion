@@ -11,25 +11,27 @@ export const appRedir = {
   resend: '/renvoi_lien_validation',
   validateLinkEmail: '/validation_email',
   signout: '/deconnexion',
-  attribution: '/attribution',
-  contact: '/contact',
-  rules: '/regles_de_saisie',
-  legacy: '/mentions_legales',
-  getMe: '/chargement',
-  deleteProfile: '/suppression_profil',
-  profile: '/modification_profil',
-  account: '/modification_donnees_personnelles',
-  photo: '/modification_photos',
-  dashboard: '/accueil',
-  chat: '/chat',
-  search: '/recherche',
+  dashboard: '/tableau_de_bord',
+  account: '/mon_profil',
+  search: '/rechercher_des_profils',
+  chat: '/discussion_instantanee',
   history: '/historique_de_navigation',
+  contact: '/contact',
   errorInternal: '/erreur_interne',
-  errorServer: '/erreur_serveur',
   errorNotfound: '/page_introuvable',
-  listingMatcha: '/selection_matcha',
-  listing: '/liste_de_profils',
-  userProfile: '/profil_utilisateur',
+  getMe: '/chargement',
+  deleteAccount: '/suppression_du_compte',
+
+
+  
+  // attribution: '/attribution',
+  // photo: '/photos_de_profil',
+  // rules: '/regles_de_saisie',
+  // legacy: '/mentions_legales',
+  // errorServer: '/erreur_serveur',
+  // listingMatcha: '/selection_matcha',
+  // listing: '/liste_de_profils',
+  // userProfile: '/profil_utilisateur',
 };
 
 export const authRoute = {
@@ -45,42 +47,47 @@ export const authRoute = {
 
 export const userRoute = {
   getMe: `${PATH}/user/get_me`,
-  getUser: `${PATH}/user/get_user`,
-  updateName: `${PATH}/user/update_name`,
-  updateValideEmail: `${PATH}/user/update_valide_email`,
-  updatePassword: `${PATH}/user/update_password`,
-  updateEmail: `${PATH}/user/update_email`,
-  deletePhoto: `${PATH}/user/delete_photo`,
-  updatePhoto: `${PATH}/user/update_photo`,
+  getUserData: `${PATH}/user/get_user_data`,
+  getUserTags: `${PATH}/user/get_user_tags`,
+  updatePhotoProfile: `${PATH}/user/update_photo_profile`,
+  deletePhotoProfile: `${PATH}/user/delete_photo_profile`,
+  updateProfileData: `${PATH}/user/update_profile_data`,
+  updateFirstData: `${PATH}/user/update_first_data`,
+  updateLookFor: `${PATH}/user/update_look_for`,
+  addTags: `${PATH}/user/add_tags`,
+  deleteTag: `${PATH}/user/delete_tag`,
   deleteAccount: `${PATH}/user/delete_account`,
+
+  // getPhotos: `${PATH}/user/get_photos`,
+  // sendEmailNewPassword: `${PATH}/user/send_email_new_password`,
 };
 
-export const profileRoute = {
-  getDisplayProfile: `${PATH}/profile/get_display_profile`,
-  // getDisplayTags: `${PATH}/profile/get_display_tags`,
-  // getInteractions: `${PATH}/profile/get_interactions`,
-};
+// export const profileRoute = {
+//   getDisplayProfile: `${PATH}/profile/get_display_profile`,
+//   getDisplayTags: `${PATH}/profile/get_display_tags`,
+// };
 
 export const listingRoute = {
-  getListing: `${PATH}/listing/get_listing`,
   getAgeFilter: `${PATH}/listing/get_age_filter`,
-  getFameFilter: `${PATH}/listing/get_fame_filter`,
   getLocationFilter: `${PATH}/listing/get_location_filter`,
+  getFameFilter: `${PATH}/listing/get_fame_filter`,
   getTagsFilter: `${PATH}/listing/get_tags_filter`,
+  getListing: `${PATH}/listing/get_listing`,
 };
 
 export const searchRoute = {
-  searchUsername: `${PATH}/search/search_username`,
-  searchLocation: `${PATH}/search/search_location`,
-  searchTags: `${PATH}/search/search_tags`,
-  searchAdvance: `${PATH}/search/search_advance`,
-  searchAgeFilter: `${PATH}/search/search_age_filter`,
+  searchMulti: `${PATH}/search/search_multi`,
+  // searchUsername: `${PATH}/search/search_username`,
+  // searchLocation: `${PATH}/search/search_location`,
+  // searchTags: `${PATH}/search/search_tags`,
+  // searchAgeFilter: `${PATH}/search/search_age_filter`,
 };
 
 export const chatRoute = {
-  getChatStat: `${PATH}/chat/get_chat_stat`,
-  markMessageSeen: `${PATH}/chat/mark_message_seen`,
-  getUnseenMessage: `${PATH}/chat/get_unseen_message`,
+  getMicroMatchList: `${PATH}/chat/get_micro_match_list`,
+//   getChatStat: `${PATH}/chat/get_chat_stat`,
+//   markMessageSeen: `${PATH}/chat/mark_message_seen`,
+//   getUnseenMessage: `${PATH}/chat/get_unseen_message`,
 };
 
 export const socketRoute = {
@@ -103,4 +110,8 @@ export const socketRoute = {
 
 export const mailerRoute = {
   contactUs: `${PATH}/mailer/contactUs`,
+};
+
+export const actionRoute = {
+  getInteractions: `${PATH}/action/get_interactions`,
 };

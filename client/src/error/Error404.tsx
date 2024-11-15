@@ -1,13 +1,19 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../appConfig/appPath';
 import Cookie from 'js-cookie';
+import { useSelectMenu } from '../appContext/selectMenu.context';
 
 type Props = {
 };
 
 const Error404: FC<Props> = ({ }) => {
   const nav = useNavigate();
+  const menu = useSelectMenu();
+
+  useEffect(() => {
+    menu.setAllMenuOff();
+  }, []);
 
   return (
     <>
@@ -25,7 +31,7 @@ const Error404: FC<Props> = ({ }) => {
             }}
             className='error_button'
           >
-            Retourner à l'accueil'
+            Retour à la page d'accueil
           </div>
         </div>
       </div>

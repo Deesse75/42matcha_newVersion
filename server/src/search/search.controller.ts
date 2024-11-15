@@ -46,7 +46,7 @@ export const searchTags = async (
 ): Promise<void> => {
   try {
     const searchResult = await searchTagsService(
-      req.body.userTags,
+      req.body.tags,
       req.body.existingUser,
     );
     res.status(200).json({ searchResult: searchResult });

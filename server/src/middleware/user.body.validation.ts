@@ -1,36 +1,7 @@
 import Joi from "joi";
 import { Request, Response, NextFunction } from 'express';
 
-const getMeSchema = Joi.object({
-  region: Joi.string()
-    .empty()
-    .required()
-    .messages({
-      'string.base': 'La région est invalide',
-      'any.required': 'La région est requise',
-    }),
-  county: Joi.string()
-    .empty()
-    .required()
-    .messages({
-      'string.base': 'Le département est invalide',
-      'any.required': 'Le département est requis',
-    }),
-  town: Joi.string()
-    .empty()
-    .required()
-    .messages({
-      'string.base': 'La ville est invalide',
-      'any.required': 'La ville est requise',
-    }),
-})
-  .unknown(false)
-  .messages({
-    'objet.unknown': 'La requete est invalide.',
-  });
-
   const schemaMap: { [key: string]: Joi.ObjectSchema } = {
-    '/get_me': getMeSchema,
   };
 
   export const userBodyValidation = async (

@@ -5,10 +5,10 @@ import {
   MdOutlineDriveFileRenameOutline,
 } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import GeneratePassword from './GeneratePassword';
-import InputEye from './InputEye';
-import inputValidation from '../../utils/inputValidation';
 import AuthInputIsValid from './AuthInputIsValid';
+import GeneratePassword from '../../utils/GeneratePassword';
+import InputEye from '../../utils/InputEye';
+import inputValidation from '../../utils/inputValidation';
 
 export type ValideAuthInput = {
   firstname: boolean;
@@ -60,7 +60,7 @@ const AuthInputContainer: FC<Props> = ({
     if (!value) {
       setValideInput({ ...valideInput, [inputName]: false });
       return;
-    };
+    }
     if (!inputValidation(inputName, value.trim())) {
       setValideInput({ ...valideInput, [inputName]: false });
       setIsInvalid(true);

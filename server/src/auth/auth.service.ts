@@ -22,7 +22,6 @@ export const authSignup = async (
   email: string,
   password: string,
 ): Promise<void> => {
-  console.log("TEST")
   try {
     const hash = await argon.hashedData(password);
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
@@ -36,11 +35,12 @@ export const authSignup = async (
       email: email,
       emailCode: num,
       hashedPassword: hash,
+      fameRating: 100,
     });
     const query = 'SELECT * FROM User WHERE email = ?';
     const user = await mysql.getFullUserData(query, [email]);
     if (!user) {
-      throw new matchaError(500, 'Une erreur interne est survenue');
+      throw new matchaError(500, 'Une erreur est survenue lors de la création de votre profil. Merci de réessayer.');
     }
     await mailer.sendEmailTokenProcess(user.email, emailCode);
   } catch (error) {
@@ -51,6 +51,9 @@ export const authSignup = async (
 export const authSignin = async (
   existingUser: MysqlUserType,
   password: string,
+  region: string,
+  county: string,
+  town: string,
 ): Promise<string> => {
   try {
     const comparePassword = await argon.verifyData(
@@ -64,9 +67,15 @@ export const authSignin = async (
       existingUser.email,
       process.env.JWT_SECRET_TOKEN || '',
     );
-    const query =
-      'UPDATE User SET age = TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) WHERE id = ?';
-    await mysql.updateUserMysqlData(query, [existingUser.id]);
+    const query = `UPDATE User SET 
+        age = TIMESTAMPDIFF(YEAR, birthdate, CURDATE()), 
+        region = ?, 
+        county = ?, 
+        town = ?
+        WHERE id = ?
+      `;
+    const values = [region, county, town, existingUser.id];
+    await mysql.updateUserData(query, values);
     return token;
   } catch (error) {
     throw error;
@@ -81,12 +90,12 @@ export const authValidate = async (
   try {
     const compareCode = await argon.verifyData(code, existingUser.emailCode);
     query = 'UPDATE User SET emailCode = ? WHERE id = ?';
-    await mysql.updateUserMysqlData(query, ['', existingUser.id]);
+    await mysql.updateUserData(query, ['', existingUser.id]);
     if (!compareCode) {
       throw new matchaError(401, 'Token invalide, absent ou expiré.');
     }
     query = 'UPDATE User SET emailCertified = 1 WHERE id = ?';
-    await mysql.updateUserMysqlData(query, [existingUser.id]);
+    await mysql.updateUserData(query, [existingUser.id]);
   } catch (error) {
     throw error;
   }
@@ -99,7 +108,7 @@ export const authResendEmail = async (
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
     const emailCode = await argon.hashedData(num);
     const query = 'UPDATE User SET emailCode = ? WHERE id = ?';
-    await mysql.updateUserMysqlData(query, [num, existingUser.id]);
+    await mysql.updateUserData(query, [num, existingUser.id]);
     mailer.sendEmailTokenProcess(existingUser.email, emailCode);
   } catch (error) {
     throw error;
@@ -112,7 +121,7 @@ export const authForgotPassword = async (
   try {
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
     const query = 'UPDATE User SET emailCode = ? WHERE id = ?';
-    await mysql.updateUserMysqlData(query, [num, existingUser.id]);
+    await mysql.updateUserData(query, [num, existingUser.id]);
     mailer.sendEmailPasswordProcess(existingUser.email, num);
   } catch (error) {
     throw error;
@@ -128,12 +137,12 @@ export const authReinitPassword = async (
   try {
     const copyCode = existingUser.emailCode;
     query = 'UPDATE User SET emailCode = ? WHERE id = ?';
-    await mysql.updateUserMysqlData(query, ['', existingUser.id]);
+    await mysql.updateUserData(query, ['', existingUser.id]);
     if (code !== copyCode)
       throw new matchaError(401, 'Le code ne correspond pas.');
     const hashedPassword = await argon.hashedData(newPassword);
     query = 'UPDATE User SET hashedPassword = ? WHERE id = ?';
-    await mysql.updateUserMysqlData(query, [hashedPassword, existingUser.id]);
+    await mysql.updateUserData(query, [hashedPassword, existingUser.id]);
   } catch (error) {
     throw error;
   }

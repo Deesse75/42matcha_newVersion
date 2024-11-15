@@ -10,10 +10,7 @@ export const getMe = async (
   try {
     const user = await userGetMe(
       req.body.existingUser,
-      req.body.userTags,
-      req.body.region,
-      req.body.county,
-      req.body.town,
+      req.body.tags,
     );
     res.status(200).json({ user: user });
     return;

@@ -6,4 +6,5 @@ export type CreateNewUserType = {
   email: string;
   emailCode: string;
   hashedPassword: string;
+  fameRating: number;
 };

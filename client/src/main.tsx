@@ -3,14 +3,17 @@ import App from './App';
 import './styles/index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import UserProvider from './appContext/user.context.tsx';
-import MenuOnOffProvider from './appContext/menuOnOff.context.tsx';
+import SelectMenuProvider from './appContext/selectMenu.context.tsx';
+import MemoryProvider from './appContext/memory.context.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <UserProvider>
-      <MenuOnOffProvider>
+    <SelectMenuProvider>
+      <MemoryProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </MenuOnOffProvider>
+      </MemoryProvider>
+    </SelectMenuProvider>
   </UserProvider>,
 );

@@ -26,6 +26,18 @@ const signinUsernameSchema = Joi.object({
         'Le format du mot de passe est invalide. Voir les règles de saisie',
       'any.required': 'Le mot de passe est requis.',
     }),
+  region: Joi.string().empty().required().messages({
+    'string.base': 'La région est invalide',
+    'any.required': 'La région est requise',
+  }),
+  county: Joi.string().empty().required().messages({
+    'string.base': 'Le département est invalide',
+    'any.required': 'Le département est requis',
+  }),
+  town: Joi.string().empty().required().messages({
+    'string.base': 'La ville est invalide',
+    'any.required': 'La ville est requise',
+  }),
 })
   .unknown(false)
   .messages({
@@ -61,6 +73,18 @@ const signinEmailSchema = Joi.object({
         'Le format du mot de passe est invalide. Voir les règles de saisie',
       'any.required': 'Le mot de passe est requis.',
     }),
+  region: Joi.string().empty().required().messages({
+    'string.base': 'La région est invalide',
+    'any.required': 'La région est requise',
+  }),
+  county: Joi.string().empty().required().messages({
+    'string.base': 'Le département est invalide',
+    'any.required': 'Le département est requis',
+  }),
+  town: Joi.string().empty().required().messages({
+    'string.base': 'La ville est invalide',
+    'any.required': 'La ville est requise',
+  }),
 })
   .unknown(false)
   .messages({

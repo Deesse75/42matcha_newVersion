@@ -17,14 +17,7 @@ export type MysqlUserType = {
   tall: number;
   biography: string | null;
   fameRating: number;
-  photo1: Buffer | null;
-  photo2: Buffer | null;
-  photo3: Buffer | null;
-  photo4: Buffer | null;
-  photo5: Buffer | null;
-  ageMin: number;
-  ageMax: number;
-  genderLookFor: string | null;
+  photo: Buffer | null;
   lastConnection: string | null;
   createdAt: string;
   updatedAt: string;
@@ -40,8 +33,17 @@ export type MysqlMiniUserType = {
   county: string | null;
   town: string | null;
   fameRating: number;
-  photo1: Buffer | null;
+  photo: Buffer | null;
   lastConnection: string | null;
+};
+
+export type MysqlPhotosType = {
+  id: number;
+  userId: number;
+  photo2: Buffer | null;
+  photo3: Buffer | null;
+  photo4: Buffer | null;
+  photo5: Buffer | null;
 };
 
 export type MysqlUserTagsType = {
@@ -50,12 +52,44 @@ export type MysqlUserTagsType = {
   tagName: string;
 };
 
+export type MysqlLookForType = {
+  id: number;
+  userId: number;
+  ageMin: number;
+  ageMax: number;
+  tallMin: number;
+  tallMax: number;
+  gender: string | null;
+  withPhoto: boolean;
+};
+
+export type MysqlLastSearchType = {
+  id: number;
+  userId: number;
+  ageMin: number;
+  ageMax: number;
+  tallMin: number;
+  tallMax: number;
+  gender: string | null;
+  orientation: string | null;
+  withPhoto: boolean;
+  withBio: boolean;
+  fameRatingMin: number;
+};
+
 export type MysqlUserChatType = {
   id: number;
   senderId: number;
   receiverId: number;
   message: string;
   readed: boolean;
+  createdAt: string;
+};
+
+export type MysqlNotifType = {
+  id: number;
+  userId: number;
+  message: string;
   createdAt: string;
 };
 

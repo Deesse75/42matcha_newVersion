@@ -52,7 +52,13 @@ export const signinUsername = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const token = await authSignin(req.body.existingUser, req.body.password);
+    const token = await authSignin(
+      req.body.existingUser,
+      req.body.password,
+      req.body.region,
+      req.body.county,
+      req.body.town,
+    );
     res.status(200).json({
       token: token,
     });
@@ -67,7 +73,13 @@ export const signinEmail = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const token = await authSignin(req.body.existingUser, req.body.password);
+    const token = await authSignin(
+      req.body.existingUser,
+      req.body.password,
+      req.body.region,
+      req.body.county,
+      req.body.town,
+    );
     res.status(200).json({
       token: token,
     });

@@ -8,21 +8,14 @@ import * as mysql from '../mysql/mysql.service.js';
 
 export const userGetMe = async (
   existingUser: MysqlUserType,
-  existingUserTags: MysqlUserTagsType[] | null,
-  region: string,
-  county: string,
-  town: string,
+  tags: MysqlUserTagsType[] | null,
 ): Promise<UserType> => {
   try {
-    let query = 'UPDATE User SET region = ?, county = ?, town = ? WHERE id = ?';
-    let values = [region, county, town, existingUser.id];
-    await mysql.updateUserMysqlData(query, values);
-
-    query = 'SELECT * FROM User WHERE id = ?';
-    values = [existingUser.id];
+    const query = 'SELECT * FROM User WHERE id = ?';
+    const values = [existingUser.id];
     const user = await mysql.getFullUserData(query, values);
     if (!user) throw new Error('Utilisateur inconnu');
-    return convertFullUserType(user, existingUserTags);
+    return convertFullUserType(user, tags);
   } catch (error) {
     throw error;
   }

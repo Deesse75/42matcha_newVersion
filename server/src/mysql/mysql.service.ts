@@ -20,7 +20,7 @@ export async function createNewUser(newUser: CreateNewUserType): Promise<void> {
   }
 }
 
-export async function updateUserMysqlData(
+export async function updateUserData(
   query: string,
   values: any[],
 ): Promise<void> {
@@ -36,7 +36,7 @@ export async function getFullUserData(
   values: any[],
 ): Promise<MysqlUserType | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows[0];
   } catch (error) {
@@ -49,7 +49,7 @@ export async function getMiniUserData(
   values: any[],
 ): Promise<MysqlMiniUserType | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows[0];
   } catch (error) {
@@ -62,7 +62,7 @@ export async function getUsername(
   values: any[],
 ): Promise<string | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows[0].username;
   } catch (error) {
@@ -70,12 +70,12 @@ export async function getUsername(
   }
 }
 
-export async function getUserTags(
+export async function getTags(
   query: string,
   values: any[],
 ): Promise<MysqlUserTagsType[] | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
@@ -88,7 +88,7 @@ export async function getListing(
   values: any[],
 ): Promise<MysqlMiniUserType[] | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
@@ -99,9 +99,9 @@ export async function getListing(
 export async function getUnseenMess(
   query: string,
   values: any[],
-): Promise<{id: number, senderId: number, message: string}[] | null> {
+): Promise<{ id: number; senderId: number; message: string }[] | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
@@ -114,7 +114,7 @@ export async function getCommonTags(
   values: any[],
 ): Promise<number[] | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
