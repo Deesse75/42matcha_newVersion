@@ -38,11 +38,14 @@ export const authSignup = async (
       fameRating: 100,
     });
     const query = 'SELECT * FROM User WHERE email = ?';
-    const user = await mysql.getFullUserData(query, [email]);
+    const user = await mysql.getUser(query, [email]);
     if (!user) {
-      throw new matchaError(500, 'Une erreur est survenue lors de la création de votre profil. Merci de réessayer.');
+      throw new matchaError(
+        500,
+        'Une erreur est survenue lors de la création de votre profil. Merci de réessayer.',
+      );
     }
-    await mailer.sendEmailTokenProcess(user.email, emailCode);
+    await mailer.sendEmailAuthTokenProcess(user.email, emailCode);
   } catch (error) {
     throw error;
   }
@@ -75,7 +78,7 @@ export const authSignin = async (
         WHERE id = ?
       `;
     const values = [region, county, town, existingUser.id];
-    await mysql.updateUserData(query, values);
+    await mysql.updateTable(query, values);
     return token;
   } catch (error) {
     throw error;
@@ -90,12 +93,12 @@ export const authValidate = async (
   try {
     const compareCode = await argon.verifyData(code, existingUser.emailCode);
     query = 'UPDATE User SET emailCode = ? WHERE id = ?';
-    await mysql.updateUserData(query, ['', existingUser.id]);
+    await mysql.updateTable(query, ['', existingUser.id]);
     if (!compareCode) {
       throw new matchaError(401, 'Token invalide, absent ou expiré.');
     }
     query = 'UPDATE User SET emailCertified = 1 WHERE id = ?';
-    await mysql.updateUserData(query, [existingUser.id]);
+    await mysql.updateTable(query, [existingUser.id]);
   } catch (error) {
     throw error;
   }
@@ -108,8 +111,8 @@ export const authResendEmail = async (
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
     const emailCode = await argon.hashedData(num);
     const query = 'UPDATE User SET emailCode = ? WHERE id = ?';
-    await mysql.updateUserData(query, [num, existingUser.id]);
-    mailer.sendEmailTokenProcess(existingUser.email, emailCode);
+    await mysql.updateTable(query, [num, existingUser.id]);
+    mailer.sendEmailAuthTokenProcess(existingUser.email, emailCode);
   } catch (error) {
     throw error;
   }
@@ -121,8 +124,8 @@ export const authForgotPassword = async (
   try {
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
     const query = 'UPDATE User SET emailCode = ? WHERE id = ?';
-    await mysql.updateUserData(query, [num, existingUser.id]);
-    mailer.sendEmailPasswordProcess(existingUser.email, num);
+    await mysql.updateTable(query, [num, existingUser.id]);
+    mailer.sendEmailForgotPasswordProcess(existingUser.email, num);
   } catch (error) {
     throw error;
   }
@@ -137,12 +140,12 @@ export const authReinitPassword = async (
   try {
     const copyCode = existingUser.emailCode;
     query = 'UPDATE User SET emailCode = ? WHERE id = ?';
-    await mysql.updateUserData(query, ['', existingUser.id]);
+    await mysql.updateTable(query, ['', existingUser.id]);
     if (code !== copyCode)
       throw new matchaError(401, 'Le code ne correspond pas.');
     const hashedPassword = await argon.hashedData(newPassword);
     query = 'UPDATE User SET hashedPassword = ? WHERE id = ?';
-    await mysql.updateUserData(query, [hashedPassword, existingUser.id]);
+    await mysql.updateTable(query, [hashedPassword, existingUser.id]);
   } catch (error) {
     throw error;
   }
@@ -163,4 +166,3 @@ export const authContactUs = (
     throw error;
   }
 };
-

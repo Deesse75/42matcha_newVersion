@@ -40,7 +40,7 @@ export const sendNewEmail = (
   }
 };
 
-export const sendEmailTokenProcess = async (
+export const sendEmailAuthTokenProcess = async (
   email: string,
   emailCode: string,
 ): Promise<void> => {
@@ -50,28 +50,46 @@ export const sendEmailTokenProcess = async (
       email,
       process.env.JWT_SECRET_MAIL || '',
     );
-    // sendNewEmail(
-    //   email,
-    //   'Validation de votre adresse email',
-    //   temp.validateSignupEmail(token),
-    // );
-    console.log(temp.validateSignupEmail(token));
+    sendNewEmail(
+      email,
+      'Validation de votre adresse email',
+      temp.validateSignupEmail(token),
+    );
   } catch (error) {
     throw error;
   }
 };
 
-export const sendEmailPasswordProcess = async (
+export const sendEmailUserTokenProcess = async (
   email: string,
   emailCode: string,
 ): Promise<void> => {
   try {
-    // sendNewEmail(
-    //   email,
-    //   'Réinitialisation de votre mot de passe',
-    //   temp.sendPasswordCode(emailCode),
-    // );
-    console.log(temp.sendPasswordCode(emailCode));
+    const token = jwt.createEmailToken(
+      emailCode,
+      email,
+      process.env.JWT_SECRET_MAIL || '',
+    );
+    sendNewEmail(
+      email,
+      'Validation de votre adresse email',
+      temp.validateNewEmail(token),
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendEmailForgotPasswordProcess = async (
+  email: string,
+  num: string,
+): Promise<void> => {
+  try {
+    sendNewEmail(
+      email,
+      'Réinitialisation de votre mot de passe',
+      temp.sendForgotPasswordCode(num),
+    );
   } catch (error) {
     throw error;
   }

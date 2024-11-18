@@ -1,11 +1,11 @@
 import {
   UserFrontType,
-  MiniProfileFrontType,
+  ProfileFrontType,
   UserTagsFrontType,
 } from '../appConfig/interface';
 
 export function calculateDistance(
-  profile: MiniProfileFrontType,
+  profile: ProfileFrontType,
   user: UserFrontType | null,
 ): number {
   if (!user) return 0;
@@ -16,7 +16,7 @@ export function calculateDistance(
 }
 
 export function communTags(
-  profile: MiniProfileFrontType,
+  profile: ProfileFrontType,
   tags: UserTagsFrontType[] | null,
 ): number {
   if (!tags || !profile.tags) return 0;

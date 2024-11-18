@@ -6,10 +6,10 @@ import Cookies from 'js-cookie';
 import { useSelectMenu } from '../../appContext/selectMenu.context';
 import DisplayPhotoProfile from './components/DisplayPhotoProfile';
 import UpdatePhotoProfile from './components/UpdatePhotoProfile';
-import UpdateFirstData from './components/UpdateFirstData';
 import UpdateTags from './components/UpdateTags';
 import UpdateProfileData from './components/UpdateProfileData';
 import UpdateLookFor from './components/UpdateLookFor';
+import UpdateUserData from './components/UpdateUserData';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -19,7 +19,7 @@ const AccountPage: FC<Props> = ({ setMatchaNotif }) => {
   const me = useUserInfo();
   const nav = useNavigate();
   const menu = useSelectMenu();
-  const [reloadAccount, setReloadAccount] = useState<boolean>(false);
+  const [reloadAccount, setReloadAccount] = useState<string |null>(null);
 
   useEffect(() => {
     if (!Cookies.get('matchaOn')) {
@@ -36,7 +36,7 @@ const AccountPage: FC<Props> = ({ setMatchaNotif }) => {
   }, []);
 
   useEffect(() => {
-    if (!reloadAccount) return;
+    if (reloadAccount !== 'userData') return;
     let isMounted = true;
     const request = async () => {
       try {
@@ -59,19 +59,138 @@ const AccountPage: FC<Props> = ({ setMatchaNotif }) => {
           nav(appRedir.errorInternal);
           return;
         }
-        setReloadAccount(false);
+        setReloadAccount(null);
         if (response.status !== 200) {
           setMatchaNotif(data.message);
           return;
         }
         me.setUser(data.user);
-        if (data.token) {
-          Cookies.set('session', data.token, {
-            expires: undefined,
-            sameSite: 'None',
-            secure: true,
-          });
+      } catch (error) {
+        if (!isMounted) return;
+        setMatchaNotif((error as Error).message);
+        nav(appRedir.errorInternal);
+      }
+    };
+    request();
+    return () => {
+      isMounted = false;
+    };
+  }, [reloadAccount]);
+
+  useEffect(() => {
+    if (reloadAccount !== 'userTags') return;
+    let isMounted = true;
+    const request = async () => {
+      try {
+        const response = await fetch(userRoute.getUserTags, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('session')}`,
+          },
+        });
+        const data = await response.json();
+        if (!isMounted) return;
+        if (data.message && data.message.split(' ')[0] === 'Token') {
+          setMatchaNotif(data.message);
+          nav(appRedir.signout);
+          return;
         }
+        if (response.status === 500) {
+          setMatchaNotif(data.message);
+          nav(appRedir.errorInternal);
+          return;
+        }
+        setReloadAccount(null);
+        if (response.status !== 200) {
+          setMatchaNotif(data.message);
+          return;
+        }
+        me.setUserTags(data.userTags);
+      } catch (error) {
+        if (!isMounted) return;
+        setMatchaNotif((error as Error).message);
+        nav(appRedir.errorInternal);
+      }
+    };
+    request();
+    return () => {
+      isMounted = false;
+    };
+  }, [reloadAccount]);
+
+  useEffect(() => {
+    if (reloadAccount !== 'userLookFor') return;
+    let isMounted = true;
+    const request = async () => {
+      try {
+        const response = await fetch(userRoute.getUserLookFor, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('session')}`,
+          },
+        });
+        const data = await response.json();
+        if (!isMounted) return;
+        if (data.message && data.message.split(' ')[0] === 'Token') {
+          setMatchaNotif(data.message);
+          nav(appRedir.signout);
+          return;
+        }
+        if (response.status === 500) {
+          setMatchaNotif(data.message);
+          nav(appRedir.errorInternal);
+          return;
+        }
+        setReloadAccount(null);
+        if (response.status !== 200) {
+          setMatchaNotif(data.message);
+          return;
+        }
+        me.setUserLookFor(data.userLookFor);
+      } catch (error) {
+        if (!isMounted) return;
+        setMatchaNotif((error as Error).message);
+        nav(appRedir.errorInternal);
+      }
+    };
+    request();
+    return () => {
+      isMounted = false;
+    };
+  }, [reloadAccount]);
+
+  useEffect(() => {
+    if (reloadAccount !== 'photosPlus') return;
+    let isMounted = true;
+    const request = async () => {
+      try {
+        const response = await fetch(userRoute.getUserPhotosPlus, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('session')}`,
+          },
+        });
+        const data = await response.json();
+        if (!isMounted) return;
+        if (data.message && data.message.split(' ')[0] === 'Token') {
+          setMatchaNotif(data.message);
+          nav(appRedir.signout);
+          return;
+        }
+        if (response.status === 500) {
+          setMatchaNotif(data.message);
+          nav(appRedir.errorInternal);
+          return;
+        }
+        setReloadAccount(null);
+        if (response.status !== 200) {
+          setMatchaNotif(data.message);
+          return;
+        }
+        me.setUserPhotosPlus(data.userPhotosPlus);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -97,13 +216,16 @@ const AccountPage: FC<Props> = ({ setMatchaNotif }) => {
               />
             </div>
             <div className='account_data'>
-              <UpdateFirstData
+              <UpdateUserData
                 setMatchaNotif={setMatchaNotif}
                 setReloadAccount={setReloadAccount}
               />
             </div>
             <div className='account_tags'>
-              <UpdateTags setMatchaNotif={setMatchaNotif} />
+              <UpdateTags
+                setMatchaNotif={setMatchaNotif}
+                setReloadAccount={setReloadAccount}
+              />
             </div>
           </div>
           <div className='account_top_section'>
@@ -114,7 +236,10 @@ const AccountPage: FC<Props> = ({ setMatchaNotif }) => {
               />
             </div>
             <div className='account_lookFor'>
-              <UpdateLookFor setMatchaNotif={setMatchaNotif} />
+              <UpdateLookFor
+                setMatchaNotif={setMatchaNotif}
+                setReloadAccount={setReloadAccount}
+              />
             </div>
           </div>
         </div>

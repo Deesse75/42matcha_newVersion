@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { MiniProfileFrontType } from '../../appConfig/interface';
+import { ProfileFrontType } from '../../appConfig/interface';
 import DisplayConnection from './DisplayConnection';
 import DisplayInteraction from './DisplayInteraction';
 import DisplayFameRating from './DisplayFameRating';
@@ -8,7 +8,7 @@ import DisplayTags from './DisplayTags';
 
 type Props = {
   key: number;
-  profile: MiniProfileFrontType;
+  profile: ProfileFrontType;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 

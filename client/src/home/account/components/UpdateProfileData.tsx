@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  setReloadAccount: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadAccount: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
@@ -15,7 +15,7 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
   const [bodyRequest, setBodyRequest] = useState<{
     gender: string | null;
     orientation: string | null;
-    tall: number;
+    tall: number | null;
     biography: string | null;
   } | null>(null);
 
@@ -28,18 +28,26 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
     if (
       (!gender || gender === '---') &&
       (!orientation || orientation === '---') &&
-      (!tall || !parseInt(tall)) &&
-      !biography
+      !tall &&
+      biography === me?.user?.biography
     ) {
       setMatchaNotif('Aucune donnée à modifier.');
+      return;
+    }
+    if (tall && parseInt(tall) < 0) {
+      setMatchaNotif('La taille ne peut pas être négative.');
+      return;
+    }
+    if (tall && parseInt(tall) > 250) {
+      setMatchaNotif('La taille ne peut depasser 250.');
       return;
     }
     setBodyRequest({
       gender: gender !== '---' ? gender : null,
       orientation: orientation !== '---' ? orientation : null,
-      tall: tall ? parseInt(tall) : 0,
-      biography: biography ? biography : null,
-    })
+      tall: tall ? parseInt(tall) : null,
+      biography: biography === me?.user?.biography ? null : biography,
+    });
   };
 
   useEffect(() => {
@@ -72,7 +80,7 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
           setMatchaNotif(data.message);
           return;
         }
-        setReloadAccount(true);
+        setReloadAccount('userData');
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -107,6 +115,7 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
                 <option value='Homme transgenre'>Homme transgenre</option>
                 <option value='Pangenre'>Pangenre</option>
                 <option value='Autre'>Autre</option>
+                <option value='delete'>Supprimer la valeur actuelle</option>
               </select>
             </div>
           </div>
@@ -114,7 +123,7 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
           <div className='profile_form_block'>
             <div className='profile_form_name'>Orientation sexuelle</div>
             <div className='profile_form_currentValue'>
-              value={me.user && me.user.orientation ? me.user.orientation : '-'}
+              {me.user && me.user.orientation ? me.user.orientation : '-'}
             </div>
             <div className='profile_form_newValue'>
               <select name='newOrientation' id='newOrientation'>
@@ -131,6 +140,7 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
                 <option value='Skoliosexuel'>Skoliosexuel(le)</option>
                 <option value='Graysexuel'>Graysexuel(le)</option>
                 <option value='Autre'>Autre</option>
+                <option value='delete'>Supprimer la valeur actuelle</option>
               </select>
             </div>
           </div>
@@ -138,14 +148,14 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
           <div className='profile_form_block'>
             <div className='profile_form_name'>Taille</div>
             <div className='profile_form_currentValue'>
-              value={me.user && me.user.tall ? `${me.user.tall} cm` : '-'}
+              {me.user && me.user.tall ? `${me.user.tall} cm` : '-'}
             </div>
             <div className='profile_form_newValue'>
               <input
                 type='number'
                 name='newTall'
                 id='newTall'
-                min={50}
+                min={0}
                 max={250}
                 autoComplete='number'
               />
@@ -155,7 +165,7 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
           <div className='profile_form_block'>
             <div className='profile_form_name'>Annonce</div>
             <div className='profile_form_currentValue'>
-              value={me.user && me.user.biography ? me.user.biography : '-'}
+              {me.user && me.user.biography ? me.user.biography : '-'}
             </div>
             <div className='profile_form_newValue'>
               <textarea
@@ -163,6 +173,7 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
                 id='newBiography'
                 placeholder='Nouvelle annonce'
                 maxLength={450}
+                defaultValue={me.user && me.user.biography ? me.user.biography : ''}
               ></textarea>
             </div>
           </div>

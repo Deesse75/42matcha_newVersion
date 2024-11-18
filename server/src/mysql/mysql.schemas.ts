@@ -27,8 +27,8 @@ export const userSchema = `
   );
 `;
 
-export const photosSchema = `
-  CREATE TABLE IF NOT EXISTS Photos (
+export const photosPlusSchema = `
+  CREATE TABLE IF NOT EXISTS PhotosPlus (
     id INT AUTO_INCREMENT PRIMARY KEY,
     userId INT NOT NULL,
     photo2 LONGBLOB NOT NULL,
@@ -52,7 +52,7 @@ export const tagsSchema = `
 export const lookForSchema = `
   CREATE TABLE IF NOT EXISTS LookFor (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userId INT NOT NULL,
+    userId INT NOT NULL UNIQUE,
     ageMin INT DEFAULT 18,
     ageMax INT DEFAULT 120,
     tallMin INT DEFAULT 50,

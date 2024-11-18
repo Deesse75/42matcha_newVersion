@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import {
   findExistingUser,
+  findLookFor,
+  findPhotosPlus,
   findTags,
 } from '../middleware/user.data.validation.js';
-import { userTokenValidation } from '../middleware/userToken.validation.js';
-import { getMe } from './user.controller.js';
+import { urlTokenValidation, userTokenValidation } from '../middleware/userToken.validation.js';
+import { addTag, deleteAccount, deletePhotoProfile, deleteTag, getMe, getNewToken, getUserData, getUserLookFor, getUserPhotosPlus, getUserTags, updateEmail, updateLookFor, updatePassword, updatePhotoPlus, updatePhotoProfile, updateProfileData, updateUserData, validateUpdateEmail } from './user.controller.js';
 import { userBodyValidation } from '../middleware/user.body.validation.js';
 
 const userRoute = Router();
@@ -14,86 +16,133 @@ userRoute.get(
   userTokenValidation,
   findExistingUser,
   findTags,
+  findLookFor,
   getMe,
 );
 
 userRoute.get(
-  '/get_account_data',
+  '/get_user_data',
   userTokenValidation,
   findExistingUser,
-  getAccountData,
+  getUserData,
+);
+
+userRoute.get(
+  '/get_user_tags',
+  userTokenValidation,
+  findExistingUser,
+  findTags,
+  getUserTags,
+);
+
+userRoute.get(
+  '/get_user_look_for',
+  userTokenValidation,
+  findExistingUser,
+  findLookFor,
+  getUserLookFor,
+);
+
+userRoute.get(
+  '/get_user_photos_plus',
+  userTokenValidation,
+  findExistingUser,
+  findPhotosPlus,
+  getUserPhotosPlus,
 );
 
 userRoute.post(
-  '/update_name',
-  userTokenValidation,
+  '/update_user_data',
   userBodyValidation,
+  userTokenValidation,
   findExistingUser,
-  updateName,
+  updateUserData,
 );
 
-userRoute.post(
-  '/update_valide_email',
-  userTokenValidation,
+userRoute.post('/update_password',
   userBodyValidation,
-  findExistingUser,
-  updateValideEmail,
-);
-
-userRoute.post(
-  '/send_email_new_password',
   userTokenValidation,
-  findExistingUser,
-  sendEmailNewPassword,
-);
-
-userRoute.post(
-  '/update_password',
-  userTokenValidation,
-  userBodyValidation,
   findExistingUser,
   updatePassword,
 );
 
-userRoute.post(
-  '/update_email',
-  userTokenValidation,
+userRoute.post('/update_email',
   userBodyValidation,
+  userTokenValidation,
   findExistingUser,
   updateEmail,
 );
 
-userRoute.post(
-  '/update_birthdate',
-  userTokenValidation,
+userRoute.post('/validate_link_new_email',
   userBodyValidation,
+  urlTokenValidation,
   findExistingUser,
-  updateBirthdate,
+  validateUpdateEmail,
 );
 
+userRoute.get('/get_new_token:id', getNewToken);
+
 userRoute.post(
-  '/update_photo',
-  userTokenValidation,
+  '/add_tag',
   userBodyValidation,
+  userTokenValidation,
   findExistingUser,
-  updatePhoto,
+  findTags,
+  addTag,
 );
 
 userRoute.delete(
-  '/delete_photo',
+  '/delete_tag:id',
   userTokenValidation,
-  userBodyValidation,
   findExistingUser,
-  deletePhoto,
+  deleteTag,
+);
+
+userRoute.post(
+  '/update_profile_data',
+  userBodyValidation,
+  userTokenValidation,
+  findExistingUser,
+  updateProfileData,
+);
+
+userRoute.post(
+  '/update_look_for',
+  userBodyValidation,
+  userTokenValidation,
+  findExistingUser,
+  findLookFor,
+  updateLookFor,
+);
+
+userRoute.post(
+  '/update_photo_profile',
+  userBodyValidation,
+  userTokenValidation,
+  findExistingUser,
+  updatePhotoProfile,
+);
+
+userRoute.post(
+  '/update_photo_plus',
+  userBodyValidation,
+  userTokenValidation,
+  findExistingUser,
+  updatePhotoPlus,
+);
+
+userRoute.delete(
+  '/delete_photo_profile',
+  userTokenValidation,
+  findExistingUser,
+  deletePhotoProfile,
 );
 
 userRoute.delete(
   '/delete_account',
   userTokenValidation,
-  userBodyValidation,
   findExistingUser,
   deleteAccount,
 );
 
 export default userRoute;
-

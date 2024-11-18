@@ -5,13 +5,7 @@ const signinUsernameSchema = Joi.object({
   username: Joi.string()
     .empty()
     .pattern(new RegExp('^[a-zA-Z][a-zA-Z0-9_@]{2,29}$'))
-    .required()
-    .messages({
-      'string.empty': "Le nom d'utilisateur ne doit pas être vide",
-      'string.pattern.base':
-        "Le format du nom d'utilisateur est invalide. Voir les règles de saisie",
-      'any.required': "Le nom d'utilisateur est requis.",
-    }),
+    .required(),
   password: Joi.string()
     .empty()
     .pattern(
@@ -19,25 +13,10 @@ const signinUsernameSchema = Joi.object({
         '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!?@])[a-zA-Z0-9!?@]{8,30}$',
       ),
     )
-    .required()
-    .messages({
-      'string.empty': 'Le mot de passe ne doit pas être vide',
-      'string.pattern.base':
-        'Le format du mot de passe est invalide. Voir les règles de saisie',
-      'any.required': 'Le mot de passe est requis.',
-    }),
-  region: Joi.string().empty().required().messages({
-    'string.base': 'La région est invalide',
-    'any.required': 'La région est requise',
-  }),
-  county: Joi.string().empty().required().messages({
-    'string.base': 'Le département est invalide',
-    'any.required': 'Le département est requis',
-  }),
-  town: Joi.string().empty().required().messages({
-    'string.base': 'La ville est invalide',
-    'any.required': 'La ville est requise',
-  }),
+    .required(),
+  region: Joi.string().empty().required(),
+  county: Joi.string().empty().required(),
+  town: Joi.string().empty().required(),
 })
   .unknown(false)
   .messages({
@@ -52,13 +31,7 @@ const signinEmailSchema = Joi.object({
       tlds: { allow: ['com', 'fr'] },
     })
     .empty()
-    .required()
-    .messages({
-      'string.email':
-        "Le format de l'adresse email est invalide. Voir les règles de saisie",
-      'string.empty': "L'adresse email ne doit pas être vide",
-      'any.required': "L'adresse email est requise.",
-    }),
+    .required(),
   password: Joi.string()
     .empty()
     .pattern(
@@ -66,25 +39,10 @@ const signinEmailSchema = Joi.object({
         '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!?@])[a-zA-Z0-9!?@]{8,30}$',
       ),
     )
-    .required()
-    .messages({
-      'string.empty': 'Le mot de passe ne doit pas être vide',
-      'string.pattern.base':
-        'Le format du mot de passe est invalide. Voir les règles de saisie',
-      'any.required': 'Le mot de passe est requis.',
-    }),
-  region: Joi.string().empty().required().messages({
-    'string.base': 'La région est invalide',
-    'any.required': 'La région est requise',
-  }),
-  county: Joi.string().empty().required().messages({
-    'string.base': 'Le département est invalide',
-    'any.required': 'Le département est requis',
-  }),
-  town: Joi.string().empty().required().messages({
-    'string.base': 'La ville est invalide',
-    'any.required': 'La ville est requise',
-  }),
+    .required(),
+  region: Joi.string().empty().required(),
+  county: Joi.string().empty().required(),
+  town: Joi.string().empty().required(),
 })
   .unknown(false)
   .messages({
@@ -95,38 +53,16 @@ const signupSchema = Joi.object({
   firstname: Joi.string()
     .empty()
     .pattern(new RegExp("^[a-zA-Z][a-zA-Z- ']{2,29}$"))
-    .required()
-    .messages({
-      'string.empty': 'Le prénom ne doit pas être vide',
-      'string.pattern.base':
-        'Le format du prénom est invalide. Voir les règles de saisie',
-      'any.required': 'Le prénom est requis.',
-    }),
+    .required(),
   lastname: Joi.string()
     .empty()
     .pattern(new RegExp("^[a-zA-Z][a-zA-Z- ']{2,29}$"))
-    .required()
-    .messages({
-      'string.empty': 'Le nom ne doit pas être vide',
-      'string.pattern.base':
-        'Le format du nom est invalide. Voir les règles de saisie',
-      'any.required': 'Le nom est requis.',
-    }),
+    .required(),
   username: Joi.string()
     .empty()
     .pattern(new RegExp('^[a-zA-Z][a-zA-Z0-9_@]{2,29}$'))
-    .required()
-    .messages({
-      'string.empty': "Le nom d'utilisateur ne doit pas être vide",
-      'string.pattern.base':
-        "Le format du nom d'utilisateur est invalide. Voir les règles de saisie",
-      'any.required': "Le nom d'utilisateur est requis.",
-    }),
-  birthdate: Joi.string().isoDate().empty().required().messages({
-    'string.isoDate': 'Le format de la date de naissance est invalide.',
-    'date.empty': 'La date de naissance ne doit pas être vide',
-    'any.required': 'La date de naissance est requise.',
-  }),
+    .required(),
+  birthdate: Joi.string().isoDate().empty().required(),
   email: Joi.string()
     .email({
       minDomainSegments: 2,
@@ -134,13 +70,7 @@ const signupSchema = Joi.object({
       tlds: { allow: ['com', 'fr'] },
     })
     .empty()
-    .required()
-    .messages({
-      'string.email':
-        "Le format de l'adresse email est invalide. Voir les règles de saisie",
-      'string.empty': "L'adresse email ne doit pas être vide",
-      'any.required': "L'adresse email est requise.",
-    }),
+    .required(),
   password: Joi.string()
     .empty()
     .pattern(
@@ -148,13 +78,7 @@ const signupSchema = Joi.object({
         '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!?@])[a-zA-Z0-9!?@]{8,30}$',
       ),
     )
-    .required()
-    .messages({
-      'string.empty': 'Le mot de passe ne doit pas être vide',
-      'string.pattern.base':
-        'Le format du mot de passe est invalide. Voir les règles de saisie',
-      'any.required': 'Le mot de passe est requis.',
-    }),
+    .required(),
 })
   .unknown(false)
   .messages({
@@ -169,13 +93,7 @@ const resendEmailSchema = Joi.object({
       tlds: { allow: ['com', 'fr'] },
     })
     .empty()
-    .required()
-    .messages({
-      'string.email':
-        "Le format de l'adresse email est invalide. Voir les règles de saisie",
-      'string.empty': "L'adresse email ne doit pas être vide",
-      'any.required': "L'adresse email est requise.",
-    }),
+    .required(),
 })
   .unknown(false)
   .messages({
@@ -190,13 +108,7 @@ const forgotPasswordSchema = Joi.object({
       tlds: { allow: ['com', 'fr'] },
     })
     .empty()
-    .required()
-    .messages({
-      'string.email':
-        "Le format de l'adresse email est invalide. Voir les règles de saisie",
-      'string.empty': "L'adresse email ne doit pas être vide",
-      'any.required': "L'adresse email est requise.",
-    }),
+    .required(),
 })
   .unknown(false)
   .messages({
@@ -207,12 +119,7 @@ const reinitPasswordSchema = Joi.object({
   code: Joi.string()
     .empty()
     .pattern(new RegExp('^[0-9]{6}$'))
-    .required()
-    .messages({
-      'string.empty': 'Le code ne doit pas être vide',
-      'string.pattern.base': 'Le code est incorrect.',
-      'any.required': 'Le code est requis.',
-    }),
+    .required(),
   newPassword: Joi.string()
     .empty()
     .pattern(
@@ -248,11 +155,7 @@ const reinitPasswordSchema = Joi.object({
   });
 
 const validateEmailSchema = Joi.object({
-  url: Joi.string().empty().uri().required().messages({
-    'string.empty': "L'URL ne doit pas être vide",
-    'string.uri': "L'URL est invalide.",
-    'any.required': "L'URL est requise.",
-  }),
+  url: Joi.string().empty().uri().required(),
 })
   .unknown(false)
   .messages({
@@ -262,13 +165,7 @@ const validateEmailSchema = Joi.object({
 export const contactSchema = Joi.object({
   contactName: Joi.string()
     .empty()
-    .required()
-    .messages({
-      'string.empty': 'Le nom de contact ne doit pas être vide',
-      'string.pattern.base':
-        'Le format du nom de contact est invalide. Voir les règles de saisie',
-      'any.required': 'Le nom de contact est requis.',
-    }),
+    .required(),
   contactEmail: Joi.string()
     .email({
       minDomainSegments: 2,
@@ -276,23 +173,9 @@ export const contactSchema = Joi.object({
       tlds: { allow: ['com', 'fr'] },
     })
     .empty()
-    .required()
-    .messages({
-      'string.email':
-        "Le format de l'adresse email est invalide. Voir les règles de saisie",
-      'string.empty': "L'adresse email ne doit pas être vide",
-      'any.required': "L'adresse email est requise.",
-    }),
-  subject: Joi.string().empty().max(100).required().messages({
-    'string.empty': "L'objet du message ne doit pas être vide",
-    'string.max': "L'objet du message ne doit pas dépasser 100 caractères",
-    'any.required': "L'objet du message est requis.",
-  }),
-  text: Joi.string().empty().max(955).required().messages({
-    'string.empty': 'Le message ne doit pas être vide',
-    'string.max': 'Le message ne doit pas dépasser 955 caractères',
-    'any.required': 'Le message est requis.',
-  }),
+    .required(),
+  subject: Joi.string().empty().max(100).required(),
+  text: Joi.string().empty().max(955).required(),
 })
   .unknown(false)
   .messages({

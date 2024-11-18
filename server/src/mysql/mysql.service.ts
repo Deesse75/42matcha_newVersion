@@ -1,12 +1,25 @@
 import { matchaError } from '../utils/matcha_error.js';
 import { mysqlDb } from '../mysql/mysql.config.js';
 import {
-  MysqlMiniUserType,
   MysqlChatMessageType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
-import { CreateNewUserType } from '../interfaces/auth.interfaces.js';
+import {
+  PhotosPlusBackType,
+  UserLookForBackType,
+} from '../interfaces/user.interface.js';
+
+type CreateNewUserType = {
+  firstname: string;
+  lastname: string;
+  username: string;
+  birthdate: Date;
+  email: string;
+  emailCode: string;
+  hashedPassword: string;
+  fameRating: number;
+};
 
 export async function createNewUser(newUser: CreateNewUserType): Promise<void> {
   const query = 'INSERT INTO User SET ?';
@@ -20,10 +33,7 @@ export async function createNewUser(newUser: CreateNewUserType): Promise<void> {
   }
 }
 
-export async function updateUserData(
-  query: string,
-  values: any[],
-): Promise<void> {
+export async function updateTable(query: string, values: any[]): Promise<void> {
   try {
     await mysqlDb.query(query, values);
   } catch (error) {
@@ -31,7 +41,7 @@ export async function updateUserData(
   }
 }
 
-export async function getFullUserData(
+export async function getUser(
   query: string,
   values: any[],
 ): Promise<MysqlUserType | null> {
@@ -40,33 +50,7 @@ export async function getFullUserData(
     if (!rows[0]) return null;
     return rows[0];
   } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
-  }
-}
-
-export async function getMiniUserData(
-  query: string,
-  values: any[],
-): Promise<MysqlMiniUserType | null> {
-  try {
-    const [rows]: any[] = await mysqlDb.query(query, values);
-    if (!rows[0]) return null;
-    return rows[0];
-  } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
-  }
-}
-
-export async function getUsername(
-  query: string,
-  values: any[],
-): Promise<string | null> {
-  try {
-    const [rows]: any[] = await mysqlDb.query(query, values);
-    if (!rows[0]) return null;
-    return rows[0].username;
-  } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
+    throw new matchaError(500, (error as Error).message);
   }
 }
 
@@ -79,20 +63,46 @@ export async function getTags(
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
+    throw new matchaError(500, (error as Error).message);
+  }
+}
+
+export async function getLookFor(
+  query: string,
+  values: any[],
+): Promise<UserLookForBackType | null> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows[0];
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
+  }
+}
+
+export async function getPhotosPlus(
+  query: string,
+  values: any[],
+): Promise<PhotosPlusBackType | null> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows[0];
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
   }
 }
 
 export async function getListing(
   query: string,
   values: any[],
-): Promise<MysqlMiniUserType[] | null> {
+): Promise<MysqlUserType[] | null> {
   try {
     const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
+    throw new matchaError(500, (error as Error).message);
   }
 }
 
@@ -105,7 +115,7 @@ export async function getUnseenMess(
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
+    throw new matchaError(500, (error as Error).message);
   }
 }
 
@@ -118,7 +128,7 @@ export async function getCommonTags(
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
+    throw new matchaError(500, (error as Error).message);
   }
 }
 
@@ -131,6 +141,6 @@ export async function getUserStatChat(
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
+    throw new matchaError(500, (error as Error).message);
   }
 }

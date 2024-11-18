@@ -8,10 +8,10 @@ type Props = {
   tag: UserTagsFrontType;
   key: number;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  setReloadTags: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadAccount: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const EditOneTag: FC<Props> = ({ tag, setMatchaNotif, setReloadTags }) => {
+const EditOneTag: FC<Props> = ({ tag, setMatchaNotif, setReloadAccount }) => {
   const [deleteTag, setDeleteTag] = useState<boolean>(false);
   const [confirm, setConfirm] = useState<boolean>(false);
   const [delText, setDelText] = useState<boolean>(false);
@@ -47,7 +47,7 @@ const EditOneTag: FC<Props> = ({ tag, setMatchaNotif, setReloadTags }) => {
           setMatchaNotif(data.message);
           return;
         }
-        setReloadTags(true);
+        setReloadAccount('userTags');
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);

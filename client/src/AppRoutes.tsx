@@ -17,6 +17,9 @@ import DeleteAccount from './home/account/DeleteAccount';
 import Dashboard from './home/Dashboard/Dashboard';
 import ChatPage from './home/chat/ChatPage';
 import SearchPage from './home/search/SearchPage';
+import UpdateEmail from './home/account/components/UpdateEmail';
+import UpdatePassword from './home/account/components/UpdatePassword';
+import ValidateLinkNewEmail from './home/account/components/ValidateLinkNewEmail';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -82,6 +85,18 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
         <Route
           path={appRedir.account}
           element={<AccountPage setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route
+          path={appRedir.updateEmail}
+          element={<UpdateEmail setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route
+          path={appRedir.validateLinkNewEmail}
+          element={<ValidateLinkNewEmail setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route
+          path={appRedir.updatePassword}
+          element={<UpdatePassword setMatchaNotif={setMatchaNotif} />}
         />
         <Route path='/*' element={<Error404 />} />
       </Routes>

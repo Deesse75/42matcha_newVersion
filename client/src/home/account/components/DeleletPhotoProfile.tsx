@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  setReloadAccount: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadAccount: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 export const DeleletPhotoProfile: FC<Props> = ({
@@ -49,7 +49,7 @@ export const DeleletPhotoProfile: FC<Props> = ({
           setMatchaNotif(data.message);
           return;
         }
-        setReloadAccount(true);
+        setReloadAccount('account');
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);

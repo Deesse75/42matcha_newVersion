@@ -3,7 +3,7 @@ import AppRoutes from './AppRoutes';
 import Footer from './footer/Footer';
 import Header from './header/Header';
 import MatchaNotif from './notification/matchaNotification/MatchaNotif';
-import { appRedir } from './appConfig/appPath';
+import { appRedir, socketRoute, userRoute } from './appConfig/appPath';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useUserInfo } from './appContext/user.context';
@@ -21,6 +21,49 @@ function App() {
       else nav(appRedir.loading);
     }
   }, []);
+
+  useEffect(() => {
+    const listenSocket = () => {
+      if (!me.userSocket) return;
+
+      me.userSocket.on(socketRoute.updateToken, () => {
+        const request = async () => {
+          try {
+            const response = await fetch(
+              `${userRoute.getNewToken}/${me.user?.id}`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+            );
+            const data = await response.json();
+            if (response.status !== 200) {
+              setMatchaNotif(data.message);
+              nav(appRedir.errorInternal);
+              return;
+            }
+            Cookies.set('session', data.token, {
+              expires: undefined,
+              sameSite: 'None',
+              secure: true,
+            });
+          } catch (error) {
+            setMatchaNotif((error as Error).message);
+            nav(appRedir.errorInternal);
+          }
+        };
+        request();
+      });
+
+    };
+    listenSocket();
+    return () => {
+      if (!me.userSocket) return;
+      me.userSocket.off(socketRoute.updateToken);
+    };
+  }, [me.userSocket]);
 
   return (
     <>

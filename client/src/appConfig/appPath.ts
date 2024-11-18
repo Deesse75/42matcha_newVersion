@@ -13,6 +13,9 @@ export const appRedir = {
   signout: '/deconnexion',
   dashboard: '/tableau_de_bord',
   account: '/mon_profil',
+  updateEmail: '/modification_adresse_email',
+  updatePassword: '/modification_mot_de_passe',
+  validateLinkNewEmail: '/validation_nouvelle_adresse_email',
   search: '/rechercher_des_profils',
   chat: '/discussion_instantanee',
   history: '/historique_de_navigation',
@@ -54,17 +57,21 @@ export const userRoute = {
   getMe: `${PATH}/user/get_me`,
   getUserData: `${PATH}/user/get_user_data`,
   getUserTags: `${PATH}/user/get_user_tags`,
+  getUserLookFor: `${PATH}/user/get_user_look_for`,
+  getUserPhotosPlus: `${PATH}/user/get_user_photos_plus`,
+  getNewToken: `${PATH}/user/get_new_token`,
   updatePhotoProfile: `${PATH}/user/update_photo_profile`,
   deletePhotoProfile: `${PATH}/user/delete_photo_profile`,
-  updateProfileData: `${PATH}/user/update_profile_data`,
-  updateFirstData: `${PATH}/user/update_first_data`,
-  updateLookFor: `${PATH}/user/update_look_for`,
-  addTags: `${PATH}/user/add_tags`,
+  updateUsertData: `${PATH}/user/update_user_data`,
+  updateEmail: `${PATH}/user/update_email`,
+  addTag: `${PATH}/user/add_tag`,
   deleteTag: `${PATH}/user/delete_tag`,
+  updateProfileData: `${PATH}/user/update_profile_data`,
+  updateLookFor: `${PATH}/user/update_look_for`,
   deleteAccount: `${PATH}/user/delete_account`,
-
-  // getPhotos: `${PATH}/user/get_photos`,
-  // sendEmailNewPassword: `${PATH}/user/send_email_new_password`,
+  updatePhotoPlus: `${PATH}/user/update_photo_plus`,
+  validateLinkNewEmail: `${PATH}/user/validate_link_new_email`,
+  updatePassword: `${PATH}/user/update_password`,
 };
 
 // export const profileRoute = {
@@ -97,20 +104,24 @@ export const chatRoute = {
 
 export const socketRoute = {
   path: `${PATH}`,
-  connected: 'connected',
-  connectFailed: 'connection_failed',
-  newConnection: 'newConnection',
-  newDisconnect: 'newDisconnect',
+  connected: 'connected', //getMe.tsx
+  connection_failed: 'connection_failed', //getMe.tsx
+  validEmail: 'validEmail',
+  updateToken: 'updateToken',
+
+  
   isConnected: 'isUserConnected',
   receptIsConnected: 'receptIsConnected',
-  sendView: 'sendView', //{receiverId: number}
-  sendLike: 'sendLike', //{senderUsername: string, receiverId: number}
-  sendDislike: 'sendDislike', //{senderUsername: string, receiverId: number}
-  sendBan: 'sendBan', //{receiverId: number}
-  receptView: 'receptView', // {senderUsername: string}
-  receptLike: 'receptLike', // {senderUsernq,e: string}
-  receptDislike: 'receptDislike', // {senderUsername: string}
-  receptBan: 'receptBan', //vide
+
+  // newDisconnect: 'newDisconnect',
+  // sendView: 'sendView', //{receiverId: number}
+  // sendLike: 'sendLike', //{senderUsername: string, receiverId: number}
+  // sendDislike: 'sendDislike', //{senderUsername: string, receiverId: number}
+  // sendBan: 'sendBan', //{receiverId: number}
+  // receptView: 'receptView', // {senderUsername: string}
+  // receptLike: 'receptLike', // {senderUsernq,e: string}
+  // receptDislike: 'receptDislike', // {senderUsername: string}
+  // receptBan: 'receptBan', //vide
 };
 export const actionRoute = {
   getInteractions: `${PATH}/action/get_interactions`,

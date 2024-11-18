@@ -6,16 +6,17 @@ import Cookies from 'js-cookie';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setReloadAccount: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const UpdateLookFor: FC<Props> = ({ setMatchaNotif }) => {
+const UpdateLookFor: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
   const me = useUserInfo();
   const nav = useNavigate();
   const [bodyRequest, setBodyRequest] = useState<{
-    ageMin: number;
-    ageMax: number;
-    tallMin: number;
-    tallMax: number;
+    ageMin: number | null;
+    ageMax: number | null;
+    tallMin: number | null;
+    tallMax: number | null;
     gender: string | null;
     withPhoto: boolean;
   } | null>(null);
@@ -26,73 +27,71 @@ const UpdateLookFor: FC<Props> = ({ setMatchaNotif }) => {
     const ageMax = e.currentTarget?.ageMax.value;
     const tallMin = e.currentTarget?.tallMin.value;
     const tallMax = e.currentTarget?.tallMax.value;
-    const gender = e.currentTarget?.genderSelect.value;
+    const gender = e.currentTarget?.lookForGender.value;
     const withPhoto = e.currentTarget?.withPhoto.checked;
     if (
-      (!ageMin || !parseInt(ageMin)) &&
-      (!ageMax || !parseInt(ageMax)) &&
-      (!tallMin || !parseInt(tallMin)) &&
-      (!tallMax || !parseInt(tallMax)) &&
+      !ageMin &&
+      !ageMax &&
+      !tallMin &&
+      !tallMax &&
       (!gender || gender === '---') &&
-      !withPhoto
+      (withPhoto === me?.userLookFor?.withPhoto)
     ) {
       setMatchaNotif('Aucune donnée à modifier.');
       return;
     }
     setBodyRequest({
-      ageMin: ageMin ? parseInt(ageMin) : 0,
-      ageMax: ageMax ? parseInt(ageMax) : 0,
-      tallMin: tallMin ? parseInt(tallMin) : 0,
-      tallMax: tallMax ? parseInt(tallMax) : 0,
+      ageMin: ageMin ? parseInt(ageMin) : null,
+      ageMax: ageMax ? parseInt(ageMax) : null,
+      tallMin: tallMin ? parseInt(tallMin) : null,
+      tallMax: tallMax ? parseInt(tallMax) : null,
       gender: gender !== '---' ? gender : null,
       withPhoto: withPhoto,
     });
   };
 
-    useEffect(() => {
-      if (!bodyRequest) return;
-      let isMounted = true;
-      const request = async () => {
-        try {
-          const response = await fetch(userRoute.updateLookFor, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${Cookies.get('session')}`,
-            },
-            body: JSON.stringify(bodyRequest),
-          });
-          const data = await response.json();
-          if (!isMounted) return;
-          if (data.message && data.message.split(' ')[0] === 'Token') {
-            setMatchaNotif(data.message);
-            nav(appRedir.signout);
-            return;
-          }
-          if (response.status === 500) {
-            setMatchaNotif(data.message);
-            nav(appRedir.errorInternal);
-            return;
-          }
-          setBodyRequest(null);
-          if (response.status !== 200) {
-            setMatchaNotif(data.message);
-            return;
-          }
-          me.setUserLookFor(data.userLookFor);
-        } catch (error) {
-          if (!isMounted) return;
-          setMatchaNotif((error as Error).message);
-          nav(appRedir.errorInternal);
+  useEffect(() => {
+    if (!bodyRequest) return;
+    let isMounted = true;
+    const request = async () => {
+      try {
+        const response = await fetch(userRoute.updateLookFor, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('session')}`,
+          },
+          body: JSON.stringify(bodyRequest),
+        });
+        const data = await response.json();
+        if (!isMounted) return;
+        if (data.message && data.message.split(' ')[0] === 'Token') {
+          setMatchaNotif(data.message);
+          nav(appRedir.signout);
+          return;
         }
-      };
-      request();
-      return () => {
-        isMounted = false;
-      };
-    }, [bodyRequest]);
-
-
+        if (response.status === 500) {
+          setMatchaNotif(data.message);
+          nav(appRedir.errorInternal);
+          return;
+        }
+        setBodyRequest(null);
+        if (response.status !== 200) {
+          setMatchaNotif(data.message);
+          return;
+        }
+        setReloadAccount('userLookFor');
+      } catch (error) {
+        if (!isMounted) return;
+        setMatchaNotif((error as Error).message);
+        nav(appRedir.errorInternal);
+      }
+    };
+    request();
+    return () => {
+      isMounted = false;
+    };
+  }, [bodyRequest]);
 
   return (
     <>
@@ -165,6 +164,41 @@ const UpdateLookFor: FC<Props> = ({ setMatchaNotif }) => {
                 min={50}
               />
             </div>
+          </div>
+          <div className='look_for_block'>
+            <div className='look_for_block_label'>Genre</div>
+            <div className='look_for_block_current'>
+              {me.userLookFor && me.userLookFor.gender
+                ? me.userLookFor.gender
+                : '-'}
+            </div>
+            <div className='look_for_block_new'>
+              <select name='lookForGender' id='lookForGender'>
+                <option defaultValue='default'>---</option>
+                <option value='Homme'>Homme</option>
+                <option value='Femme'>Femme</option>
+                <option value='Non-binaire'>Non-binaire</option>
+                <option value='Agenre'>Agenre</option>
+                <option value='Bigenre'>Bigenre</option>
+                <option value='Genre fluide'>Genre fluide</option>
+                <option value='Femme transgenre'>Femme transgenre</option>
+                <option value='Homme transgenre'>Homme transgenre</option>
+                <option value='Pangenre'>Pangenre</option>
+                <option value='Autre'>Autre</option>
+                <option value='delete'>Supprimer la valeur actuelle</option>
+              </select>
+            </div>
+          </div>
+          <div className='look_for_block'>
+            <div className='look_for_block_label'>Avec photo</div>
+            <input
+              type='checkbox'
+              name='withPhoto'
+              id='withPhoto'
+              checked={
+                me.userLookFor && me.userLookFor.withPhoto ? true : false
+              }
+            />
           </div>
           <div className='look_for_submit'>
             <input

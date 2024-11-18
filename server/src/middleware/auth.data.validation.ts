@@ -47,12 +47,12 @@ export const authUserValidation = async (
   try {
     if (req.path === '/signup') {
       query = 'SELECT * FROM User WHERE email = ?';
-      if (await mysql.getFullUserData(query, [req.body.email])) {
+      if (await mysql.getUser(query, [req.body.email])) {
         res.status(400).json({ message: 'Adresse email déjà utilisée.' });
         return;
       } else {
         query = 'SELECT * FROM User WHERE username = ?';
-        if (await mysql.getFullUserData(query, [req.body.username])) {
+        if (await mysql.getUser(query, [req.body.username])) {
           res
             .status(400)
             .json({ message: "Le nom d'utilisateur est déjà utilisée." });
@@ -63,7 +63,7 @@ export const authUserValidation = async (
     } else {
       if (req.path === '/signin_username') {
         query = 'SELECT * FROM User WHERE username = ?';
-        existingUser = await mysql.getFullUserData(query, [req.body.username]);
+        existingUser = await mysql.getUser(query, [req.body.username]);
         if (!existingUser) {
           res.status(400).json({ message: "Nom d'utilisateur inconnu." });
           return;
@@ -75,14 +75,14 @@ export const authUserValidation = async (
         req.path === '/reinit_password'
       ) {
         query = 'SELECT * FROM User WHERE email = ?';
-        existingUser = await mysql.getFullUserData(query, [req.body.email]);
+        existingUser = await mysql.getUser(query, [req.body.email]);
         if (!existingUser) {
           res.status(400).json({ message: 'Adresse email inconnue.' });
           return;
         }
       } else if (req.path === '/validate_email') {
         query = 'SELECT * FROM User WHERE email = ?';
-        existingUser = await mysql.getFullUserData(query, [
+        existingUser = await mysql.getUser(query, [
           req.body.email,
         ]);
         if (!existingUser) {

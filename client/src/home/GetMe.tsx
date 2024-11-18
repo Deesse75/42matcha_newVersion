@@ -39,6 +39,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
         }
         me.setUser(data.user);
         me.setUserTags(data.userTags);
+        me.setUserLookFor = data.userLookFor;
         setUserIsLoaded(true);
       } catch (error) {
         if (!isMounted) return;
@@ -79,7 +80,7 @@ const GetMe: FC<Props> = ({ setMatchaNotif }) => {
       });
 
       //If connection is not ok errorPage
-      socket.on(socketRoute.connectFailed, () => {
+      socket.on(socketRoute.connection_failed, () => {
         setMatchaNotif('La connexion a échouée. Veuillez réessayer.');
         socket.disconnect();
         nav(appRedir.errorInternal);

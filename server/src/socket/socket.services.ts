@@ -22,11 +22,6 @@ export const manageSocket = (io: Server) => {
       if (!sendError) {
         socketsMap.set(id, socket);
         socket.emit(socketRoute.connected);
-        socketsMap.forEach((value, key) => {
-          if (key !== id) {
-            value.emit(socketRoute.newConnection, id, username);
-          }
-        });
       } else {
         socket.emit(socketRoute.connection_failed);
         socket.disconnect();
@@ -40,7 +35,7 @@ export const manageSocket = (io: Server) => {
     socket.on(socketRoute.disconnect, () => {
       const query = 'UPDATE User SET lastConnection = ? WHERE id = ?';
       const values = [new Date(), id];
-      mysql.updateUserData(query, values);
+      mysql.updateTable(query, values);
       socketsMap.delete(id);
       socketsMap.forEach((value, key) => {
         value.emit(socketRoute.newDisconnect, id, username);
@@ -48,6 +43,9 @@ export const manageSocket = (io: Server) => {
     });
 
     //request
+    socket.on(socketRoute.validEmail, () => {
+      socket.emit(socketRoute.updateToken);
+    });
     socket.on(socketRoute.isUserConnected, (id: number) => {
       const response: Socket | null = isSocketExist(id);
       socket.emit(socketRoute.receptIsConnected, response ? true : false);

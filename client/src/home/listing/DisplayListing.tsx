@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { MiniProfileFrontType } from '../../appConfig/interface';
+import { ProfileFrontType } from '../../appConfig/interface';
 import SortListing from './SortListing';
 import FilterListing from './FilterListing';
 import MiniProfile from './MiniProfile';
@@ -7,7 +7,7 @@ import { ReinitListing } from './ReinitListing';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  listing: MiniProfileFrontType[] | null;
+  listing: ProfileFrontType[] | null;
   listingName: string;
 };
 

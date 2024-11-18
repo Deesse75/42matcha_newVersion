@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useUserInfo } from '../../appContext/user.context';
 import { useMemory } from '../../appContext/memory.context';
-import { MiniProfileFrontType } from '../../appConfig/interface';
+import { ProfileFrontType } from '../../appConfig/interface';
 import DisplayListing from '../listing/DisplayListing';
 import SearchMulti from './components/SearchMulti';
 
@@ -14,7 +14,7 @@ type Props = {
 };
 
 const SearchPage: FC<Props> = ({ setMatchaNotif }) => {
-  const [searchListing, setSearchListing] = useState<MiniProfileFrontType[] | null>(
+  const [searchListing, setSearchListing] = useState<ProfileFrontType[] | null>(
     null,
   );
   const menu = useSelectMenu();

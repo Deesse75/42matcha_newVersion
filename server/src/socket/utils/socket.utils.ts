@@ -1,9 +1,11 @@
 export const socketRoute = {
   connection: 'connection',
   connected: 'connected',
-  newConnection: 'newConnection',
   connection_failed: 'connection_failed',
   disconnect: 'disconnect',
+  validEmail: 'validEmail',
+  updateToken: 'updateToken',
+
   newDisconnect: 'newDisconnect',
   isUserConnected: 'isUserConnected',
   receptIsConnected: 'receptIsConnected',

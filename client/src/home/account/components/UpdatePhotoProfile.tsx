@@ -8,10 +8,13 @@ import { useNavigate } from 'react-router-dom';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  setReloadAccount: React.Dispatch<React.SetStateAction<boolean>>;
+  setReloadAccount: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const UpdatePhotoProfile: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
+const UpdatePhotoProfile: FC<Props> = ({
+  setMatchaNotif,
+  setReloadAccount,
+}) => {
   const nav = useNavigate();
   const [upLoad, setUpLoad] = useState<boolean>(false);
   const [newPhoto, setNewPhoto] = useState<string | null>(null);
@@ -46,7 +49,7 @@ const UpdatePhotoProfile: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => 
           setMatchaNotif(data.message);
           return;
         }
-        setReloadAccount(true);
+        setReloadAccount('userData');
         setUpLoad(false);
       } catch (error) {
         if (!isMounted) return;

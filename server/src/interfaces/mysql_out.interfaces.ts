@@ -23,20 +23,6 @@ export type MysqlUserType = {
   updatedAt: string;
 };
 
-export type MysqlMiniUserType = {
-  id: number;
-  username: string;
-  age: number;
-  gender: string | null;
-  orientation: string | null;
-  region: string | null;
-  county: string | null;
-  town: string | null;
-  fameRating: number;
-  photo: Buffer | null;
-  lastConnection: string | null;
-};
-
 export type MysqlPhotosPlusType = {
   id: number;
   userId: number;
