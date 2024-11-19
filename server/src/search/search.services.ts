@@ -2,16 +2,13 @@ import {
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
-import { SearchRequestType } from '../interfaces/search.interfaces.js';
-import { MiniProfileBackType } from '../interfaces/user.interface.js';
+import { ProfileBackType } from '../interfaces/user.interface.js';
 import * as mysql from '../mysql/mysql.service.js';
-import {
-  convertListingMiniUser,
-} from '../utils/convertData.js';
+import { convertPublicProfileList } from '../utils/convertData.js';
 
 export const searchLocationService = async (
   user: MysqlUserType,
-): Promise<MiniProfileBackType[] | null> => {
+): Promise<ProfileBackType[] | null> => {
   const query: string = `
     SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
     FROM User 
@@ -21,11 +18,11 @@ export const searchLocationService = async (
     CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
     CASE WHEN region = ? THEN 1 ELSE 0 END DESC;
   `;
-  const values: any = [user.id, user.town, user.county, user.region];
+  const values: any[] = [user.id, user.town, user.county, user.region];
   try {
     const listing = await mysql.getListing(query, values);
     if (!listing) return null;
-    return await convertListingMiniUser(listing);
+    return await convertPublicProfileList(listing);
   } catch (error) {
     throw error;
   }
@@ -34,8 +31,7 @@ export const searchLocationService = async (
 export const searchUsernameService = async (
   user: MysqlUserType,
   username: string,
-): Promise<MiniProfileBackType[] | null> => {
-  // const usernameValue = `%${username}%`;
+): Promise<ProfileBackType[] | null> => {
   const query: string = `
   SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
     FROM User 
@@ -46,7 +42,7 @@ export const searchUsernameService = async (
     CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
     CASE WHEN region = ? THEN 1 ELSE 0 END DESC
     `;
-  const values: any = [
+  const values: any[] = [
     user.id,
     `%${username}%`,
     user.town,
@@ -59,7 +55,7 @@ export const searchUsernameService = async (
     console.log('searchUsernameService getListing');
     if (!listing) return null;
     console.log('searchUsernameService go convertListingMiniUser');
-    return convertListingMiniUser(listing);
+    return convertPublicProfileList(listing);
   } catch (error) {
     throw error;
   }
@@ -68,9 +64,9 @@ export const searchUsernameService = async (
 export const searchTagsService = async (
   user: MysqlUserType,
   tags: MysqlUserTagsType,
-): Promise<MiniProfileBackType[] | null> => {
+): Promise<ProfileBackType[] | null> => {
   const query: string = '';
-  const values: any = [];
+  const values: any[] = [];
   try {
     return null;
   } catch (error) {
@@ -78,41 +74,41 @@ export const searchTagsService = async (
   }
 };
 
-export const searchAdvanceService = async (
-  user: MysqlUserType,
-  searchRequest: SearchRequestType,
-): Promise<MiniProfileBackType[] | null> => {
-  let query: string = `
-  SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
-  FROM User 
-  WHERE id != ?
-  AND age BETWEEN ? AND ?
-  AND tall BETWEEN ? AND ?
-  `;
-  let values: any[] = [user.id, searchRequest.ageMin, searchRequest.ageMax, searchRequest.tallMin, searchRequest.tallMax];
-  if (searchRequest.gender) {
-    query += ' AND gender = ? ';
-    values.push(searchRequest.gender);
-  }
-  if (searchRequest.orientation) {
-    query += ' AND orientation = ? ';
-    values.push(searchRequest.orientation);
-  }
-  if (searchRequest.advancePhoto)
-    query += ' AND photo1 IS NOT NULL ';
-  query += `
-    ORDER BY
-    CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
-    CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
-    CASE WHEN region = ? THEN 1 ELSE 0 END DESC;
-  `;
-  try {
-    const listing = await mysql.getListing(query, values);
-    if (!listing) return null;
-    return convertListingMiniUser(listing);
-  } catch (error) {
-    throw error;
-  }
-};
+// export const searchAdvanceService = async (
+//   user: MysqlUserType,
+//   searchRequest: SearchRequestType,
+// ): Promise<ProfileBackType[] | null> => {
+//   let query: string = `
+//   SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
+//   FROM User 
+//   WHERE id != ?
+//   AND age BETWEEN ? AND ?
+//   AND tall BETWEEN ? AND ?
+//   `;
+//   let values: any[] = [user.id, searchRequest.ageMin, searchRequest.ageMax, searchRequest.tallMin, searchRequest.tallMax];
+//   if (searchRequest.gender) {
+//     query += ' AND gender = ? ';
+//     values.push(searchRequest.gender);
+//   }
+//   if (searchRequest.orientation) {
+//     query += ' AND orientation = ? ';
+//     values.push(searchRequest.orientation);
+//   }
+//   if (searchRequest.advancePhoto)
+//     query += ' AND photo1 IS NOT NULL ';
+//   query += `
+//     ORDER BY
+//     CASE WHEN town = ? THEN 1 ELSE 0 END DESC,
+//     CASE WHEN county = ? THEN 1 ELSE 0 END DESC,
+//     CASE WHEN region = ? THEN 1 ELSE 0 END DESC;
+//   `;
+//   try {
+//     const listing = await mysql.getListing(query, values);
+//     if (!listing) return null;
+//     return convertListingMiniUser(listing);
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 

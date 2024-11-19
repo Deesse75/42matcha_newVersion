@@ -79,3 +79,8 @@ export type MysqlNotifType = {
   createdAt: string;
 };
 
+export type MysqlActionType = {
+  id: number;
+  senderId: number;
+  receiverId: number;
+};

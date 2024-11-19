@@ -3,33 +3,31 @@ import { userTokenValidation } from '../middleware/userToken.validation.js';
 import {
   findExistingUser,
   findTags,
-  searchRequestValidation,
 } from '../middleware/user.data.validation.js';
 import { searchBodyValidation } from '../middleware/search.body.validation.js';
 import {
-  searchAdvance,
   searchLocation,
   searchTags,
   searchUsername,
 } from './search.controller.js';
 
-const searchRouter = Router();
+const searchRoute = Router();
 
-searchRouter.get(
+searchRoute.get(
   '/search_username/:username',
   userTokenValidation,
   findExistingUser,
   searchUsername,
 );
 
-searchRouter.get(
+searchRoute.get(
   '/search_location',
   userTokenValidation,
   findExistingUser,
   searchLocation,
 );
 
-searchRouter.get(
+searchRoute.get(
   '/search_tags',
   userTokenValidation,
   findExistingUser,
@@ -37,13 +35,13 @@ searchRouter.get(
   searchTags,
 );
 
-searchRouter.post(
-  '/search_advance',
-  searchBodyValidation,
-  userTokenValidation,
-  searchRequestValidation,
-  findExistingUser,
-  searchAdvance,
-);
+// searchRoute.post(
+//   '/search_advance',
+//   searchBodyValidation,
+//   userTokenValidation,
+//   searchRequestValidation,
+//   findExistingUser,
+//   searchAdvance,
+// );
 
-export default searchRouter;
+export default searchRoute;

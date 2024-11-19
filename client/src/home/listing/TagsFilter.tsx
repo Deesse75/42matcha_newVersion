@@ -15,7 +15,6 @@ const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
   const nav = useNavigate();
   const me = useUserInfo();
   const [bodyRequest, setBodyRequest] = useState<{
-    listingName: string;
     tags: string[];
   } | null>(null);
 
@@ -26,7 +25,7 @@ const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
       setMatchaNotif('Aucun tag selectionné.');
       return;
     }
-    setBodyRequest({ listingName: listingName, tags: tags });
+    setBodyRequest({ tags: tags });
   };
 
   useEffect(() => {
@@ -34,14 +33,17 @@ const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(listingRoute.getTagsFilter, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+        const response = await fetch(
+          `${listingRoute.getTagsFilter}/${listingName}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('session')}`,
+            },
+            body: JSON.stringify(bodyRequest),
           },
-          body: JSON.stringify(bodyRequest),
-        });
+        );
         const data = await response.json();
         if (!isMounted) return;
         if (data.message && data.message.split(' ')[0] === 'Token') {

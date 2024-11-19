@@ -1,55 +1,71 @@
 import { Router } from 'express';
 import { userTokenValidation } from '../middleware/userToken.validation.js';
 import { listingBodyValidation } from '../middleware/listing.body.validation.js';
-import { findExistingUser } from '../middleware/user.data.validation.js';
+import { findExistingUser, findLastSearch, findLookFor, findTags } from '../middleware/user.data.validation.js';
 import {
-  ageFilter,
-  fameFilter,
   getListing,
-  locationFilter,
-  tagsFilter,
 } from './listing.controller.js';
+import { selectListingName } from '../middleware/listingName.validation.js';
 
-const listingRouter = Router();
+const listingRoute = Router();
 
-listingRouter.post(
-  '/get_listing',
-  listingBodyValidation,
+listingRoute.get(
+  '/get_listing/:listingName',
   userTokenValidation,
   findExistingUser,
+  findLookFor,
+  findTags,
+  findLastSearch,
+  selectListingName,
   getListing,
 );
 
-listingRouter.post(
-  '/get_age_filter',
+listingRoute.post(
+  '/get_age_filter/:listingName',
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  ageFilter,
+  findLookFor,
+  findTags,
+  findLastSearch,
+  selectListingName,
+  getListing,
 );
 
-listingRouter.post(
-  '/get_fame_filter',
+listingRoute.post(
+  '/get_fame_filter/:listingName',
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  fameFilter,
+  findLookFor,
+  findTags,
+  findLastSearch,
+  selectListingName,
+  getListing,
 );
 
-listingRouter.post(
-  '/get_location_filter',
+listingRoute.post(
+  '/get_location_filter/:listingName',
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  locationFilter,
+  findLookFor,
+  findTags,
+  findLastSearch,
+  selectListingName,
+  getListing,
 );
 
-listingRouter.post(
-  '/get_tags_filter',
+listingRoute.post(
+  '/get_tags_filter/:listingName',
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  tagsFilter,
+  findLookFor,
+  findTags,
+  findLastSearch,
+  selectListingName,
+  getListing,
 );
 
-export default listingRouter;
+export default listingRoute;

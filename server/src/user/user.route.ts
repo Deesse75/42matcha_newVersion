@@ -80,7 +80,7 @@ userRoute.post('/validate_link_new_email',
   validateUpdateEmail,
 );
 
-userRoute.get('/get_new_token:id', getNewToken);
+userRoute.get('/get_new_token/:id', getNewToken);
 
 userRoute.post(
   '/add_tag',
@@ -92,7 +92,7 @@ userRoute.post(
 );
 
 userRoute.delete(
-  '/delete_tag:id',
+  '/delete_tag/:id',
   userTokenValidation,
   findExistingUser,
   deleteTag,

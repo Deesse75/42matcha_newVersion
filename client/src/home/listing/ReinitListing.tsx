@@ -19,13 +19,12 @@ export const ReinitListing: FC<Props> = ({ listingName, setMatchaNotif}) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(listingRoute.getListing, {
-          method: 'POST',
+        const response = await fetch(`${listingRoute.getListing}/${listingName}`, {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${Cookies.get('session')}`,
           },
-          body: JSON.stringify({ listingName: listingName }),
         });
         const data = await response.json();
         if (!isMounted) return;

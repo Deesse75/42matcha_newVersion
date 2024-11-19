@@ -4,7 +4,6 @@ import {
   searchLocationService,
   searchUsernameService,
   searchTagsService,
-  searchAdvanceService,
 } from './search.services.js';
 import { exist } from 'joi';
 
@@ -56,22 +55,22 @@ export const searchTags = async (
   }
 };
 
-export const searchAdvance = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const searchResult = await searchAdvanceService(
-      req.body.existingUser,
-      req.body.searchRequest,
-    );
-    res.status(200).json({ searchResult: searchResult });
-    return;
-  } catch (error) {
-    matchaError.catched(error as Error, res);
-  }
-};
+// export const searchAdvance = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ): Promise<void> => {
+//   try {
+//     const searchResult = await searchAdvanceService(
+//       req.body.existingUser,
+//       req.body.searchRequest,
+//     );
+//     res.status(200).json({ searchResult: searchResult });
+//     return;
+//   } catch (error) {
+//     matchaError.catched(error as Error, res);
+//   }
+// };
 
 // export const searchMulti = async (
 //   req: Request,

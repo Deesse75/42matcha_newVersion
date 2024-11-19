@@ -1,5 +1,4 @@
 import {
-  MysqlProfileType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
@@ -19,7 +18,6 @@ export function convertPublicUser(
     firstname: user.firstname,
     lastname: user.lastname,
     username: user.username,
-    email: user.email,
     birthdate: user.birthdate,
     age: user.age,
     gender: user.gender,
@@ -38,20 +36,20 @@ export function convertPublicUser(
 }
 
 export function convertPublicProfile(
-  user: MysqlProfileType,
+  user: MysqlUserType,
   userTags: MysqlUserTagsType[] | null,
 ): ProfileBackType {
   return {
     id: user.id,
     username: user.username,
     age: user.age,
-    gender: user.gender ? user.gender  : null,
-    orientation: user.orientation ? user.orientation  : null,
-    region: user.region ? user.region  : null,
-    county: user.county ? user.county  : null,
-    town: user.town ? user.town  : null,
+    gender: user.gender ? user.gender : null,
+    orientation: user.orientation ? user.orientation : null,
+    region: user.region ? user.region : null,
+    county: user.county ? user.county : null,
+    town: user.town ? user.town : null,
     tall: user.tall,
-    biography: user.biography ? user.biography  : null,
+    biography: user.biography ? user.biography : null,
     fameRating: user.fameRating,
     photo: user.photo ? convertPublicPhoto(user.photo) : null,
     lastConnection: user.lastConnection ? user.lastConnection : null,
@@ -60,7 +58,7 @@ export function convertPublicProfile(
 }
 
 export async function convertPublicProfileList(
-  listing: MysqlProfileType[],
+  listing: MysqlUserType[],
 ): Promise<ProfileBackType[]> {
   let newListing: ProfileBackType[] = [];
   for (let i = 0; i < listing.length; i++) {

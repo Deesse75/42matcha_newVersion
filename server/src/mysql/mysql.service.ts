@@ -1,13 +1,15 @@
 import { matchaError } from '../utils/matcha_error.js';
 import { mysqlDb } from '../mysql/mysql.config.js';
 import {
+  MysqlActionType,
   MysqlChatMessageType,
+  MysqlLastSearchType,
+  MysqlLookForType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
 import {
   PhotosPlusBackType,
-  UserLookForBackType,
 } from '../interfaces/user.interface.js';
 
 type CreateNewUserType = {
@@ -70,7 +72,20 @@ export async function getTags(
 export async function getLookFor(
   query: string,
   values: any[],
-): Promise<UserLookForBackType | null> {
+): Promise<MysqlLookForType | null> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows[0];
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
+  }
+}
+
+export async function getLastSearch(
+  query: string,
+  values: any[],
+): Promise<MysqlLastSearchType | null> {
   try {
     const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
@@ -101,6 +116,19 @@ export async function getListing(
     const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows;
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
+  }
+}
+
+export async function getActionBetween(
+  query: string,
+  values: any[],
+): Promise<boolean> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return false;
+    return true;
   } catch (error) {
     throw new matchaError(500, (error as Error).message);
   }

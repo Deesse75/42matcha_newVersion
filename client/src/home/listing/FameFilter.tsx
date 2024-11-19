@@ -12,10 +12,7 @@ type Props = {
 const FameFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
   const nav = useNavigate();
   const memo = useMemory();
-  const [bodyRequest, setBodyRequest] = useState<{
-    listingName: string;
-    fameMin: number;
-  } | null>(null);
+  const [fameMin, setFameMin] = useState<number | null>(null);
 
   const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,25 +21,25 @@ const FameFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
       setMatchaNotif("L'indice de popularité doit être supérieur à 0.");
       return;
     }
-      setBodyRequest({
-        listingName: listingName,
-        fameMin: fameMin,
-      });
+      setFameMin(fameMin);
   };
 
   useEffect(() => {
-    if (!bodyRequest) return;
+    if (!fameMin) return;
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(listingRoute.getFameFilter, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+        const response = await fetch(
+          `${listingRoute.getFameFilter}/${listingName}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('session')}`,
+            },
+            body: JSON.stringify({ fameMin }),
           },
-          body: JSON.stringify(bodyRequest),
-        });
+        );
         const data = await response.json();
         if (!isMounted) return;
         if (data.message && data.message.split(' ')[0] === 'Token') {
@@ -55,7 +52,7 @@ const FameFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
           nav(appRedir.errorInternal);
           return;
         }
-        setBodyRequest(null);
+        setFameMin(null);
         if (response.status !== 200) {
           setMatchaNotif(data.message);
           return;
@@ -71,7 +68,7 @@ const FameFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [bodyRequest]);
+  }, [fameMin]);
 
   return (
     <>

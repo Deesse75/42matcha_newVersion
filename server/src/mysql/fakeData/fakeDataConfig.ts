@@ -96,7 +96,7 @@ export async function insertFakeTags() {
     if (!fs.existsSync(`${fakeRoute}/tags.json`)) return;
     const query = `INSERT INTO Tags SET ?`;
     const fakeData = JSON.parse(
-      fs.readFileSync(`${fakeRoute}/users.json`, 'utf8'),
+      fs.readFileSync(`${fakeRoute}/tags.json`, 'utf8'),
     );
     fakeData.forEach(async (item: { userId: number; tagName: string }) => {
       await mysqlDb.query(query, item);

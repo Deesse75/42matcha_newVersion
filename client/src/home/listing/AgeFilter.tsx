@@ -13,7 +13,6 @@ const AgeFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
   const nav = useNavigate();
   const memo = useMemory();
   const [bodyRequest, setBodyRequest] = useState<{
-    listingName: string;
     ageMin: number;
     ageMax: number;
   } | null>(null);
@@ -40,7 +39,6 @@ const AgeFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
     }
     else
       setBodyRequest({
-        listingName: listingName,
         ageMin: min ? parseInt(min) : 18,
         ageMax: max ? parseInt(max) : 120,
       });
@@ -51,14 +49,17 @@ const AgeFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(listingRoute.getAgeFilter, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+        const response = await fetch(
+          `${listingRoute.getAgeFilter}/${listingName}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('session')}`,
+            },
+            body: JSON.stringify(bodyRequest),
           },
-          body: JSON.stringify(bodyRequest),
-        });
+        );
         const data = await response.json();
         if (!isMounted) return;
         if (data.message && data.message.split(' ')[0] === 'Token') {

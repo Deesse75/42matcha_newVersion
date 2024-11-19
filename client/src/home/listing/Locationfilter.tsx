@@ -12,10 +12,7 @@ type Props = {
 const Locationfilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
   const nav = useNavigate();
   const memo = useMemory();
-  const [bodyRequest, setBodyRequest] = useState<{
-    listingName: string;
-    zone: string;
-  } | null>(null);
+  const [zone, setZone] = useState<string | null>(null);
 
   const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,25 +21,25 @@ const Locationfilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
       setMatchaNotif('Veuillez choisir une zone de filtrage');
       return;
     }
-      setBodyRequest({
-        listingName: listingName,
-        zone: zone,
-      });
+     setZone(zone);
   };
 
   useEffect(() => {
-    if (!bodyRequest) return;
+    if (!zone) return;
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(listingRoute.getLocationFilter, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+        const response = await fetch(
+          `${listingRoute.getLocationFilter}/${listingName}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('session')}`,
+            },
+            body: JSON.stringify({ zone }),
           },
-          body: JSON.stringify(bodyRequest),
-        });
+        );
         const data = await response.json();
         if (!isMounted) return;
         if (data.message && data.message.split(' ')[0] === 'Token') {
@@ -55,7 +52,7 @@ const Locationfilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
           nav(appRedir.errorInternal);
           return;
         }
-        setBodyRequest(null);
+        setZone(null);
         if (response.status !== 200) {
           setMatchaNotif(data.message);
           return;
@@ -71,7 +68,7 @@ const Locationfilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [bodyRequest]);
+  }, [zone]);
 
   return (
     <>

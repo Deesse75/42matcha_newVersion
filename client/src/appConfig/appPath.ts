@@ -42,17 +42,6 @@ export const mailerRoute = {
   contactUs: `${PATH}/mailer/contactUs`,
 };
 
-
-  
-  // attribution: '/attribution',
-  // photo: '/photos_de_profil',
-  // rules: '/regles_de_saisie',
-  // legacy: '/mentions_legales',
-  // errorServer: '/erreur_serveur',
-  // listingMatcha: '/selection_matcha',
-  // listing: '/liste_de_profils',
-  // userProfile: '/profil_utilisateur',
-
 export const userRoute = {
   getMe: `${PATH}/user/get_me`,
   getUserData: `${PATH}/user/get_user_data`,
@@ -73,11 +62,6 @@ export const userRoute = {
   validateLinkNewEmail: `${PATH}/user/validate_link_new_email`,
   updatePassword: `${PATH}/user/update_password`,
 };
-
-// export const profileRoute = {
-//   getDisplayProfile: `${PATH}/profile/get_display_profile`,
-//   getDisplayTags: `${PATH}/profile/get_display_tags`,
-// };
 
 export const listingRoute = {
   getAgeFilter: `${PATH}/listing/get_age_filter`,
@@ -125,4 +109,8 @@ export const socketRoute = {
 };
 export const actionRoute = {
   getInteractions: `${PATH}/action/get_interactions`,
+  actionLike: `${PATH}/action/action_like`,
+  deleteLike: `${PATH}/action/delete_like`,
+  actionView: `${PATH}/action/action_view`,
+  actionBan: `${PATH}/action/action_ban`,
 };

@@ -62,6 +62,21 @@ export const findLookFor = async (
   }
 };
 
+export const findLastSearch = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const query = 'SELECT * FROM LastSearch WHERE userId = ?';
+  const values = [req.body.payloadToken.id];
+  try {
+    req.body.userLastSearch = await mysql.getLastSearch(query, values);
+    return next();
+  } catch (error) {
+    matchaError.catched(error as Error, res);
+  }
+};
+
 export const findPhotosPlus = async (
   req: Request,
   res: Response,
