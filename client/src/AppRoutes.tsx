@@ -1,25 +1,27 @@
 import { FC } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { appRedir } from './appConfig/appPath';
-import LoadingPage from './auth/LoadingPage';
-import ValidateLinkEmail from './auth/validate/ValidateLinkEmail';
-import GetMe from './home/GetMe';
-import Signin from './auth/signin/Signin';
-import Signup from './auth/signup/Signup';
-import ForgotPassword from './auth/forgot/ForgotPassword';
-import ResendLinkEmail from './auth/resend/ResendLinkEmail';
+import ForgotPassword from './auth/pages/ForgotPassword';
+import Loading from './auth/pages/Loading';
+import ResendEmail from './auth/pages/ResendEmail';
+import Signin from './auth/pages/Signin';
+import Signup from './auth/pages/Signup';
+import ValidateEmail from './auth/pages/ValidateEmail';
 import Error500 from './error/Error500';
-import Error404 from './error/Error404';
+import ErrorNotFound from './error/ErrorNotFound';
 import ContactUs from './footer/components/ContactUs';
-import Signout from './home/Signout';
-import AccountPage from './home/account/AccountPage';
-import DeleteAccount from './home/account/DeleteAccount';
-import Dashboard from './home/Dashboard/Dashboard';
-import ChatPage from './home/chat/ChatPage';
-import SearchPage from './home/search/SearchPage';
-import UpdateEmail from './home/account/components/UpdateEmail';
-import UpdatePassword from './home/account/components/UpdatePassword';
-import ValidateLinkNewEmail from './home/account/components/ValidateLinkNewEmail';
+import UpdateEmail from './home/components/account/UpdateEmail';
+import UpdatePassword from './home/pages/UpdatePassword';
+import UpdatePhotosPlus from './home/components/account/UpdatePhotosPlus';
+import AccountPage from './home/pages/Account';
+import ChatPage from './home/pages/Chat';
+import DeleletPhotoProfile from './home/pages/DeleletPhotoProfile';
+import DeleteAccount from './home/pages/DeleteAccount';
+import GetMe from './home/pages/GetMe';
+import SearchPage from './home/pages/Search';
+import Signout from './home/pages/Signout';
+import Dashboard from './home/pages/Dashboard';
+import History from './home/pages/History';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -31,7 +33,7 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
       <Routes>
         <Route
           path={appRedir.loading}
-          element={<LoadingPage setMatchaNotif={setMatchaNotif} />}
+          element={<Loading setMatchaNotif={setMatchaNotif} />}
         />
         <Route
           path={appRedir.signin}
@@ -47,14 +49,14 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
         />
         <Route
           path={appRedir.resend}
-          element={<ResendLinkEmail setMatchaNotif={setMatchaNotif} />}
+          element={<ResendEmail setMatchaNotif={setMatchaNotif} />}
         />
         <Route
-          path={appRedir.validateLinkEmail}
-          element={<ValidateLinkEmail setMatchaNotif={setMatchaNotif} />}
+          path={appRedir.validateEmail}
+          element={<ValidateEmail setMatchaNotif={setMatchaNotif} />}
         />
 
-        <Route path={appRedir.errorNotfound} element={<Error404 />} />
+        <Route path={appRedir.errorNotfound} element={<ErrorNotFound />} />
         <Route path={appRedir.errorInternal} element={<Error500 />} />
 
         <Route
@@ -75,6 +77,10 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
           element={<Dashboard setMatchaNotif={setMatchaNotif} />}
         />
         <Route
+          path={appRedir.history}
+          element={<History setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route
           path={appRedir.chat}
           element={<ChatPage setMatchaNotif={setMatchaNotif} />}
         />
@@ -91,14 +97,18 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
           element={<UpdateEmail setMatchaNotif={setMatchaNotif} />}
         />
         <Route
-          path={appRedir.validateLinkNewEmail}
-          element={<ValidateLinkNewEmail setMatchaNotif={setMatchaNotif} />}
-        />
-        <Route
           path={appRedir.updatePassword}
           element={<UpdatePassword setMatchaNotif={setMatchaNotif} />}
         />
-        <Route path='/*' element={<Error404 />} />
+        <Route
+          path={appRedir.updatePhotosPlus}
+          element={<UpdatePhotosPlus setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route
+          path={appRedir.deletePhotoProfil}
+          element={<DeleletPhotoProfile setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route path='/*' element={<ErrorNotFound />} />
       </Routes>
     </>
   );

@@ -1,2 +1,50 @@
-@mixin auth_form {
+@mixin wait_to_charge {
+  font-size: 15px;
+  font-weight: bold;
+  color: $color_pal_navy;
+  margin: 20px;
+}
+
+@mixin button_style_1 {
+  border: none;
+  font-style: italic;
+  color: $color_nuance_white1;
+  background: rgb(17, 17, 17);
+  background: linear-gradient(
+    180deg,
+    rgba(17, 17, 17, 1) 0%,
+    rgba(26, 68, 59, 1) 10%,
+    rgba(60, 144, 128, 0.9) 30%,
+    rgba(26, 68, 59, 1) 60%,
+    rgba(17, 17, 17, 1) 100%
+  );
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@mixin button_bubble_1 {
+  box-shadow: 1px 1px 5px 1px $color_nuance_grey3;
+  background: rgb(8, 184, 149);
+  background: linear-gradient(
+    180deg,
+    rgba(8, 184, 149, 1) 0%,
+    rgba(59, 191, 165, 1) 24%,
+    rgba(116, 208, 190, 1) 61%,
+    rgba(154, 208, 197, 1) 83%,
+    rgba(179, 210, 204, 1) 100%
+  );
+}
+
+@mixin button_submit_1 {
+  border: none;
+  font-style: italic;
+  color: $color_nuance_white1;
+  background: rgb(210, 176, 89);
+  background: linear-gradient(
+    180deg,
+    rgba(210, 176, 89, 1) 0%,
+    rgba(175, 148, 82, 1) 9%,
+    rgba(17, 17, 17, 1) 100%
+  );
+  box-shadow: 1px 1px 5px 1px $color_nuance_grey5;
 }

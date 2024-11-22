@@ -106,19 +106,26 @@ export const isEmailCertified = (
   try {
     if (req.body.existingUser.emailCertified) {
       if (req.path === '/resend_email' || req.path === '/validate_email') {
+        console.log("test1")
         res.status(400).json({ message: 'Adresse email déjà validée.' });
         return;
       }
+      console.log("test2")
       return next();
     } else {
-      if (req.path === '/resend_email' || req.path === '/validate_email')
+      console.log("test3")
+      if (req.path === '/resend_email' || req.path === '/validate_email') {
+        console.log("test4")
         return next();
+      }
+      console.log("test5")
       res
-        .status(400)
-        .json({ message: "En attente de validation de l'adresse email." });
+      .status(400)
+      .json({ message: "En attente de validation de l'adresse email." });
       return;
     }
   } catch (error) {
+    console.log('isEmailCertified', error);
     return matchaError.catched(error as Error, res);
   }
 };

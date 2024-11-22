@@ -64,12 +64,11 @@ export async function createDatabase(): Promise<void> {
   const db = process.env.MYSQL_DATABASE || '';
   let query = `CREATE DATABASE IF NOT EXISTS ${db}`;
   try {
-    //try to create db
     await mysqlDb.query(query);
 
     //check if db is created
     query = `SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '${db}'`;
-    const rows: any = await mysqlDb.query(query);
+    const [rows]: any[] = await mysqlDb.query(query);
     if (rows[0].length === 0) {
       throw new Error('Database creation failed');
     }

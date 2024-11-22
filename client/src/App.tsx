@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { appRedir, socketRoute, userRoute } from './appConfig/appPath';
+import { useSelectMenu } from './appContext/selectMenu.context';
+import { useUserInfo } from './appContext/user.context';
 import AppRoutes from './AppRoutes';
 import Footer from './footer/Footer';
 import Header from './header/Header';
+import MenuMatcha from './home/components/menu/MenuMatcha';
 import MatchaNotif from './notification/matchaNotification/MatchaNotif';
-import { appRedir, socketRoute, userRoute } from './appConfig/appPath';
-import { useNavigate } from 'react-router-dom';
+import SocketNotification from './notification/socketNotification/SocketNotification';
 import Cookies from 'js-cookie';
-import { useUserInfo } from './appContext/user.context';
-import HomeNotification from './notification/homeNotification/HomeNotification';
-import MenuMatcha from './home/menu/MenuMatcha';
 
 function App() {
   const [matchaNotif, setMatchaNotif] = useState<string | null>(null);
+  const [displayMenu, setDisplayMenu] = useState<boolean>(false);
   const nav = useNavigate();
   const me = useUserInfo();
+  const menu = useSelectMenu();
 
   useEffect(() => {
     if (import.meta.hot) {
@@ -21,6 +24,14 @@ function App() {
       else nav(appRedir.loading);
     }
   }, []);
+
+  useEffect(() => {
+    if (menu.displayAppMenu) setDisplayMenu(true);
+    else {
+      menu.setAllMenuOff();
+      setDisplayMenu(false);
+    }
+  }, [menu.displayAppMenu]);
 
   useEffect(() => {
     const listenSocket = () => {
@@ -56,7 +67,6 @@ function App() {
         };
         request();
       });
-
     };
     listenSocket();
     return () => {
@@ -78,18 +88,13 @@ function App() {
         />
       </div>
 
+      <div className='socket_notification'>
+        <SocketNotification />
+      </div>
+
       <div className='routes'>
-        {me.user ? (
-          <>
-            <div className='route_bgc_user'></div>
-          </>
-        ) : (
-          <>
-            <div className='route_bgc_auth'></div>
-          </>
-        )}
         <div className='route_menu'>
-          {me.user && (
+          {displayMenu && (
             <>
               <MenuMatcha />
             </>
@@ -97,9 +102,6 @@ function App() {
         </div>
         <div className='route_path'>
           <AppRoutes setMatchaNotif={setMatchaNotif} />
-        </div>
-        <div className='route_notification'>
-          <HomeNotification />
         </div>
       </div>
 

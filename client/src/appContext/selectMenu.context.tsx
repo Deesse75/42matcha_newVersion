@@ -31,6 +31,9 @@ type SelectMenuContextType = {
   setHistorySelected: React.Dispatch<React.SetStateAction<string | null>>;
   setAllMenuOff: () => void;
   setOneMenuOn: (tab: string) => void;
+
+  displayAppMenu: boolean;
+  setDisplayAppMenu: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const SelectMenuContext = createContext<SelectMenuContextType>({
@@ -64,6 +67,8 @@ export const SelectMenuContext = createContext<SelectMenuContextType>({
   setHistorySelected: () => {},
   setAllMenuOff: () => {},
   setOneMenuOn: () => {},
+  displayAppMenu: false,
+  setDisplayAppMenu: () => {},
 });
 
 const SelectMenuProvider = ({ children }: { children: React.ReactNode }) => {
@@ -81,6 +86,7 @@ const SelectMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [deleteMenu, setDeleteMenu] = useState<boolean>(false);
   const [contactMenu, setContactMenu] = useState<boolean>(false);
   const [historySelected, setHistorySelected] = useState<string | null>(null);
+  const [displayAppMenu, setDisplayAppMenu] = useState<boolean>(false);
   const setAllMenuOff = () => {
     setDashboardMenu(false);
     setAccountMenu(false);
@@ -170,6 +176,8 @@ const SelectMenuProvider = ({ children }: { children: React.ReactNode }) => {
         setHistorySelected,
         setAllMenuOff,
         setOneMenuOn,
+        displayAppMenu,
+        setDisplayAppMenu,
       }}
     >
       {children}

@@ -1,0 +1,122 @@
+.auth_form_container {
+  width: 40%;
+  display: flex;
+  .auth_form {
+    width: 100%;
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    box-sizing: border-box;
+    color: $color_nuance_white1;
+    background: rgb(255, 255, 255);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(232, 178, 43, 1) 100%
+    );
+    .auth_form_row {
+      width: 90%;
+      height: 45px;
+      display: flex;
+      padding: 0 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      background-color: white;
+      box-sizing: border-box;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+      .auth_form_icon {
+        width: 10%;
+        height: 70%;
+        display: flex;
+        margin-right: 25px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        box-sizing: border-box;
+        @include button_bubble_1;
+      }
+      .auth_form_input {
+        width: 65%;
+        height: 90%;
+        border: none;
+        font-size: 15px;
+        box-sizing: border-box;
+        padding-left: 20px;
+        outline: none;
+        background-color: transparent;
+      }
+      .auth_form_end_container {
+        width: 25%;
+        height: 80%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-items: center;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey5;
+        .auth_form_end_icon_container {
+          width: 30%;
+          height: 100%;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          align-items: center;
+          border-radius: 5px;
+          box-sizing: border-box;
+          .generate_icon_text {
+            width: 160px;
+            padding: 2px 5px;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background-color: $color_nuance_grey3;
+          }
+          .input_rules_container {
+            width: 350px;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            padding: 0 5px;
+            top: 50px;
+            left: 0;
+            color: $color_nuance_grey2;
+            box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+            border-radius: 5px;
+            background-color: $color_nuance_white1;
+          }
+        }
+      }
+    }
+
+    .auth_submit {
+      width: 100%;
+      height: 30px;
+      display: flex;
+      justify-content: space-around;
+      margin: 10px;
+      .auth_submit_button {
+        width: 40%;
+        height: 100%;
+        display: flex;
+        font-size: 15px;
+        color: $color_pal_navy;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        border: none;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+        background-color: $color_pal_base;
+        outline-color: $color_pal_base;
+        cursor: pointer;
+      }
+    }
+  }
+}

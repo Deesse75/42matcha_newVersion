@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
 
 const updatePhotoProfileSchema = Joi.object({
-  photo: Joi.string().required().base64(),
+  photo: Joi.string().required(),
 })
   .unknown(false)
   .messages({
@@ -10,7 +10,7 @@ const updatePhotoProfileSchema = Joi.object({
   });
 
 const updatePhotoPlusSchema = Joi.object({
-  photo: Joi.string().required().base64(),
+  photo: Joi.string().required(),
   index: Joi.number().required().min(2).max(5),
 })
   .unknown(false)
@@ -19,16 +19,13 @@ const updatePhotoPlusSchema = Joi.object({
   });
 
 const updateUserDataSchema = Joi.object({
-  firstname: Joi.string()
-    .allow(null)
+  firstname: Joi.string().empty(null)
     .pattern(new RegExp("^[a-zA-Z][a-zA-Z- ']{2,29}$")),
-  lastname: Joi.string()
-    .allow(null)
+  lastname: Joi.string().empty(null)
     .pattern(new RegExp("^[a-zA-Z][a-zA-Z- ']{2,29}$")),
-  username: Joi.string()
-    .allow(null)
+  username: Joi.string().empty(null)
     .pattern(new RegExp('^[a-zA-Z][a-zA-Z0-9_@]{2,29}$')),
-  birthdate: Joi.string().allow(null).isoDate(),
+  birthdate: Joi.string().isoDate().empty(null),
   })
   .unknown(false)
   .messages({
@@ -157,15 +154,6 @@ const updateLookForSchema = Joi.object({
     'objet.unknown': 'La requete est invalide.',
   });
 
-const validateUpdateEmailSchema = Joi.object({
-  url: Joi.string().empty().uri().required(),
-})
-  .unknown(false)
-  .messages({
-    'objet.unknown': 'La requete est invalide.',
-  });
-
-
 const schemaMap: { [key: string]: Joi.ObjectSchema } = {
   '/update_photo_profile': updatePhotoProfileSchema,
   '/update_user_data': updateUserDataSchema,
@@ -175,7 +163,6 @@ const schemaMap: { [key: string]: Joi.ObjectSchema } = {
   '/update_photo_plus': updatePhotoPlusSchema,
   '/update_password': updatePasswordSchema,
   '/update_email': updateEmailSchema,
-  '/validate_link_new_email': validateUpdateEmailSchema,
 };
 
 export const userBodyValidation = async (

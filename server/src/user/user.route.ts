@@ -5,8 +5,28 @@ import {
   findPhotosPlus,
   findTags,
 } from '../middleware/user.data.validation.js';
-import { urlTokenValidation, userTokenValidation } from '../middleware/userToken.validation.js';
-import { addTag, deleteAccount, deletePhotoProfile, deleteTag, getMe, getNewToken, getUserData, getUserLookFor, getUserPhotosPlus, getUserTags, updateEmail, updateLookFor, updatePassword, updatePhotoPlus, updatePhotoProfile, updateProfileData, updateUserData, validateUpdateEmail } from './user.controller.js';
+import {
+  userTokenValidation,
+} from '../middleware/userToken.validation.js';
+import {
+  addTag,
+  deleteAccount,
+  deletePhotoProfile,
+  deleteTag,
+  getMe,
+  getNewToken,
+  getUserData,
+  getUserLookFor,
+  getUserPhotosPlus,
+  getUserTags,
+  updateEmail,
+  updateLookFor,
+  updatePassword,
+  updatePhotoPlus,
+  updatePhotoProfile,
+  updateProfileData,
+  updateUserData,
+} from './user.controller.js';
 import { userBodyValidation } from '../middleware/user.body.validation.js';
 
 const userRoute = Router();
@@ -59,25 +79,20 @@ userRoute.post(
   updateUserData,
 );
 
-userRoute.post('/update_password',
+userRoute.post(
+  '/update_password',
   userBodyValidation,
   userTokenValidation,
   findExistingUser,
   updatePassword,
 );
 
-userRoute.post('/update_email',
+userRoute.post(
+  '/update_email',
   userBodyValidation,
   userTokenValidation,
   findExistingUser,
   updateEmail,
-);
-
-userRoute.post('/validate_link_new_email',
-  userBodyValidation,
-  urlTokenValidation,
-  findExistingUser,
-  validateUpdateEmail,
 );
 
 userRoute.get('/get_new_token/:id', getNewToken);

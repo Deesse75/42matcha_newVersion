@@ -1,16 +1,3 @@
-export default function inputValidation(
-  type: string,
-  value: string | null,
-): boolean {
-  if (type === 'firstname' && !nameValidation(value)) return false;
-  if (type === 'lastname' && !nameValidation(value)) return false;
-  if (type === 'username' && !usernameValidation(value)) return false;
-  if (type === 'email' && !emailValidation(value)) return false;
-  if (type === 'birthdate' && !birthdateValidation(value)) return false;
-  if (type === 'password' && !passwordValidation(value)) return false;
-  return true;
-}
-
 export function usernameValidation(username: string | null): boolean {
   if (!username) return false;
   const regex = /^[a-zA-Z][a-zA-Z0-9_@]*$/;

@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from 'react';
-import { MdOutlineKeyboardDoubleArrowRight } from 'react-icons/md';
-import { userRoute, appRedir } from '../../../../appConfig/appPath';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-import UpdateNewPassword from './UpdateNewPassword';
+import { FC, useEffect, useState } from "react";
+import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
+import { userRoute, appRedir } from "../../../../appConfig/appPath";
+import { useNavigate } from "react-router-dom";
+import UpdateNewPassword from "./UpdateNewPassword";
 
 type Props = {
   setReloadAccount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,16 +26,16 @@ const UpdatePassword: FC<Props> = ({
     const request = async () => {
       try {
         const response = await fetch(userRoute.sendEmailNewPassword, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("session")}`,
           },
         });
         const data = await response.json();
         if (!isMounted) return;
         setMatchaNotif(data.message);
-        if (data.message && data.message.split(' ')[0] === 'Token') {
+        if (data.message && data.message.split(" ")[0] === "Token") {
           nav(appRedir.signout);
           return;
         }
@@ -63,7 +62,7 @@ const UpdatePassword: FC<Props> = ({
 
   return (
     <>
-      <div className='account_data_password'>
+      <div className="account_data_password">
         {updatePassword ? (
           <>
             <UpdateNewPassword
@@ -76,16 +75,16 @@ const UpdatePassword: FC<Props> = ({
           <>
             {sendEmail ? (
               <>
-                <div className='wait_to_charge'>Chargement en cours ...</div>
+                <div className="wait_to_charge">Chargement en cours ...</div>
               </>
             ) : (
               <>
-                <div className='account_data_password_update'>
-                  <div className='account_data_password_update_text'>
+                <div className="account_data_password_update">
+                  <div className="account_data_password_update_text">
                     Modifier le mot de passe
                   </div>
                   <div
-                    className='account_data_password_update_button'
+                    className="account_data_password_update_button"
                     onClick={() => {
                       setSendEmail(true);
                     }}

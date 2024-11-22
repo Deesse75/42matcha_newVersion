@@ -13,25 +13,25 @@ export const selectListingName = async (
   next: NextFunction,
 ): Promise<void> => {
   let listingRequest: ListingRequestType | null = null;
-  if (req.body.params.listingName === 'matcha')
+  if (req.params.listingName === 'matcha')
     listingRequest = matchaSelect(
       req.body.existingUser,
       req.body.userTags,
       req.body.userLookFor,
     );
-  else if (req.body.params.listingName === 'match')
+  else if (req.params.listingName === 'match')
     listingRequest = matchSelect(req.body.existingUser);
-  else if (req.body.params.listingName === 'view')
+  else if (req.params.listingName === 'view')
     listingRequest = viewSelect(req.body.existingUser);
-  else if (req.body.params.listingName === 'like')
+  else if (req.params.listingName === 'like')
     listingRequest = likeSelect(req.body.existingUser);
-  else if (req.body.params.listingName === 'visited')
+  else if (req.params.listingName === 'visited')
     listingRequest = visitedSelect(req.body.existingUser);
-  else if (req.body.params.listingName === 'liked')
+  else if (req.params.listingName === 'liked')
     listingRequest = likedSelect(req.body.existingUser);
-  else if (req.body.params.listingName === 'banned')
+  else if (req.params.listingName === 'banned')
     listingRequest = bannedSelect(req.body.existingUser);
-  else if (req.body.params.listingName === 'search')
+  else if (req.params.listingName === 'search')
     listingRequest = searchSelect(
       req.body.existingUser,
       req.body.userLastSearch,

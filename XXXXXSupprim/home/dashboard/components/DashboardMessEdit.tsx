@@ -1,8 +1,8 @@
-import { FC } from 'react';
-import { UnseenMessageType } from '../../../../appConfig/interface';
-import { useNavigate } from 'react-router-dom';
-import { appRedir } from '../../../../appConfig/appPath';
-import { useUserInfo } from '../../../../appContext/user.context';
+import { FC } from "react";
+import { UnseenMessageType } from "../../../../appConfig/interface";
+import { useNavigate } from "react-router-dom";
+import { appRedir } from "../../../../appConfig/appPath";
+import { useUserInfo } from "../../../../appContext/user.context";
 
 type Props = {
   notif: UnseenMessageType;
@@ -67,12 +67,12 @@ const DashboardMessEdit: FC<Props> = ({ notif, setMatchaNotif }) => {
 
   return (
     <>
-      <div key={notif.id} className='dashboard_chat_section_one_content'>
-        <div className='dashboard_chat_section_one_content_username'>
+      <div key={notif.id} className="dashboard_chat_section_one_content">
+        <div className="dashboard_chat_section_one_content_username">
           {notif.senderUsername}
         </div>
         <button
-          className='dashboard_chat_section_one_content_button'
+          className="dashboard_chat_section_one_content_button"
           onClick={() => {
             me.setActiveChatId(notif.senderId);
             nav(appRedir.chat);
@@ -80,7 +80,7 @@ const DashboardMessEdit: FC<Props> = ({ notif, setMatchaNotif }) => {
         >
           Lire
         </button>
-        <button className='dashboard_chat_section_one_content_button'>
+        <button className="dashboard_chat_section_one_content_button">
           Muet
         </button>
       </div>

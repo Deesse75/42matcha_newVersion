@@ -1,36 +1,36 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 type Props = {
-  refInput: React.RefObject<HTMLInputElement> | null;
-  display: boolean;
+  refPassword: React.RefObject<HTMLInputElement> | null;
 };
 
-const InputEye: FC<Props> = ({ refInput, display }) => {
-  const [visiblePassword, setVisiblePassword] = useState(false);
+const InputEye: FC<Props> = ({ refPassword }) => {
+  const [action, setAction] = useState<boolean>(false);
+  const [visiblePassword, setVisiblePassword] = useState<boolean>(false);
 
-  const handleClick = () => {
-    setVisiblePassword(!visiblePassword);
-    if (refInput && refInput.current) {
-      refInput.current.type = visiblePassword ? 'password' : 'text';
-    }
-  };
+  useEffect(() => {
+    if (!action) return;
+    if (refPassword && refPassword.current)
+      refPassword.current.type = visiblePassword ? 'text' : 'password';
+    setAction(false);
+  }, [action]);
 
   return (
-    <div className='auth_input_icon_container'>
-      {display && (
+    <div
+      className='input_eye_icon'
+      onClick={() => {
+        setAction(true);
+        setVisiblePassword(!visiblePassword);
+      }}
+    >
+      {visiblePassword ? (
         <>
-          <div onClick={handleClick} className='auth_input_display_icon'>
-            {visiblePassword ? (
-              <>
-                <AiOutlineEye size={28} color='#111111' />
-              </>
-            ) : (
-              <>
-                <AiOutlineEyeInvisible size={28} color='#777777' />
-              </>
-            )}
-          </div>
+          <AiOutlineEye size={24} color='#111111' />
+        </>
+      ) : (
+        <>
+          <AiOutlineEyeInvisible size={24} color='#777777' />
         </>
       )}
     </div>

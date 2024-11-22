@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { matchaError } from '../utils/matcha_error.js';
-import * as mysql from '../mysql/mysql.service.js';
 import {
   addTagService,
   deleteAccountService,
@@ -16,15 +15,14 @@ import {
   updatePhotoProfileService,
   updateProfileDataService,
   updateUserDataService,
-  validateUpdateEmailService,
 } from './user.service.js';
 
 export const getMe = async (req: Request, res: Response): Promise<void> => {
   try {
     const me = await getMeService(
       req.body.existingUser,
-      req.body.tags,
-      req.body.lookFor,
+      req.body.userTags,
+      req.body.userLookFor,
     );
     res.status(200).json({
       user: me.user,
@@ -137,31 +135,12 @@ export const updateEmail = async (
   }
 };
 
-export const validateUpdateEmail = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    await validateUpdateEmailService(
-      req.body.existingUser,
-      req.body.code,
-      req.body.email,
-    );
-    res.status(200).json({
-      message: 'Votre adresse email a été modifiée.',
-    });
-    return;
-  } catch (error) {
-    return matchaError.catched(error as Error, res);
-  }
-};
-
 export const getNewToken = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
   try {
-    const token = await getNewTokenService(req.body.params.id);
+    const token = await getNewTokenService(parseInt(req.params.id));
     res.status(200).json({ token: token });
     return;
   } catch (error) {
@@ -187,7 +166,7 @@ export const addTag = async (req: Request, res: Response): Promise<void> => {
 
 export const deleteTag = async (req: Request, res: Response): Promise<void> => {
   try {
-    await deleteTagService(req.body.existingUser, req.body.params.id);
+    await deleteTagService(req.body.existingUser, parseInt(req.params.id));
     res.status(200).json({ message: 'Le profil a été mis à jour.' });
     return;
   } catch (error) {

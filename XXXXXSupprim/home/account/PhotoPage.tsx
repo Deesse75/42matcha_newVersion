@@ -1,11 +1,10 @@
-import { FC, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUserInfo } from '../../../appContext/user.context';
-import UploadPhoto from './xxxcomponents/UploadPhoto';
-import { appRedir, userRoute } from '../../../appConfig/appPath';
-import Cookies from 'js-cookie';
-import { useSelectMenu } from '../../../appContext/selectMenu.context';
-import PhotosPlus from './xxxcomponents/PhotosPlus';
+import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUserInfo } from "../../../appContext/user.context";
+import UploadPhoto from "./xxxcomponents/UploadPhoto";
+import { appRedir, userRoute } from "../../../appConfig/appPath";
+import { useSelectMenu } from "../../../appContext/selectMenu.context";
+import PhotosPlus from "./xxxcomponents/PhotosPlus";
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -20,17 +19,17 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif }) => {
   const [upload, setUpload] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!Cookies.get('matchaOn')) {
+    if (!Cookies.get("matchaOn")) {
       menu.setAllMenuOff();
       nav(appRedir.loading);
       return;
     }
-    if (!Cookies.get('session') || !me.user) {
+    if (!Cookies.get("session") || !me.user) {
       menu.setAllMenuOff();
       nav(appRedir.getMe);
       return;
     }
-    menu.setOneMenuOn('photos');
+    menu.setOneMenuOn("photos");
   }, []);
 
   useEffect(() => {
@@ -39,16 +38,16 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif }) => {
     const request = async () => {
       try {
         const response = await fetch(userRoute.updatePhotoProfile, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("session")}`,
           },
           body: JSON.stringify({ photo: newPhoto }),
         });
         const data = await response.json();
         if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
+        if (data.message && data.message.split(" ")[0] === "Token") {
           setMatchaNotif(data.message);
           nav(appRedir.signout);
           return;
@@ -77,17 +76,17 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <div className='photos_page_container'>
+      <div className="photos_page_container">
         {photoProfile ? (
           <>
-            <div className='photos_page_photo_profile'>
+            <div className="photos_page_photo_profile">
               <img
                 src={
                   me.user && me.user.photo
                     ? me.user.photo
-                    : 'avatar/default_avatar.jpg'
+                    : "avatar/default_avatar.jpg"
                 }
-                alt='Photo de profil'
+                alt="Photo de profil"
               />
               {upload && (
                 <UploadPhoto
@@ -96,7 +95,7 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif }) => {
                 />
               )}
               <button
-                className='photos_page_button_change'
+                className="photos_page_button_change"
                 onClick={() => {
                   setUpload(true);
                 }}
@@ -104,7 +103,7 @@ const PhotoPage: FC<Props> = ({ setMatchaNotif }) => {
                 Modifier
               </button>
               <button
-                className='photos_page_button_others'
+                className="photos_page_button_others"
                 onClick={() => {
                   setPhotoProfile(false);
                 }}

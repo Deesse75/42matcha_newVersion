@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from 'react';
-import { MiniUserType } from '../../../../appConfig/interface';
-import { appRedir, profileRoute } from '../../../../appConfig/appPath';
-import { useUserInfo } from '../../../../appContext/user.context';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { FC, useEffect, useState } from "react";
+import { MiniUserType } from "../../../../appConfig/interface";
+import { appRedir, profileRoute } from "../../../../appConfig/appPath";
+import { useUserInfo } from "../../../../appContext/user.context";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   profile: MiniUserType;
@@ -24,16 +23,16 @@ const DashboardMatchEdit: FC<Props> = ({ profile, setMatchaNotif }) => {
         const response = await fetch(
           `${profileRoute.getDisplayProfile}/${id}`,
           {
-            method: 'GET',
+            method: "GET",
             headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${Cookies.get('session')}`,
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("session")}`,
             },
-          },
+          }
         );
         const data = await response.json();
         if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
+        if (data.message && data.message.split(" ")[0] === "Token") {
           setMatchaNotif(data.message);
           nav(appRedir.signout);
           return;
@@ -64,15 +63,15 @@ const DashboardMatchEdit: FC<Props> = ({ profile, setMatchaNotif }) => {
 
   return (
     <>
-      <div key={profile.id} className='dashboard_chat_section_one_content'>
-        <div className='dashboard_chat_section_one_content_username'>
+      <div key={profile.id} className="dashboard_chat_section_one_content">
+        <div className="dashboard_chat_section_one_content_username">
           {profile.username}
         </div>
         <button
           onClick={() => {
             setId(profile.id);
           }}
-          className='dashboard_chat_section_one_content_button'
+          className="dashboard_chat_section_one_content_button"
         >
           Voir
         </button>
@@ -81,7 +80,7 @@ const DashboardMatchEdit: FC<Props> = ({ profile, setMatchaNotif }) => {
             me.setActiveChatId(profile.id);
             nav(appRedir.chat);
           }}
-          className='dashboard_chat_section_one_content_button'
+          className="dashboard_chat_section_one_content_button"
         >
           Discuter
         </button>

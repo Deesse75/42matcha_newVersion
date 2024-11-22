@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from 'react';
-import { appRedir, searchRoute } from '../../../../appConfig/appPath';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-import { useUserInfo } from '../../../../appContext/user.context';
-import { SearchAdvanceRequestType } from '../../../../appConfig/interface';
+import { FC, useEffect, useState } from "react";
+import { appRedir, searchRoute } from "../../../../appConfig/appPath";
+import { useNavigate } from "react-router-dom";
+import { useUserInfo } from "../../../../appContext/user.context";
+import { SearchAdvanceRequestType } from "../../../../appConfig/interface";
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -23,11 +22,11 @@ const SearchAgeFilter: FC<Props> = ({ setMatchaNotif }) => {
     const min = e.currentTarget.agemin.value;
     const max = e.currentTarget.agemax.value;
     if (!me.searchRequest) {
-      setMatchaNotif('Veuillez effectuer une recherche');
+      setMatchaNotif("Veuillez effectuer une recherche");
       return;
     }
     if (!min && !max) {
-      setMatchaNotif('Veuillez renseigner un âge minimum et/ou maximum');
+      setMatchaNotif("Veuillez renseigner un âge minimum et/ou maximum");
       return;
     }
     if (min && (min < 18 || min > 120)) {
@@ -55,16 +54,16 @@ const SearchAgeFilter: FC<Props> = ({ setMatchaNotif }) => {
     const request = async () => {
       try {
         const response = await fetch(searchRoute.searchAgeFilter, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("session")}`,
           },
           body: JSON.stringify(bodyRequest),
         });
         const data = await response.json();
         if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
+        if (data.message && data.message.split(" ")[0] === "Token") {
           setMatchaNotif(data.message);
           nav(appRedir.signout);
           return;
@@ -94,29 +93,29 @@ const SearchAgeFilter: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <div className='dashboard_filter'>
-        <form onSubmit={handleClick} className='dashboard_filter_form'>
+      <div className="dashboard_filter">
+        <form onSubmit={handleClick} className="dashboard_filter_form">
           <input
-            type='number'
+            type="number"
             min={18}
             max={120}
-            name='agemin'
-            id='ageMin'
-            placeholder='age minimum'
+            name="agemin"
+            id="ageMin"
+            placeholder="age minimum"
           />
           <input
-            type='number'
+            type="number"
             min={18}
             max={120}
-            name='agemax'
-            id='ageMax'
-            placeholder='age maximum'
+            name="agemax"
+            id="ageMax"
+            placeholder="age maximum"
           />
           <input
-            type='submit'
-            name='age_filter'
-            id='age_filter'
-            value='Filtrer'
+            type="submit"
+            name="age_filter"
+            id="age_filter"
+            value="Filtrer"
           />
         </form>
       </div>

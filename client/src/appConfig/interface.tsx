@@ -37,8 +37,6 @@ export type UserLookForFrontType = {
 };
 
 export type UserLastSearchFrontType = {
-  id: number;
-  userId: number;
   ageMin: number;
   ageMax: number;
   tallMin: number;

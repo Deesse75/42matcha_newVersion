@@ -1,0 +1,30 @@
+.update_photo_profile_modif {
+  width: 90%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  position: absolute;
+  bottom: 35px;
+  .update_photo_profile_modif_icon {
+    width: 35px;
+    height: 100%;
+    display: flex;
+    position: relative;
+    margin-right: 5px;
+    justify-content: center;
+    align-items: center;
+    @include button_bubble_1;
+    border-radius: 15px;
+    .update_photo_profile_modif_text {
+      position: absolute;
+      bottom: -25px;
+      border-radius: 5px;
+      padding: 1px 5px;
+      color: $color_nuance_grey1;
+      font-size: 13px;
+      background-color: $color_nuance_white1;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    }
+  }
+}

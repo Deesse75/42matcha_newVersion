@@ -9,37 +9,34 @@ export const appRedir = {
   forgotPassword: '/mot_de_passe_oublie',
   reinitPassword: '/reinitialisation_mot_de_passe',
   resend: '/renvoi_lien_validation',
-  validateLinkEmail: '/validation_email',
+  validateEmail: '/validation_email',
   signout: '/deconnexion',
   dashboard: '/tableau_de_bord',
   account: '/mon_profil',
   updateEmail: '/modification_adresse_email',
   updatePassword: '/modification_mot_de_passe',
-  validateLinkNewEmail: '/validation_nouvelle_adresse_email',
+  updatePhotosPlus: '/modification_photos_supplementaires',
   search: '/rechercher_des_profils',
   chat: '/discussion_instantanee',
-  history: '/historique_de_navigation',
   contact: '/contact',
   errorInternal: '/erreur_interne',
   errorNotfound: '/page_introuvable',
   getMe: '/chargement',
   deleteAccount: '/suppression_du_compte',
+  deletePhotoProfil: '/suppression_photo_profil',
+  history: '/historique_de_navigation',
 };
 
-  export const authRoute = {
-    init: `${PATH}/auth/init`,
-    signup: `${PATH}/auth/signup`,
-    signinUsername: `${PATH}/auth/signin_username`,
-    signinEmail: `${PATH}/auth/signin_Email`,
-    forgotPassword: `${PATH}/auth/forgot_password`,
-    resendLinkEmail: `${PATH}/auth/resend_email`,
-    reinitPassword: `${PATH}/auth/reinit_password`,
-    ValidateLinkEmail: `${PATH}/auth/validate_email`,
-    contactUs: `${PATH}/auth/contact_us`,
-  };
-
-export const mailerRoute = {
-  contactUs: `${PATH}/mailer/contactUs`,
+export const authRoute = {
+  init: `${PATH}/auth/init`,
+  signup: `${PATH}/auth/signup`,
+  signinUsername: `${PATH}/auth/signin_username`,
+  signinEmail: `${PATH}/auth/signin_email`,
+  forgotPassword: `${PATH}/auth/forgot_password`,
+  resendEmail: `${PATH}/auth/resend_email`,
+  reinitPassword: `${PATH}/auth/reinit_password`,
+  validateEmail: `${PATH}/auth/validate_email`,
+  contactUs: `${PATH}/auth/contact_us`,
 };
 
 export const userRoute = {
@@ -59,7 +56,6 @@ export const userRoute = {
   updateLookFor: `${PATH}/user/update_look_for`,
   deleteAccount: `${PATH}/user/delete_account`,
   updatePhotoPlus: `${PATH}/user/update_photo_plus`,
-  validateLinkNewEmail: `${PATH}/user/validate_link_new_email`,
   updatePassword: `${PATH}/user/update_password`,
 };
 
@@ -75,15 +71,17 @@ export const searchRoute = {
   searchMulti: `${PATH}/search/search_multi`,
   searchUsername: `${PATH}/search/search_username`,
   searchLocation: `${PATH}/search/search_location`,
-  searchTags: `${PATH}/search/search_tags`,
+  searchTag: `${PATH}/search/search_tag`,
+  getLastSearch: `${PATH}/search/get_last_search`,
   // searchAgeFilter: `${PATH}/search/search_age_filter`,
 };
 
 export const chatRoute = {
   getMicroMatchList: `${PATH}/chat/get_micro_match_list`,
-//   getChatStat: `${PATH}/chat/get_chat_stat`,
-//   markMessageSeen: `${PATH}/chat/mark_message_seen`,
-//   getUnseenMessage: `${PATH}/chat/get_unseen_message`,
+  getChatActiveList: `${PATH}/chat/get_chat_active_list`,
+  //   getChatStat: `${PATH}/chat/get_chat_stat`,
+  //   markMessageSeen: `${PATH}/chat/mark_message_seen`,
+  //   getUnseenMessage: `${PATH}/chat/get_unseen_message`,
 };
 
 export const socketRoute = {
@@ -93,7 +91,6 @@ export const socketRoute = {
   validEmail: 'validEmail',
   updateToken: 'updateToken',
 
-  
   isConnected: 'isUserConnected',
   receptIsConnected: 'receptIsConnected',
 

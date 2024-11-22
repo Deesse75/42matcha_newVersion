@@ -5,8 +5,7 @@ import {
   initializeDatabase,
   reinitPassword,
   resendEmail,
-  signinEmail,
-  signinUsername,
+  signin,
   signup,
   validateEmail,
 } from './auth.controller.js';
@@ -33,14 +32,14 @@ authRoute.post(
   authBodyValidation,
   authUserValidation,
   isEmailCertified,
-  signinUsername,
+  signin,
 );
 authRoute.post(
   '/signin_email',
   authBodyValidation,
   authUserValidation,
   isEmailCertified,
-  signinEmail,
+  signin,
 );
 authRoute.post(
   '/forgot_password',
@@ -72,6 +71,6 @@ authRoute.post(
   validateEmail,
 );
 
-authRoute.post('/contact_us', authBodyValidation, contactUs,);
+authRoute.post('/contact_us', authBodyValidation, contactUs);
 
 export default authRoute;

@@ -1,0 +1,20 @@
+.error_container {
+  width: 90%;
+  display: flex;
+  height: 670px;
+  flex-direction: column;
+  box-sizing: border-box;
+  box-sizing: content-box;
+  .error_title {
+    width: 90%;
+    display: flex;
+    height: 40px;
+    font-size: 40px;
+  }
+  .error_text {
+  }
+  .error_button_container {
+    .error_button {
+    }
+  }
+}

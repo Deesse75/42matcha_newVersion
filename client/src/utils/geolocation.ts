@@ -9,7 +9,7 @@ async function getBrowserLocation(): Promise<GeolocationPosition> {
       },
     );
   });
-};
+}
 
 async function setLocation(url: string): Promise<void> {
   try {
@@ -18,7 +18,14 @@ async function setLocation(url: string): Promise<void> {
     const data = await response.json();
     localStorage.setItem('region', data.address.state);
     localStorage.setItem('county', data.address.county || data.address.city);
-    localStorage.setItem('town', data.address.city || data.address.village);
+    localStorage.setItem(
+      'town',
+      data.address.city
+        ? data.address.city
+        : data.address.town
+          ? data.address.town
+          : data.address.village,
+    );
   } catch (error) {
     throw error;
   }

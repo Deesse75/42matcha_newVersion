@@ -1,14 +1,8 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { appRedir, mailerRoute } from '../../appConfig/appPath';
+import { appRedir, authRoute } from '../../appConfig/appPath';
+import { useSelectMenu } from '../../appContext/selectMenu.context';
 import Cookies from 'js-cookie';
-
-type ReqDataType = {
-  contactName: string;
-  contactEmail: string;
-  subject: string;
-  text: string;
-};
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -16,47 +10,60 @@ type Props = {
 
 const ContactUs: FC<Props> = ({ setMatchaNotif }) => {
   const nav = useNavigate();
-  const [reqData, setReqData] = useState<ReqDataType | null>(null);
+  const menu = useSelectMenu();
+  const refUsername = useRef<HTMLInputElement>(null);
+  const refEmail = useRef<HTMLInputElement>(null);
+  const refSubject = useRef<HTMLInputElement>(null);
+  const refArea = useRef<HTMLTextAreaElement>(null);
+  const [session, setSession] = useState<string | null>(null);
+  const [bodyRequest, setBodyRequest] = useState<{
+    contactName: string;
+    contactEmail: string;
+    subject: string;
+    text: string;
+  } | null>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    //Check user entries
-    const contactName = e.currentTarget!.contactName.value.trim();
-    const contactEmail = e.currentTarget!.contactEmail.value.trim();
-    const subject = e.currentTarget!.subject.value.trim();
-    const text = e.currentTarget!.text.value.trim();
-    if (!contactName || !contactEmail || !subject || !text) {
+    const username = refUsername.current?.value.trim() || null;
+    const email = refEmail.current?.value.trim() || null;
+    const subject = refSubject.current?.value.trim() || null;
+    const text = refArea.current?.value.trim() || null;
+    if (!username || !email || !subject || !text) {
       setMatchaNotif('Tous les champs sont requis.');
       return;
     }
-
-    //If all is good, set the request data
-    setReqData({
-      contactName: contactName,
-      contactEmail: contactEmail,
+    setBodyRequest({
+      contactName: username,
+      contactEmail: email,
       subject: subject,
       text: text,
     });
   };
 
+  const handleClear = () => {
+    if (refUsername.current) refUsername.current.value = '';
+    if (refEmail.current) refEmail.current.value = '';
+    if (refSubject.current) refSubject.current.value = '';
+    if (refArea.current) refArea.current.value = '';
+  };
+
   useEffect(() => {
-    if (!Cookies.get('matchaOn')) {
-      setMatchaNotif('Votre session a expiré, le site a redemarré.');
-      nav(appRedir.loading);
-      return;
-    }
+    const session = Cookies.get('session') || null;
+    setSession(session);
+    if (session) menu.setDisplayAppMenu(true);
+    else menu.setDisplayAppMenu(false);
   }, []);
 
   useEffect(() => {
-    if (!reqData) return;
+    if (!bodyRequest) return;
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(mailerRoute.contactUs, {
+        const response = await fetch(authRoute.contactUs, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(reqData),
+          body: JSON.stringify(bodyRequest),
         });
         const data = await response.json();
         if (!isMounted) return;
@@ -67,14 +74,11 @@ const ContactUs: FC<Props> = ({ setMatchaNotif }) => {
         }
         setMatchaNotif(data.message);
         if (response.status !== 200) {
-          setReqData(null);
+          setBodyRequest(null);
           return;
         }
-        if (Cookies.get('session')) {
-          nav(appRedir.getMe);
-        } else {
-          nav(appRedir.loading);
-        }
+        if (session) nav(appRedir.account);
+        else nav(appRedir.signin);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -85,94 +89,82 @@ const ContactUs: FC<Props> = ({ setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [reqData]);
+  }, [bodyRequest]);
 
   return (
     <>
       <div className='contact_page'>
-        <div className='contact_left'>
-          <div className='contact_title'>Contact</div>
-          <form className='contact_form' onSubmit={handleSubmit}>
-            <div className='contact_data'>
-              <div className='contact_label'>Intitulé :</div>
-              <input
-                className='contact_data_input'
-                type='text'
-                name='contactName'
-                id='contactName'
-                autoComplete='username'
-                max={30}
-                min={3}
-                required
-                placeholder='Entrez votre nom ou pseudo'
-              />
-            </div>
-            <div className='contact_data'>
-              <div className='contact_label'>Email :</div>
-              <input
-                className='contact_data_input'
-                type='email'
-                name='contactEmail'
-                id='contactEmail'
-                autoComplete='email'
-                required
-                placeholder='Entrez votre adresse email'
-              />
-            </div>
-            <div className='contact_data'>
-              <div className='contact_label'>Objet :</div>
-              <input
-                className='contact_data_input'
-                type='text'
-                name='subject'
-                id='subject'
-                required
-                autoComplete='off'
-                min={1}
-                max={100}
-                placeholder="Entrez l'objet de votre message"
-              />
-            </div>
-            <div className='contact_data_area'>
-              <div className='contact_label'>Message :</div>
-              <textarea
-                className='contact_area'
-                name='area'
-                id='area'
-                required
-                autoComplete='off'
-                minLength={1}
-                maxLength={955}
-                placeholder='Entrez votre message'
-              ></textarea>
-            </div>
-            <div className='contact_button'>
-              <input
-                type='submit'
-                name='submit'
-                id='submit'
-                value='Envoyer le message'
-              />
-              <input
-                onClick={() => {
-                  Cookies.get('session')
-                    ? nav(appRedir.getMe)
-                    : nav(appRedir.loading);
-                }}
-                type='button'
-                name='back'
-                id='back'
-                value="Retour à l'accueil"
-              />
-            </div>
-          </form>
-        </div>
-        <div className='contact_img'>
-          <img
-            src='/background/vecteezy_vector-feather-isolated-on-white-background_6297846.jpg'
-            alt=''
-          />
-        </div>
+        <div className='contact_title'>Contact</div>
+        <form className='contact_form' onSubmit={handleSubmit}>
+          <div className='contact_form_row'>
+            <input
+              className='contact_form_input'
+              type='text'
+              name='username'
+              id='username'
+              maxLength={30}
+              minLength={3}
+              required
+              autoComplete='username'
+              ref={refUsername}
+              placeholder='Entrez votre nom'
+            />
+          </div>
+          <div className='contact_form_row'>
+            <input
+              className='contact_form_input'
+              type='email'
+              name='email'
+              id='email'
+              required
+              autoComplete='email'
+              ref={refEmail}
+              placeholder='Entrez une adresse email'
+            />
+          </div>
+          <div className='contact_form_row'>
+            <input
+              className='contact_form_input'
+              type='text'
+              name='subject'
+              id='subject'
+              required
+              autoComplete='off'
+              minLength={1}
+              maxLength={100}
+              placeholder="Entrez l'objet de votre message"
+              ref={refSubject}
+            />
+          </div>
+          <div className='contact_form_row'>
+            <textarea
+              className='contact_form_area'
+              name='area'
+              id='area'
+              required
+              autoComplete='off'
+              minLength={1}
+              maxLength={955}
+              ref={refArea}
+              placeholder='Entrez votre message'
+            ></textarea>
+          </div>
+          <div className='contact_form_button'>
+            <input
+              type='submit'
+              name='contactSubmit'
+              id='contactSubmit'
+              value='Envoyer'
+            />
+            <input
+              type='button'
+              name='contactClear'
+              id='contactClear'
+              value='Effacer'
+              onClick={handleClear}
+            />
+          </div>
+        </form>
       </div>
     </>
   );

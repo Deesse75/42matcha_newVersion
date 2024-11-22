@@ -1,9 +1,10 @@
-import Cookies from 'js-cookie';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir } from '../appConfig/appPath';
 import { useUserInfo } from '../appContext/user.context';
 import { useSelectMenu } from '../appContext/selectMenu.context';
+import WaitChargement from '../utils/WaitChargement';
+import Cookies from 'js-cookie';
 
 type Props = {};
 
@@ -14,33 +15,29 @@ const Error500: FC<Props> = ({}) => {
   const [controlPage, setControlPage] = useState<boolean>(false);
 
   useEffect(() => {
-    menu.setAllMenuOff();
-    Cookies.remove('matchaOn');
     Cookies.remove('session');
     me.deleteUserData();
+    menu.setDisplayAppMenu(false);
     setControlPage(true);
   }, []);
 
   return (
     <>
-      <div className='error_page'>
-        <div className='error_title'>ERREUR</div>
-        <p className='error_text'>
-          Une erreur de chargement de la page ou une indisponibilité temporaire
-          du site a été rencontré.
-        </p>
-        <p className='error_text'>
-          Si vous étiez connecté(e), votre seesion a été déconnectée.
-        </p>
-        <p className='error_text'>
-          Veuillez nous excuser pour la gène occasionnée.
-        </p>
-        <p className='error_text'>
-          Si le problème persiste, vous pouvez envoyer un mail à
-          l'administrateur.
-        </p>
-        {controlPage && (
-          <>
+      {controlPage ? (
+        <>
+          <div className='error_container'>
+            <div className='error_title'>ERREUR SYSTEME</div>
+            <p className='error_text'>
+              Le système a rencontré une erreur interne.
+            </p>
+            <p className='error_text'>La session sera réinitialisée.</p>
+            <p className='error_text'>
+              Veuillez nous excuser pour la gène occasionnée.
+            </p>
+            <p className='error_text'>
+              Si le problème persiste, vous pouvez envoyer un mail à
+              l'administrateur.
+            </p>
             <div className='error_button_container'>
               <div
                 onClick={() => {
@@ -52,16 +49,20 @@ const Error500: FC<Props> = ({}) => {
               </div>
               <div
                 onClick={() => {
-                  nav(appRedir.signout);
+                  nav(appRedir.loading);
                 }}
                 className='error_button'
               >
-                Retour à la page d'accueil
+                Se connecter
               </div>
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <WaitChargement text='Chargement de la page ...' />
+        </>
+      )}
     </>
   );
 };

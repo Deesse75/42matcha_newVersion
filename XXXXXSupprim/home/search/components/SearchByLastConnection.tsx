@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { appRedir, searchRoute } from '../../../../appConfig/appPath';
-import { useUserInfo } from '../../../../appContext/user.context';
-import { MdOutlineKeyboardDoubleArrowRight } from 'react-icons/md';
+import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { appRedir, searchRoute } from "../../../../appConfig/appPath";
+import { useUserInfo } from "../../../../appContext/user.context";
+import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -20,15 +19,15 @@ const SearchByLastConnection: FC<Props> = ({ setMatchaNotif }) => {
     const request = async () => {
       try {
         const response = await fetch(searchRoute.searchLastConnection, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("session")}`,
           },
         });
         const data = await response.json();
         if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
+        if (data.message && data.message.split(" ")[0] === "Token") {
           setMatchaNotif(data.message);
           nav(appRedir.signout);
           return;
@@ -58,8 +57,8 @@ const SearchByLastConnection: FC<Props> = ({ setMatchaNotif }) => {
   }, [action]);
   return (
     <>
-      <div className='one_critere'>
-        <div className='one_critere_text'>
+      <div className="one_critere">
+        <div className="one_critere_text">
           Rechercher les profils récemment connectés
         </div>
         <button

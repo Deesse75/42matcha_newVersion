@@ -1,0 +1,25 @@
+.photo_profile_img {
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+  border-radius: 15px;
+  border-radius: 15px;
+  box-shadow: 1px 1px 5px 1px $color_nuance_grey5;
+}
+.photo_profile_plus {
+  width: 100%;
+  height: 20px;
+  position: absolute;
+  bottom: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .photo_profile_plus_button {
+    width: 250px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include button_style_1;
+  }
+}

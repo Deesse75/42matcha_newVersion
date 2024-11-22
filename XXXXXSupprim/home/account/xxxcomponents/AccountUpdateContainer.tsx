@@ -1,14 +1,13 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import { useUserInfo } from '../../../../appContext/user.context';
-import { IoReload } from 'react-icons/io5';
-import convertDate from '../../../../utils/convertDate';
-import AuthInputIsValid from '../../../../auth/components/AuthInputIsValid';
-import { MdDeleteOutline } from 'react-icons/md';
-import { LuSave } from 'react-icons/lu';
-import inputValidation from '../../../../utils/inputValidation';
-import { appRedir, userRoute } from '../../../../appConfig/appPath';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { FC, useEffect, useRef, useState } from "react";
+import { useUserInfo } from "../../../../appContext/user.context";
+import { IoReload } from "react-icons/io5";
+import convertDate from "../../../../utils/convertDate";
+import AuthInputIsValid from "../../../../auth/components/AuthInputIsValid";
+import { MdDeleteOutline } from "react-icons/md";
+import { LuSave } from "react-icons/lu";
+import inputValidation from "../../../../utils/inputValidation";
+import { appRedir, userRoute } from "../../../../appConfig/appPath";
+import { useNavigate } from "react-router-dom";
 
 export type BodyRequestType = {
   firstname: string | null;
@@ -64,26 +63,26 @@ const AccountUpdateContainer: FC<Props> = ({
 
   useEffect(() => {
     if (url) return;
-    if (inputName === 'birthdate') setUrl(userRoute.updateBirthdate);
+    if (inputName === "birthdate") setUrl(userRoute.updateBirthdate);
     else setUrl(userRoute.updateName);
   }, [url]);
 
   useEffect(() => {
-    if (!url || url === 'error' || !bodyRequest) return;
+    if (!url || url === "error" || !bodyRequest) return;
     let isMounted = true;
     const request = async () => {
       try {
         const response = await fetch(url, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("session")}`,
           },
           body: JSON.stringify(bodyRequest),
         });
         const data = await response.json();
         if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
+        if (data.message && data.message.split(" ")[0] === "Token") {
           setMatchaNotif(data.message);
           nav(appRedir.signout);
           return;
@@ -104,7 +103,7 @@ const AccountUpdateContainer: FC<Props> = ({
           setMatchaNotif(data.message);
           return;
         }
-        refInput.current!.value = '';
+        refInput.current!.value = "";
         setReloadAccount(true);
       } catch (error) {
         if (!isMounted) return;
@@ -120,56 +119,56 @@ const AccountUpdateContainer: FC<Props> = ({
 
   return (
     <>
-      <div className='account_input_container'>
+      <div className="account_input_container">
         {me.user ? (
           <>
-            <div className='account_input_current'>
-              {inputName === 'firstname' && (
+            <div className="account_input_current">
+              {inputName === "firstname" && (
                 <>
-                  <div className='account_input_current_name'>Prénom</div>
-                  <div className='account_input_current_value'>
+                  <div className="account_input_current_name">Prénom</div>
+                  <div className="account_input_current_value">
                     {me.user.firstname}
                   </div>
                 </>
               )}
-              {inputName === 'lastname' && (
+              {inputName === "lastname" && (
                 <>
-                  <div className='account_input_current_name'>Nom</div>
-                  <div className='account_input_current_value'>
+                  <div className="account_input_current_name">Nom</div>
+                  <div className="account_input_current_value">
                     {me.user.lastname}
                   </div>
                 </>
               )}
-              {inputName === 'username' && (
+              {inputName === "username" && (
                 <>
-                  <div className='account_input_current_name'>Pseudo</div>
-                  <div className='account_input_current_value'>
+                  <div className="account_input_current_name">Pseudo</div>
+                  <div className="account_input_current_value">
                     {me.user.username}
                   </div>
                 </>
               )}
-              {inputName === 'birthdate' && (
+              {inputName === "birthdate" && (
                 <>
-                  <div className='account_input_current_name'>
+                  <div className="account_input_current_name">
                     Date de naissance
                   </div>
-                  <div className='account_input_current_value'>
+                  <div className="account_input_current_value">
                     {convertDate(me.user.birthdate)}
                   </div>
                 </>
               )}
-              {inputName === 'email' && (
+              {inputName === "email" && (
                 <>
-                  <div className='account_input_current_name'>Email</div>
-                  <div className='account_input_current_value'>
+                  <div className="account_input_current_name">Email</div>
+                  <div className="account_input_current_value">
                     {me.user.email}
                   </div>
                 </>
               )}
             </div>
-            <div className='account_input_new'>
+            <div className="account_input_new">
               <input
-                className='account_input_new_value'
+                className="account_input_new_value"
                 type={inputType}
                 name={inputName}
                 id={inputName}
@@ -184,25 +183,25 @@ const AccountUpdateContainer: FC<Props> = ({
               />
             </div>
 
-            <div className='account_input_submit'>
-              <div className='account_input_submit_icon' onClick={handleClick}>
-                <LuSave size={25} color='#157003' />
+            <div className="account_input_submit">
+              <div className="account_input_submit_icon" onClick={handleClick}>
+                <LuSave size={25} color="#157003" />
               </div>
               <div
-                className='account_input_submit_icon'
+                className="account_input_submit_icon"
                 onClick={() => {
-                  refInput.current?.value && (refInput.current.value = '');
+                  refInput.current?.value && (refInput.current.value = "");
                 }}
               >
-                <MdDeleteOutline size={30} color='red' />
+                <MdDeleteOutline size={30} color="red" />
               </div>
             </div>
           </>
         ) : (
           <>
-            <div className='account_input_error'>Erreur chargement</div>
+            <div className="account_input_error">Erreur chargement</div>
             <div
-              className='account_input_error_icon'
+              className="account_input_error_icon"
               onClick={() => {
                 setReloadAccount(true);
               }}

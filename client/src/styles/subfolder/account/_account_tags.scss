@@ -1,0 +1,103 @@
+.account_tags_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .account_tags_title {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-radius: 5px;
+    border-bottom: 2px solid $color_nuance_grey1;
+    border-top: 2px solid $color_nuance_grey1;
+    font-size: 15px;
+    box-sizing: border-box;
+    @include button_bubble_1;
+  }
+  .account_tags_edit {
+    width: 100%;
+    height: 130px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    margin-top: 10px;
+    .one_tag_container {
+      width: 100%;
+      max-height: 70%;
+      padding: 5px;
+      box-sizing: border-box;
+      display: flex;
+      flex-wrap: wrap;
+      overflow: hidden;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .one_tag_off,
+      .one_tag_on {
+        width: auto;
+        height: 20px;
+        display: flex;
+        padding: 3px 5px;
+        margin: 5px 5px 0 0;
+        border-radius: 5px;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey5;
+        cursor: pointer;
+      }
+      .one_tag_off {
+        background-color: $color_pal_yellow;
+      }
+    }
+    .one_tag_delete_confirm {
+      width: 90%;
+      height: 20px;
+      position: absolute;
+      display: flex;
+      bottom: 20px;
+      justify-content: space-between;
+      .one_tag_delete_confirm_button {
+        width: 48%;
+        color: $color_nuance_grey3;
+        border-radius: 5px;
+        background-color: $color_nuance_white1;
+      }
+    }
+  }
+  .account_tags_add {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    position: absolute;
+    bottom: -15px;
+    .add_tag_form {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      .add_tag_input {
+        width: 70%;
+        height: 100%;
+        padding: 0 5px;
+        outline: none;
+        box-sizing: border-box;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+      }
+      .add_tag_submit {
+        width: 25%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        @include button_submit_1;
+        cursor: pointer;
+      }
+    }
+  }
+}

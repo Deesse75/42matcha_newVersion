@@ -41,11 +41,11 @@ export const authSignup = async (
     const user = await mysql.getUser(query, [email]);
     if (!user) {
       throw new matchaError(
-        500,
+        400,
         'Une erreur est survenue lors de la création de votre profil. Merci de réessayer.',
       );
     }
-    await mailer.sendEmailAuthTokenProcess(user.email, emailCode);
+    await mailer.sendEmailTokenProcess(user.email, emailCode);
   } catch (error) {
     throw error;
   }
@@ -54,10 +54,12 @@ export const authSignup = async (
 export const authSignin = async (
   existingUser: MysqlUserType,
   password: string,
-  region: string,
-  county: string,
-  town: string,
+  region: string | null,
+  county: string | null,
+  town: string | null,
 ): Promise<string> => {
+  let query: string = 'UPDATE User SET age = TIMESTAMPDIFF(YEAR, birthdate, CURDATE())';
+  let values: any[] = [];
   try {
     const comparePassword = await argon.verifyData(
       existingUser.hashedPassword,
@@ -70,14 +72,20 @@ export const authSignin = async (
       existingUser.email,
       process.env.JWT_SECRET_TOKEN || '',
     );
-    const query = `UPDATE User SET 
-        age = TIMESTAMPDIFF(YEAR, birthdate, CURDATE()), 
-        region = ?, 
-        county = ?, 
-        town = ?
-        WHERE id = ?
-      `;
-    const values = [region, county, town, existingUser.id];
+    if (region) {
+      query += ', region = ?';
+      values.push(region);
+    }
+    if (county) {
+      query += ', county = ?';
+      values.push(county);
+    }
+    if (town) {
+      query += ', town = ?';
+      values.push(town);
+    }
+    query += ' WHERE id = ?';
+    values.push(existingUser.id);
     await mysql.updateTable(query, values);
     return token;
   } catch (error) {
@@ -112,7 +120,7 @@ export const authResendEmail = async (
     const emailCode = await argon.hashedData(num);
     const query = 'UPDATE User SET emailCode = ? WHERE id = ?';
     await mysql.updateTable(query, [num, existingUser.id]);
-    mailer.sendEmailAuthTokenProcess(existingUser.email, emailCode);
+    mailer.sendEmailTokenProcess(existingUser.email, emailCode);
   } catch (error) {
     throw error;
   }
@@ -125,7 +133,7 @@ export const authForgotPassword = async (
     const num = (Math.floor(Math.random() * 900000) + 100000).toString();
     const query = 'UPDATE User SET emailCode = ? WHERE id = ?';
     await mysql.updateTable(query, [num, existingUser.id]);
-    mailer.sendEmailForgotPasswordProcess(existingUser.email, num);
+    mailer.sendEmailCodeProcess(existingUser.email, num);
   } catch (error) {
     throw error;
   }
@@ -157,11 +165,8 @@ export const authContactUs = (
   subject: string,
   text: string,
 ): void => {
-  const sendText = `Message reçu de ${contactName} - ${contactEmail}</br></br>Objet : ${subject}</br></br>${text}`;
-  const title = 'Administrateur Matcha';
-  const mailTo = process.env.MAILER_EMAIL || '';
   try {
-    mailer.sendNewEmail(mailTo, title, sendText);
+    mailer.sendContactUsProcess(contactName, contactEmail, subject, text);
   } catch (error) {
     throw error;
   }

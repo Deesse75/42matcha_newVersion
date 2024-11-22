@@ -1,22 +1,25 @@
 import { NextFunction, Request, Response } from 'express';
+import { url } from 'inspector';
 import Joi from 'joi';
 
 const signinUsernameSchema = Joi.object({
   username: Joi.string()
-    .empty()
     .pattern(new RegExp('^[a-zA-Z][a-zA-Z0-9_@]{2,29}$'))
-    .required(),
+    .required()
+    .min(3)
+    .max(30),
   password: Joi.string()
-    .empty()
     .pattern(
       new RegExp(
         '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!?@])[a-zA-Z0-9!?@]{8,30}$',
       ),
     )
-    .required(),
-  region: Joi.string().empty().required(),
-  county: Joi.string().empty().required(),
-  town: Joi.string().empty().required(),
+    .required()
+    .min(8)
+    .max(30),
+  region: Joi.string().allow(null).required(),
+  county: Joi.string().allow(null).required(),
+  town: Joi.string().allow(null).required(),
 })
   .unknown(false)
   .messages({
@@ -30,19 +33,19 @@ const signinEmailSchema = Joi.object({
       maxDomainSegments: 3,
       tlds: { allow: ['com', 'fr'] },
     })
-    .empty()
     .required(),
   password: Joi.string()
-    .empty()
     .pattern(
       new RegExp(
         '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!?@])[a-zA-Z0-9!?@]{8,30}$',
       ),
     )
-    .required(),
-  region: Joi.string().empty().required(),
-  county: Joi.string().empty().required(),
-  town: Joi.string().empty().required(),
+    .required()
+    .min(8)
+    .max(30),
+  region: Joi.string().allow(null).required(),
+  county: Joi.string().allow(null).required(),
+  town: Joi.string().allow(null).required(),
 })
   .unknown(false)
   .messages({
@@ -51,34 +54,37 @@ const signinEmailSchema = Joi.object({
 
 const signupSchema = Joi.object({
   firstname: Joi.string()
-    .empty()
     .pattern(new RegExp("^[a-zA-Z][a-zA-Z- ']{2,29}$"))
-    .required(),
+    .required()
+    .min(3)
+    .max(30),
   lastname: Joi.string()
-    .empty()
     .pattern(new RegExp("^[a-zA-Z][a-zA-Z- ']{2,29}$"))
-    .required(),
+    .required()
+    .min(3)
+    .max(30),
   username: Joi.string()
-    .empty()
     .pattern(new RegExp('^[a-zA-Z][a-zA-Z0-9_@]{2,29}$'))
-    .required(),
-  birthdate: Joi.string().isoDate().empty().required(),
+    .required()
+    .min(3)
+    .max(30),
+  birthdate: Joi.string().isoDate().required(),
   email: Joi.string()
     .email({
       minDomainSegments: 2,
       maxDomainSegments: 3,
       tlds: { allow: ['com', 'fr'] },
     })
-    .empty()
     .required(),
   password: Joi.string()
-    .empty()
     .pattern(
       new RegExp(
         '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!?@])[a-zA-Z0-9!?@]{8,30}$',
       ),
     )
-    .required(),
+    .required()
+    .min(8)
+    .max(30),
 })
   .unknown(false)
   .messages({
@@ -92,7 +98,6 @@ const resendEmailSchema = Joi.object({
       maxDomainSegments: 3,
       tlds: { allow: ['com', 'fr'] },
     })
-    .empty()
     .required(),
 })
   .unknown(false)
@@ -107,7 +112,6 @@ const forgotPasswordSchema = Joi.object({
       maxDomainSegments: 3,
       tlds: { allow: ['com', 'fr'] },
     })
-    .empty()
     .required(),
 })
   .unknown(false)
@@ -116,38 +120,23 @@ const forgotPasswordSchema = Joi.object({
   });
 
 const reinitPasswordSchema = Joi.object({
-  code: Joi.string()
-    .empty()
-    .pattern(new RegExp('^[0-9]{6}$'))
-    .required(),
+  code: Joi.string().pattern(new RegExp('^[0-9]{6}$')).required().min(6).max(6),
   newPassword: Joi.string()
-    .empty()
     .pattern(
       new RegExp(
         '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!?@])[a-zA-Z0-9!?@]{8,30}$',
       ),
     )
     .required()
-    .messages({
-      'string.empty': 'Le nouveau mot de passe ne doit pas être vide',
-      'string.pattern.base':
-        'Le format du nouveau mot de passe est invalide. Voir les règles de saisie',
-      'any.required': 'Le nouveau mot de passe est requis.',
-    }),
+    .min(8)
+    .max(30),
   email: Joi.string()
     .email({
       minDomainSegments: 2,
       maxDomainSegments: 3,
       tlds: { allow: ['com', 'fr'] },
     })
-    .empty()
-    .required()
-    .messages({
-      'string.email':
-        "Le format de l'adresse email est invalide. Voir les règles de saisie",
-      'string.empty': "L'adresse email ne doit pas être vide",
-      'any.required': "L'adresse email est requise.",
-    }),
+    .required(),
 })
   .unknown(false)
   .messages({
@@ -155,42 +144,38 @@ const reinitPasswordSchema = Joi.object({
   });
 
 const validateEmailSchema = Joi.object({
-  url: Joi.string().empty().uri().required(),
+  url: Joi.string().required().uri(),
 })
   .unknown(false)
   .messages({
     'objet.unknown': 'La requete est invalide.',
   });
 
-export const contactSchema = Joi.object({
-  contactName: Joi.string()
-    .empty()
-    .required(),
+const contactSchema = Joi.object({
+  contactName: Joi.string().required().min(3).max(30),
   contactEmail: Joi.string()
     .email({
       minDomainSegments: 2,
       maxDomainSegments: 3,
       tlds: { allow: ['com', 'fr'] },
     })
-    .empty()
     .required(),
-  subject: Joi.string().empty().max(100).required(),
-  text: Joi.string().empty().max(955).required(),
+  subject: Joi.string().min(1).max(100).required(),
+  text: Joi.string().min(1).max(955).required(),
 })
   .unknown(false)
   .messages({
     'object.unknown': 'Certains champs dans la requête ne sont pas autorisés.',
   });
 
-
 const schemaMap: { [key: string]: Joi.ObjectSchema } = {
   '/signin_username': signinUsernameSchema,
   '/signin_Email': signinEmailSchema,
   '/signup': signupSchema,
   '/forgot_password': forgotPasswordSchema,
-  '/validate_email': validateEmailSchema,
   '/reinit_password': reinitPasswordSchema,
   '/resend_email': resendEmailSchema,
+  '/validate_email': validateEmailSchema,
   '/contact_us': contactSchema,
 };
 

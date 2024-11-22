@@ -1,8 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+NG+Modern:wght@100..400');
 @import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
 @import './variable';
 @import './mixin';
-
 
 body {
   margin: 0;
@@ -10,7 +8,9 @@ body {
   width: 100vw;
   min-height: 100vh;
   display: flex;
-  color: $color_pal_navy;
+  font-family: serif;
+  font-size: 16px;
+  color: $color_font_grey;
   &::-webkit-scrollbar {
     display: none;
   }

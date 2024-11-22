@@ -105,31 +105,40 @@ export const updateUserDataService = async (
   try {
     let query: string = 'UPDATE User SET';
     const values: any[] = [];
-    let emailCode: string = '';
+    let comma: number = 0;
 
     if (updateUser.firstname) {
-      query += ' firstname = ?,';
+      query += ' firstname = ?';
       values.push(updateUser.firstname);
+      comma = 1;
     }
+
     if (updateUser.lastname) {
-      query += ' lastname = ?,';
+      if (comma) query += ', lastname = ?';
+      else query += ' lastname = ?';
       values.push(updateUser.lastname);
-    }
+    } else comma = 0;
+
     if (updateUser.username) {
       const q = 'SELECT * FROM User WHERE username = ?';
       const v = [updateUser.username];
       const testUser = await mysql.getUser(q, v);
       if (testUser)
         throw new matchaError(400, "Ce nom d'utilisateur existe déjà.");
-      query += ' username = ?,';
+      if (comma) query += ', username = ?';
+      else query += ' username = ?';
       values.push(updateUser.username);
-    }
+    } else comma = 0;
+
     if (updateUser.birthdate) {
-      query += ' birthdate = ?,';
+      if (comma) query += ', birthdate = ?';
+      else query += ' birthdate = ?';
       values.push(new Date(updateUser.birthdate));
     }
+
     query += ' WHERE id = ?';
     values.push(user.id);
+
     await mysql.updateTable(query, values);
     if (updateUser.birthdate) {
       query =
@@ -183,7 +192,7 @@ export const updateEmailService = async (
     const emailCode = await argon.hashedData(num);
     query = 'UPDATE User SET emailCode = ? WHERE id = ?';
     await mysql.updateTable(query, [num, user.id]);
-    await mailer.sendEmailUserTokenProcess(newEmail, emailCode);
+    await mailer.sendEmailTokenProcess(newEmail, emailCode);
   } catch (error) {
     throw error;
   }
@@ -215,7 +224,7 @@ export const addTagService = async (
         400,
         'Vous avez atteint le nombre maximum de tags.',
       );
-    const query = 'INSERT INTO UserTags (userId, tagName) VALUES (?, ?)';
+    const query = 'INSERT INTO Tags (userId, tagName) VALUES (?, ?)';
     await mysql.updateTable(query, [user.id, newTag]);
   } catch (error) {
     throw error;
@@ -227,27 +236,8 @@ export const deleteTagService = async (
   tagId: number,
 ): Promise<void> => {
   try {
-    const query = 'DELETE FROM UserTags WHERE id = ?';
+    const query = 'DELETE FROM Tags WHERE id = ?';
     await mysql.updateTable(query, [tagId]);
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const validateUpdateEmailService = async (
-  user: MysqlUserType,
-  code: string,
-  email: string,
-): Promise<void> => {
-  try {
-    const compareCode = await argon.verifyData(code, user.emailCode);
-    let query = 'UPDATE User SET emailCode = ? WHERE id = ?';
-    await mysql.updateTable(query, ['', user.id]);
-    if (!compareCode) {
-      throw new matchaError(401, 'Token invalide, absent ou expiré.');
-    }
-    query = 'UPDATE User SET email = ? WHERE id = ?';
-    await mysql.updateTable(query, [email, user.id]);
   } catch (error) {
     throw error;
   }
@@ -303,10 +293,14 @@ export const updateLookForService = async (
         "L'âge minimum doit être inférieur à l'âge maximum.",
       );
     }
-    if (lookFor.tallMin && lookFor.tallMax && lookFor.tallMin > lookFor.tallMax) {
+    if (
+      lookFor.tallMin &&
+      lookFor.tallMax &&
+      lookFor.tallMin > lookFor.tallMax
+    ) {
       throw new matchaError(
         400,
-        "La taille minimum doit être inférieure à la taille maximum.",
+        'La taille minimum doit être inférieure à la taille maximum.',
       );
     }
     if (lookFor.ageMin) {
@@ -341,7 +335,9 @@ export const updateLookForService = async (
   }
 };
 
-export const deleteAccountService = async (user: MysqlUserType): Promise<void> => {
+export const deleteAccountService = async (
+  user: MysqlUserType,
+): Promise<void> => {
   try {
     const query = 'DELETE FROM User WHERE id = ?';
     await mysql.updateTable(query, [user.id]);
@@ -350,10 +346,15 @@ export const deleteAccountService = async (user: MysqlUserType): Promise<void> =
   }
 };
 
-export const updatePhotoProfileService = async (user: MysqlUserType, photo: string) => {
+export const updatePhotoProfileService = async (
+  user: MysqlUserType,
+  photo: string,
+) => {
   try {
     const query = 'UPDATE User SET photo = ? WHERE id = ?';
-    await mysql.updateTable(query, [photo, user.id]);
+    const base64Data = photo.replace(/^data:.*,/, '');
+    const photoBuffer = Buffer.from(base64Data, 'base64');
+    await mysql.updateTable(query, [photoBuffer, user.id]);
   } catch (error) {
     throw error;
   }

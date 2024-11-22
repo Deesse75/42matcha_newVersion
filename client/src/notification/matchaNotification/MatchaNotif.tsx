@@ -12,7 +12,7 @@ const MatchaNotif: FC<Props> = ({ matchaNotif, setMatchaNotif }) => {
 
     const notifCount = setTimeout(() => {
       setMatchaNotif(null);
-    }, 7000);
+    }, 5000);
     return () => {
       clearTimeout(notifCount);
     };
@@ -20,20 +20,21 @@ const MatchaNotif: FC<Props> = ({ matchaNotif, setMatchaNotif }) => {
 
   return (
     <>
-      {matchaNotif && (
-        <>
-          <div className='matcha_notif_container'>
-            <div className='matcha_notif_message'>
-              {matchaNotif && (
-                <div className='matcha_notif_text'>{matchaNotif}</div>
-              )}
-              <div onClick={() => {setMatchaNotif(null)}} className='matcha_notif_close'>
-                <IoIosClose size={24} />
-              </div>
+      <div className='matcha_notif_container'>
+        {matchaNotif && (
+          <div className='matcha_notif_message'>
+            <div className='matcha_notif_text'>{matchaNotif}</div>
+            <div
+              onClick={() => {
+                setMatchaNotif(null);
+              }}
+              className='matcha_notif_close'
+            >
+              <IoIosClose size={24} />
             </div>
           </div>
-        </>
-      )}
+        )}
+      </div>
     </>
   );
 };

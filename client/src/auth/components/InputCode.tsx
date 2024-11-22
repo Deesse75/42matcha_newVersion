@@ -9,9 +9,9 @@ type Props = {
 const InputCode: FC<Props> = ({ id, currentRef, nextRef }) => {
   return (
     <>
-      <div className='reinit_page_form_number_input'>
         <input
-          className='reinit_page_form_number_input_insert'
+          className='reinit__number_input'
+          key={id}
           type='text'
           name={`Num${id}`}
           id={`Num${id}`}
@@ -25,7 +25,6 @@ const InputCode: FC<Props> = ({ id, currentRef, nextRef }) => {
             nextRef.current?.focus();
           }}
         />
-      </div>
     </>
   );
 };

@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from 'react';
-import UploadPhoto from './UploadPhoto';
-import { userRoute, appRedir } from '../../../../appConfig/appPath';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-import { PhotosPlusType } from '../../../../appConfig/interface';
+import { FC, useEffect, useState } from "react";
+import UploadPhoto from "./UploadPhoto";
+import { userRoute, appRedir } from "../../../../appConfig/appPath";
+import { useNavigate } from "react-router-dom";
+import { PhotosPlusType } from "../../../../appConfig/interface";
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
@@ -23,15 +22,15 @@ const PhotosPlus: FC<Props> = ({ setMatchaNotif }) => {
     const request = async () => {
       try {
         const response = await fetch(userRoute.getPhotos, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("session")}`,
           },
         });
         const data = await response.json();
         if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
+        if (data.message && data.message.split(" ")[0] === "Token") {
           setMatchaNotif(data.message);
           nav(appRedir.signout);
           return;
@@ -70,16 +69,16 @@ const PhotosPlus: FC<Props> = ({ setMatchaNotif }) => {
     const request = async () => {
       try {
         const response = await fetch(userRoute.updatePhotoPlus, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("session")}`,
           },
           body: JSON.stringify({ photo: newPhoto, index: index }),
         });
         const data = await response.json();
         if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
+        if (data.message && data.message.split(" ")[0] === "Token") {
           setMatchaNotif(data.message);
           nav(appRedir.signout);
           return;
@@ -108,12 +107,12 @@ const PhotosPlus: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <div className='photos_plus_container'>
-        <div className='photos_plus_section'>
-          <div className='photos_plus_one_photo'>
+      <div className="photos_plus_container">
+        <div className="photos_plus_section">
+          <div className="photos_plus_one_photo">
             <img
-              src={photos && photos.photo2 ? photos.photo2 : ''}
-              alt='Photo2'
+              src={photos && photos.photo2 ? photos.photo2 : ""}
+              alt="Photo2"
             />
             <button
               onClick={() => {
@@ -123,10 +122,10 @@ const PhotosPlus: FC<Props> = ({ setMatchaNotif }) => {
               Modifier
             </button>
           </div>
-          <div className='photos_plus_one_photo'>
+          <div className="photos_plus_one_photo">
             <img
-              src={photos && photos.photo3 ? photos.photo3 : ''}
-              alt='Photo3'
+              src={photos && photos.photo3 ? photos.photo3 : ""}
+              alt="Photo3"
             />
             <button
               onClick={() => {
@@ -137,11 +136,11 @@ const PhotosPlus: FC<Props> = ({ setMatchaNotif }) => {
             </button>
           </div>
         </div>
-        <div className='photos_plus_section'>
-          <div className='photos_plus_one_photo'>
+        <div className="photos_plus_section">
+          <div className="photos_plus_one_photo">
             <img
-              src={photos && photos.photo4 ? photos.photo4 : ''}
-              alt='Photo4'
+              src={photos && photos.photo4 ? photos.photo4 : ""}
+              alt="Photo4"
             />
             <button
               onClick={() => {
@@ -151,10 +150,10 @@ const PhotosPlus: FC<Props> = ({ setMatchaNotif }) => {
               Modifier
             </button>
           </div>
-          <div className='photos_plus_one_photo'>
+          <div className="photos_plus_one_photo">
             <img
-              src={photos && photos.photo5 ? photos.photo5 : ''}
-              alt='Photo5'
+              src={photos && photos.photo5 ? photos.photo5 : ""}
+              alt="Photo5"
             />
             <button
               onClick={() => {

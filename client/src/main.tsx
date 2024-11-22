@@ -10,9 +10,9 @@ createRoot(document.getElementById('root')!).render(
   <UserProvider>
     <SelectMenuProvider>
       <MemoryProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
       </MemoryProvider>
     </SelectMenuProvider>
   </UserProvider>,

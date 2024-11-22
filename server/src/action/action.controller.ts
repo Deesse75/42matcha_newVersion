@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 import { matchaError } from '../utils/matcha_error.js';
-import { actionBanService, actionLikeService, actionViewService, deleteLikeService } from './action.services.js';
+import {
+  actionBanService,
+  actionLikeService,
+  actionViewService,
+  deleteLikeService,
+} from './action.services.js';
 
 export const getInteractions = async (
   req: Request,
@@ -18,7 +23,7 @@ export const actionLike = async (
     await actionLikeService(
       req.body.existingUser,
       req.body.interaction,
-      req.body.params.id,
+      parseInt(req.params.id),
     );
     res.status(200).json({ message: 'like' });
     return;
@@ -35,7 +40,7 @@ export const deleteLike = async (
     await deleteLikeService(
       req.body.existingUser,
       req.body.interaction,
-      req.body.params.id,
+      parseInt(req.params.id),
     );
     res.status(200).json({ message: 'dislike' });
     return;
@@ -52,7 +57,7 @@ export const actionView = async (
     await actionViewService(
       req.body.existingUser,
       req.body.interaction,
-      req.body.params.id,
+      parseInt(req.params.id),
     );
     res.status(200).json({ message: 'view' });
     return;
@@ -61,19 +66,12 @@ export const actionView = async (
   }
 };
 
-export const actionBan = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const actionBan = async (req: Request, res: Response): Promise<void> => {
   try {
-    await actionBanService(
-      req.body.existingUser,
-      req.body.params.id,
-    );
+    await actionBanService(req.body.existingUser, parseInt(req.params.id));
     res.status(200).json({ message: 'ban' });
     return;
   } catch (error) {
     return matchaError.catched(error as Error, res);
   }
 };
-
