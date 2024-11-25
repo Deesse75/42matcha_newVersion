@@ -1,5 +1,4 @@
 import {
-  MysqlLookForType,
   MysqlPhotosPlusType,
   MysqlUserTagsType,
   MysqlUserType,
@@ -7,7 +6,6 @@ import {
 import {
   PhotosPlusBackType,
   UserBackType,
-  UserLookForBackType,
   UserTagsBackType,
 } from '../interfaces/user.interface.js';
 import * as mysql from '../mysql/mysql.service.js';
@@ -20,7 +18,6 @@ import * as jwt from '../utils/jwt.service.js';
 type GetMeType = {
   user: UserBackType;
   userTags: UserTagsBackType[] | null;
-  userLookFor: UserLookForBackType | null;
 };
 
 type UpdateUserType = {
@@ -37,26 +34,15 @@ type ProfileType = {
   biography: string | null;
 };
 
-type LookForType = {
-  ageMin: number | null;
-  ageMax: number | null;
-  tallMin: number | null;
-  tallMax: number | null;
-  gender: string | null;
-  withPhoto: boolean;
-};
-
 export const getMeService = async (
   user: MysqlUserType,
   userTags: MysqlUserTagsType[],
-  userLookFor: MysqlLookForType,
 ): Promise<GetMeType> => {
   try {
     const publicUser = convertPublicUser(user);
     return {
       user: publicUser,
       userTags: userTags ? userTags : null,
-      userLookFor: userLookFor ? userLookFor : null,
     };
   } catch (error) {
     throw error;
@@ -280,61 +266,6 @@ export const updateProfileDataService = async (
   }
 };
 
-export const updateLookForService = async (
-  user: MysqlUserType,
-  lookFor: LookForType,
-) => {
-  try {
-    let query: string = 'UPDATE LookFor SET';
-    const values: any[] = [];
-    if (lookFor.ageMin && lookFor.ageMax && lookFor.ageMin > lookFor.ageMax) {
-      throw new matchaError(
-        400,
-        "L'âge minimum doit être inférieur à l'âge maximum.",
-      );
-    }
-    if (
-      lookFor.tallMin &&
-      lookFor.tallMax &&
-      lookFor.tallMin > lookFor.tallMax
-    ) {
-      throw new matchaError(
-        400,
-        'La taille minimum doit être inférieure à la taille maximum.',
-      );
-    }
-    if (lookFor.ageMin) {
-      query += ' ageMin >= ?,';
-      values.push(lookFor.ageMin);
-    }
-    if (lookFor.ageMax) {
-      query += ' ageMax <= ?,';
-      values.push(lookFor.ageMax);
-    }
-    if (lookFor.tallMin) {
-      query += ' tallMin >= ?,';
-      values.push(lookFor.tallMin);
-    }
-    if (lookFor.tallMax) {
-      query += ' tallMax <= ?,';
-      values.push(lookFor.tallMax);
-    }
-    if (lookFor.gender) {
-      if (lookFor.gender === 'delete') query += ' gender = NULL,';
-      else {
-        query += ' gender = ?,';
-        values.push(lookFor.gender);
-      }
-    }
-    if (lookFor.withPhoto) query += ' photo IS NOT NULL,';
-    query += ' WHERE userId = ?';
-    values.push(user.id);
-    await mysql.updateTable(query, values);
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const deleteAccountService = async (
   user: MysqlUserType,
 ): Promise<void> => {
@@ -349,7 +280,7 @@ export const deleteAccountService = async (
 export const updatePhotoProfileService = async (
   user: MysqlUserType,
   photo: string,
-) => {
+): Promise<void> => {
   try {
     const query = 'UPDATE User SET photo = ? WHERE id = ?';
     const base64Data = photo.replace(/^data:.*,/, '');
@@ -360,7 +291,9 @@ export const updatePhotoProfileService = async (
   }
 };
 
-export const deletePhotoProfileService = async (user: MysqlUserType) => {
+export const deletePhotoProfileService = async (
+  user: MysqlUserType,
+): Promise<void> => {
   try {
     const query = 'UPDATE User SET photo = NULL WHERE id = ?';
     await mysql.updateTable(query, [user.id]);
@@ -368,3 +301,45 @@ export const deletePhotoProfileService = async (user: MysqlUserType) => {
     throw error;
   }
 };
+
+export const updateOnePhotoPlusService = async (
+  user: MysqlUserType,
+  userPhotosPlus: MysqlPhotosPlusType,
+  photo: string,
+  index: number,
+): Promise<void> => {
+  try {
+    let query: string = '';
+    let values: any[] = [];
+    const base64Data = photo.replace(/^data:.*,/, '');
+    const photoBuffer = Buffer.from(base64Data, 'base64');
+    if (userPhotosPlus) {
+      query = `UPDATE PhotosPlus SET photo${index} = ? WHERE id = ?`;
+      values.push(photoBuffer, user.id);
+    }
+    else {
+    query = `INSERT INTO PhotosPlus (userId, photo${index}) VALUES (?, ?)`;
+    values.push(user.id, photoBuffer);
+  }
+  await mysql.updateTable(query, values);
+} catch (error) {
+  throw error;
+}
+};
+
+export const deleteOnePhotoPlusService = async (
+  user: MysqlUserType,
+  index: number,
+): Promise<void> => {
+  try {
+    const query = `UPDATE PhotosPlus SET photo${index} = NULL WHERE id = ?`;
+    await mysql.updateTable(query, [user.id]);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateBioService = async (
+  user: MysqlUserType,
+  bio: string | null,
+): Promise<void> => {};

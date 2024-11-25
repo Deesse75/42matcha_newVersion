@@ -4,7 +4,6 @@ import {
   MysqlActionType,
   MysqlChatMessageType,
   MysqlLastSearchType,
-  MysqlLookForType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
@@ -64,19 +63,6 @@ export async function getTags(
     const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows;
-  } catch (error) {
-    throw new matchaError(500, (error as Error).message);
-  }
-}
-
-export async function getLookFor(
-  query: string,
-  values: any[],
-): Promise<MysqlLookForType | null> {
-  try {
-    const [rows]: any[] = await mysqlDb.query(query, values);
-    if (!rows[0]) return null;
-    return rows[0];
   } catch (error) {
     throw new matchaError(500, (error as Error).message);
   }

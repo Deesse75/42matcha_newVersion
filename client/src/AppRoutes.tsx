@@ -1,36 +1,36 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { appRedir } from './appConfig/appPath';
-import ForgotPassword from './auth/pages/ForgotPassword';
-import Loading from './auth/pages/Loading';
-import ResendEmail from './auth/pages/ResendEmail';
-import Signin from './auth/pages/Signin';
-import Signup from './auth/pages/Signup';
-import ValidateEmail from './auth/pages/ValidateEmail';
-import Error500 from './error/Error500';
-import ErrorNotFound from './error/ErrorNotFound';
-import ContactUs from './footer/components/ContactUs';
-import UpdateEmail from './home/components/account/UpdateEmail';
-import UpdatePassword from './home/pages/UpdatePassword';
-import UpdatePhotosPlus from './home/components/account/UpdatePhotosPlus';
-import AccountPage from './home/pages/Account';
-import ChatPage from './home/pages/Chat';
-import DeleletPhotoProfile from './home/pages/DeleletPhotoProfile';
-import DeleteAccount from './home/pages/DeleteAccount';
-import GetMe from './home/pages/GetMe';
-import SearchPage from './home/pages/Search';
-import Signout from './home/pages/Signout';
-import Dashboard from './home/pages/Dashboard';
-import History from './home/pages/History';
+import AccountPage from './pages/Account';
+import ChatPage from './pages/Chat';
+import Dashboard from './pages/Dashboard';
+import DeleteAccount from './pages/DeleteAccount';
+import Error500 from './pages/Error500';
+import ErrorNotFound from './pages/ErrorNotFound';
+import ForgotPassword from './pages/ForgotPassword';
+import GetMe from './pages/GetMe';
+import Loading from './pages/Loading';
+import PhotoProfile from './pages/PhotoProfile';
+import ResendEmail from './pages/ResendEmail';
+import SearchPage from './pages/Search';
+import Signin from './pages/Signin';
+import Signout from './pages/Signout';
+import Signup from './pages/Signup';
+import ValidateEmail from './pages/ValidateEmail';
+import HistoryPage from './pages/History';
+import ContactUs from './pages/ContactUs';
+import DisplayProfil from './pages/DisplayProfil';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
+
   return (
     <>
       <Routes>
+        {/* logged out */}
         <Route
           path={appRedir.loading}
           element={<Loading setMatchaNotif={setMatchaNotif} />}
@@ -56,18 +56,36 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
           element={<ValidateEmail setMatchaNotif={setMatchaNotif} />}
         />
 
+        {/* both */}
         <Route path={appRedir.errorNotfound} element={<ErrorNotFound />} />
         <Route path={appRedir.errorInternal} element={<Error500 />} />
-
         <Route
           path={appRedir.contact}
           element={<ContactUs setMatchaNotif={setMatchaNotif} />}
         />
+
+        {/* logged in */}
         <Route
           path={appRedir.getMe}
           element={<GetMe setMatchaNotif={setMatchaNotif} />}
         />
         <Route path={appRedir.signout} element={<Signout />} />
+        <Route
+          path={appRedir.account}
+          element={
+            <AccountPage
+              setMatchaNotif={setMatchaNotif}
+            />
+          }
+        />
+        <Route
+          path={appRedir.updatePhotos}
+          element={
+            <PhotoProfile
+              setMatchaNotif={setMatchaNotif}
+            />
+          }
+        />
         <Route
           path={appRedir.deleteAccount}
           element={<DeleteAccount setMatchaNotif={setMatchaNotif} />}
@@ -75,10 +93,6 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
         <Route
           path={appRedir.dashboard}
           element={<Dashboard setMatchaNotif={setMatchaNotif} />}
-        />
-        <Route
-          path={appRedir.history}
-          element={<History setMatchaNotif={setMatchaNotif} />}
         />
         <Route
           path={appRedir.chat}
@@ -89,25 +103,15 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
           element={<SearchPage setMatchaNotif={setMatchaNotif} />}
         />
         <Route
-          path={appRedir.account}
-          element={<AccountPage setMatchaNotif={setMatchaNotif} />}
+          path={appRedir.history}
+          element={<HistoryPage setMatchaNotif={setMatchaNotif} />}
         />
         <Route
-          path={appRedir.updateEmail}
-          element={<UpdateEmail setMatchaNotif={setMatchaNotif} />}
+          path={appRedir.displayProfil}
+          element={<DisplayProfil setMatchaNotif={setMatchaNotif} />}
         />
-        <Route
-          path={appRedir.updatePassword}
-          element={<UpdatePassword setMatchaNotif={setMatchaNotif} />}
-        />
-        <Route
-          path={appRedir.updatePhotosPlus}
-          element={<UpdatePhotosPlus setMatchaNotif={setMatchaNotif} />}
-        />
-        <Route
-          path={appRedir.deletePhotoProfil}
-          element={<DeleletPhotoProfile setMatchaNotif={setMatchaNotif} />}
-        />
+
+        {/* wrong page */}
         <Route path='/*' element={<ErrorNotFound />} />
       </Routes>
     </>

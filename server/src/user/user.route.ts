@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import {
   findExistingUser,
-  findLookFor,
   findPhotosPlus,
   findTags,
 } from '../middleware/user.data.validation.js';
@@ -16,13 +15,12 @@ import {
   getMe,
   getNewToken,
   getUserData,
-  getUserLookFor,
   getUserPhotosPlus,
   getUserTags,
+  updateBio,
   updateEmail,
-  updateLookFor,
+  updateOnePhotoPlus,
   updatePassword,
-  updatePhotoPlus,
   updatePhotoProfile,
   updateProfileData,
   updateUserData,
@@ -36,7 +34,6 @@ userRoute.get(
   userTokenValidation,
   findExistingUser,
   findTags,
-  findLookFor,
   getMe,
 );
 
@@ -53,14 +50,6 @@ userRoute.get(
   findExistingUser,
   findTags,
   getUserTags,
-);
-
-userRoute.get(
-  '/get_user_look_for',
-  userTokenValidation,
-  findExistingUser,
-  findLookFor,
-  getUserLookFor,
 );
 
 userRoute.get(
@@ -95,6 +84,14 @@ userRoute.post(
   updateEmail,
 );
 
+userRoute.post(
+  '/update_bio',
+  userBodyValidation,
+  userTokenValidation,
+  findExistingUser,
+  updateBio,
+);
+
 userRoute.get('/get_new_token/:id', getNewToken);
 
 userRoute.post(
@@ -122,15 +119,6 @@ userRoute.post(
 );
 
 userRoute.post(
-  '/update_look_for',
-  userBodyValidation,
-  userTokenValidation,
-  findExistingUser,
-  findLookFor,
-  updateLookFor,
-);
-
-userRoute.post(
   '/update_photo_profile',
   userBodyValidation,
   userTokenValidation,
@@ -139,15 +127,24 @@ userRoute.post(
 );
 
 userRoute.post(
-  '/update_photo_plus',
+  '/update_one_photo_plus',
   userBodyValidation,
   userTokenValidation,
   findExistingUser,
-  updatePhotoPlus,
+  findPhotosPlus,
+  updateOnePhotoPlus,
 );
+
 
 userRoute.delete(
   '/delete_photo_profile',
+  userTokenValidation,
+  findExistingUser,
+  deletePhotoProfile,
+);
+
+userRoute.delete(
+  '/delete_one_photo_plus/:index',
   userTokenValidation,
   findExistingUser,
   deletePhotoProfile,

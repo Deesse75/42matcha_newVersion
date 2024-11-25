@@ -25,17 +25,6 @@ export type UserTagsFrontType = {
   tagName: string;
 };
 
-export type UserLookForFrontType = {
-  id: number;
-  userId: number;
-  ageMin: number;
-  ageMax: number;
-  tallMin: number;
-  tallMax: number;
-  gender: string | null;
-  withPhoto: boolean;
-};
-
 export type UserLastSearchFrontType = {
   ageMin: number;
   ageMax: number;

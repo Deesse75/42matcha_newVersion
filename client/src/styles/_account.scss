@@ -1,77 +1,98 @@
 .account_container {
-  width: 90%;
+  width: 100%;
+  height: 100%;
   display: flex;
-  height: 670px;
+  margin-top: 5px;
+  position: relative;
   flex-direction: column;
   box-sizing: border-box;
-  box-sizing: content-box;
-
-  .account_top_section {
+  .account_info {
     width: 100%;
-    height: 270px;
+    height: 20px;
     display: flex;
-    padding: 20px;
-    margin: 30px;
+    @import './subfolder/account/account_info';
+  }
+  .account_top {
+    width: 100%;
+    height: 230px;
+    display: flex;
     justify-content: space-between;
     box-sizing: border-box;
     border-radius: 15px;
-    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
-
     .account_photo {
-      width: 20%;
-      height: 100%;
-      margin-bottom: 50px;
-      position: relative;
+      width: 15%;
+      height: 95%;
       display: flex;
-      flex-direction: column;
+      margin: auto 0;
       align-items: center;
+      justify-content: center;
       @import './subfolder/account/account_photo_profile';
-      @import './subfolder/account/account_upload_photo';
-      @import './subfolder/account/account_update_photo_profile';
     }
     .account_data {
-      width: 55%;
-      height: 100%;
-      padding: 10px;
+      width: 84%;
+      height: 95%;
       display: flex;
-      justify-content: end;
-      box-sizing: border-box;
+      align-items: end;
+      margin: auto;
       @import './subfolder/account/account_data';
     }
-    .account_tags {
-      width: 25%;
+  }
+  .account_middle {
+    width: 100%;
+    height: 180px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    border-radius: 15px;
+    .account_profile {
+      width: 45%;
       height: 100%;
       display: flex;
-      padding: 15px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+      @import './subfolder/account/account_profile';
+    }
+    .account_tags {
+      width: 54%;
+      height: 100%;
+      display: flex;
       box-sizing: border-box;
       @import './subfolder/account/account_tags';
     }
   }
-
-  .account_bottom_section {
+  .account_bottom {
     width: 100%;
-    height: 350px;
-    margin: 0 30px 10px 30px;
+    height: 230px;
     display: flex;
-    justify-content: space-between;
-    box-sizing: border-box;
-    .account_profile {
-      width: 60%;
-      height: 100%;
+    margin-top: 15px;
+    @import './subfolder/account/update_bio';
+  }
+  .account_delete {
+    width: 100%;
+    height: 70px;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    .account_delete_redirect {
+      width: auto;
+      height: 90%;
       display: flex;
-      box-sizing: border-box;
-      border-radius: 15px;
-      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
-      @import './subfolder/account/account_profile';
-    }
-    .account_lookFor {
-      width: 39%;
-      height: 100%;
-      display: flex;
-      box-sizing: border-box;
-      border-radius: 15px;
-      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
-      @import './subfolder/account/account_lookFor';
+      padding: 0 60px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      border: none;
+      color: $color_nuance_white1;
+      background-color: $color_nuance_grey5;
+      cursor: pointer;
+      &:hover {
+        background-color: $color_auth_red1;
+        transition: all 0.2s;
+      }
     }
   }
 }

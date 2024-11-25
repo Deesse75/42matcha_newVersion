@@ -3,14 +3,16 @@ import { matchaError } from '../utils/matcha_error.js';
 import {
   addTagService,
   deleteAccountService,
+  deleteOnePhotoPlusService,
   deletePhotoProfileService,
   deleteTagService,
   getMeService,
   getNewTokenService,
   getUserDataService,
   getUserPhotosPlusService,
+  updateBioService,
   updateEmailService,
-  updateLookForService,
+  updateOnePhotoPlusService,
   updatePasswordService,
   updatePhotoProfileService,
   updateProfileDataService,
@@ -19,15 +21,10 @@ import {
 
 export const getMe = async (req: Request, res: Response): Promise<void> => {
   try {
-    const me = await getMeService(
-      req.body.existingUser,
-      req.body.userTags,
-      req.body.userLookFor,
-    );
+    const me = await getMeService(req.body.existingUser, req.body.userTags);
     res.status(200).json({
       user: me.user,
       userTags: me.userTags,
-      userLookFor: me.userLookFor,
     });
     return;
   } catch (error) {
@@ -53,13 +50,6 @@ export const getUserData = async (
 export const getUserTags = (req: Request, res: Response): void => {
   res.status(200).json({
     userTags: req.body.userTags ? req.body.userTags : null,
-  });
-  return;
-};
-
-export const getUserLookFor = (req: Request, res: Response): void => {
-  res.status(200).json({
-    userLookFor: req.body.userLookFor ? req.body.userLookFor : null,
   });
   return;
 };
@@ -135,6 +125,16 @@ export const updateEmail = async (
   }
 };
 
+export const updateBio = async (req: Request, res: Response): Promise<void> => {
+  try {
+    await updateBioService(req.body.existingUser, req.body.bio);
+    res.status(200).json({ message: 'Le profil a été mis à jour.' });
+    return;
+  } catch (error) {
+    return matchaError.catched(error as Error, res);
+  }
+};
+
 export const getNewToken = async (
   req: Request,
   res: Response,
@@ -167,27 +167,6 @@ export const addTag = async (req: Request, res: Response): Promise<void> => {
 export const deleteTag = async (req: Request, res: Response): Promise<void> => {
   try {
     await deleteTagService(req.body.existingUser, parseInt(req.params.id));
-    res.status(200).json({ message: 'Le profil a été mis à jour.' });
-    return;
-  } catch (error) {
-    return matchaError.catched(error as Error, res);
-  }
-};
-
-export const updateLookFor = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    const lookFor = {
-      ageMin: req.body?.ageMin ?? null,
-      ageMax: req.body?.ageMax ?? null,
-      tallMin: req.body?.tallMin ?? null,
-      tallMax: req.body?.tallMax ?? null,
-      gender: req.body?.gender ?? null,
-      withPhoto: req.body.withPhoto,
-    };
-    await updateLookForService(req.body.existingUser, lookFor);
     res.status(200).json({ message: 'Le profil a été mis à jour.' });
     return;
   } catch (error) {
@@ -256,11 +235,38 @@ export const deletePhotoProfile = async (
   }
 };
 
-export const updatePhotoPlus = async (
+export const updateOnePhotoPlus = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
   try {
+    await updateOnePhotoPlusService(
+      req.body.existingUser,
+      req.body.userPhotosPlus,
+      req.body.photo,
+      req.body.index,
+    );
+    res
+      .status(200)
+      .json({ message: 'Les photos secondaires ont été mises à jour.' });
+  } catch (error) {
+    return matchaError.catched(error as Error, res);
+  }
+};
+
+export const deleteOnePhotoPlus = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    await deleteOnePhotoPlusService(
+      req.body.existingUser,
+      parseInt(req.params.index),
+    );
+    res
+      .status(200)
+      .json({ message: 'Les photos secondaires ont été mises à jour.' });
+    return;
   } catch (error) {
     return matchaError.catched(error as Error, res);
   }

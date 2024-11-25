@@ -1,37 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir, socketRoute, userRoute } from './appConfig/appPath';
-import { useSelectMenu } from './appContext/selectMenu.context';
 import { useUserInfo } from './appContext/user.context';
-import AppRoutes from './AppRoutes';
-import Footer from './footer/Footer';
-import Header from './header/Header';
-import MenuMatcha from './home/components/menu/MenuMatcha';
-import MatchaNotif from './notification/matchaNotification/MatchaNotif';
-import SocketNotification from './notification/socketNotification/SocketNotification';
 import Cookies from 'js-cookie';
+import AppRoutes from './AppRoutes';
+import Footer from './components/footer/Footer';
+import Header from './components/Header';
+import MatchaNotif from './components/notification/MatchaNotif';
+import MenuMatcha from './components/menu/MenuMatcha';
+import SocketNotif from './components/notification/SocketNotif';
 
 function App() {
   const [matchaNotif, setMatchaNotif] = useState<string | null>(null);
-  const [displayMenu, setDisplayMenu] = useState<boolean>(false);
   const nav = useNavigate();
   const me = useUserInfo();
-  const menu = useSelectMenu();
 
   useEffect(() => {
     if (import.meta.hot) {
       if (Cookies.get('session')) nav(appRedir.getMe);
       else nav(appRedir.loading);
     }
-  }, []);
-
-  useEffect(() => {
-    if (menu.displayAppMenu) setDisplayMenu(true);
-    else {
-      menu.setAllMenuOff();
-      setDisplayMenu(false);
-    }
-  }, [menu.displayAppMenu]);
+  }, [import.meta.hot]);
 
   useEffect(() => {
     const listenSocket = () => {
@@ -77,10 +66,6 @@ function App() {
 
   return (
     <>
-      <div className='header'>
-        <Header />
-      </div>
-
       <div className='matcha_notification'>
         <MatchaNotif
           matchaNotif={matchaNotif}
@@ -88,25 +73,29 @@ function App() {
         />
       </div>
 
-      <div className='socket_notification'>
-        <SocketNotification />
-      </div>
-
       <div className='routes'>
-        <div className='route_menu'>
-          {displayMenu && (
-            <>
-              <MenuMatcha />
-            </>
-          )}
+        <div className='routes_header'>
+          <Header />
         </div>
-        <div className='route_path'>
-          <AppRoutes setMatchaNotif={setMatchaNotif} />
+        <div className='routes_empty'></div>
+        <div className='routes_body'>
+          <div className='routes_menu'>
+            {me.user && me.user.id && (
+              <>
+                <MenuMatcha />
+              </>
+            )}
+          </div>
+          <div className='routes_path'>
+            <AppRoutes setMatchaNotif={setMatchaNotif} />
+          </div>
+          <div className='routes_socket_notif'>
+            <SocketNotif />
+          </div>
         </div>
-      </div>
-
-      <div className='footer'>
-        <Footer />
+        <div className='routes_footer'>
+          <Footer />
+        </div>
       </div>
     </>
   );

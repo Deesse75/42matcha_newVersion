@@ -13,6 +13,9 @@ type MemoryContextType = {
   setOpenChatList: React.Dispatch<
     React.SetStateAction<OpenChatListType[] | null>
   >;
+
+  activeProfileId: number | null;
+  setActiveProfileId: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const MemoryContext = createContext<MemoryContextType>({
@@ -24,6 +27,8 @@ export const MemoryContext = createContext<MemoryContextType>({
   setActiveChatUserId: () => {},
   openChatList: null,
   setOpenChatList: () => {},
+  activeProfileId: null,
+  setActiveProfileId: () => {},
 });
 
 const MemoryProvider = ({ children }: { children: React.ReactNode }) => {
@@ -33,6 +38,7 @@ const MemoryProvider = ({ children }: { children: React.ReactNode }) => {
   const [openChatList, setOpenChatList] = useState<OpenChatListType[] | null>(
     null,
   );
+  const [activeProfileId, setActiveProfileId] = useState<number | null>(null);
 
   return (
     <MemoryContext.Provider
@@ -45,6 +51,8 @@ const MemoryProvider = ({ children }: { children: React.ReactNode }) => {
         setActiveChatUserId,
         openChatList,
         setOpenChatList,
+        activeProfileId,
+        setActiveProfileId,
       }}
     >
       {children}

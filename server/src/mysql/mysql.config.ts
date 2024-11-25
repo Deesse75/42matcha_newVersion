@@ -3,7 +3,6 @@ import { matchaError } from '../utils/matcha_error.js';
 import {
   userSchema,
   tagsSchema,
-  lookForSchema,
   lastSearchSchema,
   likeTableSchema,
   viewTableSchema,
@@ -34,7 +33,6 @@ export async function configMysql(): Promise<void> {
     await createUserTable();
     await createPhotosTable();
     await createTagsTable();
-    await createLookForTable();
     await createLastSearchTable();
     await createLikeTable();
     await createViewTable();
@@ -101,16 +99,6 @@ async function createTagsTable(): Promise<void> {
   try {
     await mysqlDb.query(tagsSchema);
     const query = `SELECT * FROM Tags LIMIT 1`;
-    await mysqlDb.query(query);
-  } catch (error) {
-    throw new matchaError(500, (error as Error).message);
-  }
-}
-
-async function createLookForTable(): Promise<void> {
-  try {
-    await mysqlDb.query(lookForSchema);
-    const query = `SELECT * FROM LookFor LIMIT 1`;
     await mysqlDb.query(query);
   } catch (error) {
     throw new matchaError(500, (error as Error).message);

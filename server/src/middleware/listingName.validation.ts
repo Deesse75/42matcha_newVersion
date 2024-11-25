@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import {
   MysqlLastSearchType,
-  MysqlLookForType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
@@ -17,7 +16,6 @@ export const selectListingName = async (
     listingRequest = matchaSelect(
       req.body.existingUser,
       req.body.userTags,
-      req.body.userLookFor,
     );
   else if (req.params.listingName === 'match')
     listingRequest = matchSelect(req.body.existingUser);
@@ -77,7 +75,6 @@ export const selectListingName = async (
 const matchaSelect = (
   user: MysqlUserType,
   userTags: MysqlUserTagsType,
-  userLookFor: MysqlLookForType,
 ): ListingRequestType | null => {
   let values: any = [];
   let query: string = `

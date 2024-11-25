@@ -30,11 +30,11 @@ export const userSchema = `
 export const photosPlusSchema = `
   CREATE TABLE IF NOT EXISTS PhotosPlus (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userId INT NOT NULL,
-    photo2 LONGBLOB NOT NULL,
-    photo3 LONGBLOB NOT NULL,
-    photo4 LONGBLOB NOT NULL,
-    photo5 LONGBLOB NOT NULL,
+    userId INT NOT NULL UNIQUE,
+    photo2 LONGBLOB,
+    photo3 LONGBLOB,
+    photo4 LONGBLOB,
+    photo5 LONGBLOB,
     FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE
   );
 `;
@@ -46,20 +46,6 @@ export const tagsSchema = `
     tagName VARCHAR(200) NOT NULL,
     FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE,
     UNIQUE (userId, tagName)
-  );
-`;
-
-export const lookForSchema = `
-  CREATE TABLE IF NOT EXISTS LookFor (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    userId INT NOT NULL UNIQUE,
-    ageMin INT DEFAULT 18,
-    ageMax INT DEFAULT 120,
-    tallMin INT DEFAULT 50,
-    tallMax INT DEFAULT 250,
-    gender VARCHAR(200),
-    withPhoto BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE
   );
 `;
 

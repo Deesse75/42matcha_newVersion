@@ -1,85 +1,88 @@
 .update_account_container {
   width: 100%;
   height: 100%;
-  position: relative;
   display: flex;
-  flex-direction: column;
-  .update_account_section {
-    width: 100%;
-    height: 25px;
-    margin-top: 5px;
+  .update_account_left {
+    width: 50%;
+    height: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-
-    .update_account_section_title {
-      width: 19%;
+    justify-content: center;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    .update_account_left_section {
+      width: 95%;
+      height: 35px;
+      margin-top: 5px;
       display: flex;
-    }
-    .update_account_section_current {
-      width: 40%;
-      display: flex;
-      font-weight: bold;
-      padding-left: 10px;
-      box-sizing: border-box;
-      border-bottom: 1px dashed $color_nuance_grey5;
-    }
-    .update_account_section_new {
-      width: 38%;
-      height: 100%;
-      padding: 0 5px 0 10px;
-      display: flex;
+      justify-content: center;
       align-items: center;
-      border: none;
-      box-sizing: border-box;
-      border-radius: 5px;
-      background-color: white;
-      box-shadow: 1px 1px 5px 1px $color_nuance_grey4;
-      .update_account_input {
-        width: 100%;
+      .update_account_left_title {
+        width: 23%;
+        display: flex;
+        align-items: center;
+      }
+      .update_account_left_current {
+        width: 40%;
+        display: flex;
+        padding-left: 5px;
+        margin-right: 10px;
+        align-items: center;
+        font-size: 13px;
+        box-sizing: border-box;
+        color: $color_nuance_grey1;
+        font-weight: bold;
+        font-family: 'Playwrite FR Moderne', serif;
+        border-bottom: 1px dashed $color_nuance_grey1;
+      }
+      .update_account_left_input {
+        width: 40%;
+        height: 100%;
+        border-radius: 5px;
         border: none;
         outline: none;
-        background-color: transparent;
+        padding-left: 10px;
+        box-sizing: border-box;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey5;
+      }
+    }
+    .update_account_left_submit {
+      width: 95%;
+      height: 30px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .update_account_submit_button {
+        width: auto;
+        height: 90%;
+        padding: 0 30px;
+        margin: 0 10px;
+        display: flex;
+        align-items: center;
+        border-radius: 5px;
+        @include submit_button_black;
       }
     }
   }
-  .update_account_submit {
-    width: 100%;
-    height: 25px;
-    margin: 30px 0;
+  .update_account_right {
+    width: 49%;
+    margin-left: 15px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .update_account_submit_button {
-      width: 30%;
+    justify-content: space-between;
+    box-sizing: border-box;
+    .update_account_right_section {
+      width: 48%;
       height: 100%;
-      margin-right: 15px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      cursor: pointer;
-      border-radius: 5px;
-      color: $color_nuance_grey2;
-      @include button_submit_1;
-    }
-  }
-  .update_account_redirect {
-    width: 100%;
-    height: 30px;
-    position: absolute;
-    bottom: -20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .update_account_redirect_button {
-      width: 250px;
-      display: flex;
       justify-content: center;
-      align-items: center;
-      font-size: 13px;
-      margin-right: 10px;
-      @include button_style_1;
+      border-radius: 10px;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+      @import './update_password';
+      @import './update_email';
     }
   }
 }

@@ -2,45 +2,57 @@
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  .profile_form {
+  .profile_section {
     width: 95%;
-    height: 100%;
-    padding: 30px;
-    box-sizing: border-box;
+    height: 30px;
+    margin-bottom: 5px;
     display: flex;
-    flex-direction: column;
-
-    .profile_form_section {
-      width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    .profile_name {
+      width: 27%;
+      display: flex;
+    }
+    .profile_current_value {
+      width: 35%;
       display: flex;
       align-items: center;
-      margin-top: 5px;
+      border-bottom: 1px dashed $color_nuance_grey1;
     }
-    .profile_form_name {
-      width: 25%;
+    .profile_new_value {
+      width: 28%;
+      height: 100%;
       display: flex;
+      align-items: center;
+      .profile_new_value_input {
+        width: 100%;
+        height: 90%;
+        display: flex;
+        align-items: center;
+        padding-left: 5px;
+        box-sizing: border-box;
+        outline: none;
+        border: none;
+        box-sizing: border-box;
+        border-radius: 5px;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+      }
     }
-    .profile_form_currentValue {
+  }
+  .profile_submit {
+    width: 90%;
+    height: 35px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .profile_submit_button {
       width: 40%;
-      display: flex;
-      font-weight: bold;
-      border-bottom: 1px solid $color_nuance_grey5;
-    }
-    .profile_form_newValue {
-      width: 30%;
-      display: flex;
-      .profile_form_newValue_select {
-      }
-      .profile_form_newValue_input {
-      }
-      .profile_form_newValue_textarea {
-        width: 80%;
-        height: 50px;
-        resize: none;
-      }
+      height: 80%;
+      @include submit_button_black;
     }
   }
 }

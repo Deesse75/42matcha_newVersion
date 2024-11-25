@@ -10,21 +10,20 @@ export const appRedir = {
   reinitPassword: '/reinitialisation_mot_de_passe',
   resend: '/renvoi_lien_validation',
   validateEmail: '/validation_email',
+
+  getMe: '/chargement',
   signout: '/deconnexion',
   dashboard: '/tableau_de_bord',
   account: '/mon_profil',
-  updateEmail: '/modification_adresse_email',
-  updatePassword: '/modification_mot_de_passe',
-  updatePhotosPlus: '/modification_photos_supplementaires',
   search: '/rechercher_des_profils',
   chat: '/discussion_instantanee',
+  history: '/historique_de_navigation',
+  updatePhotos: '/modification_photos',
+  displayProfil: '/affichage_profil',
   contact: '/contact',
+  deleteAccount: '/suppression_du_compte',
   errorInternal: '/erreur_interne',
   errorNotfound: '/page_introuvable',
-  getMe: '/chargement',
-  deleteAccount: '/suppression_du_compte',
-  deletePhotoProfil: '/suppression_photo_profil',
-  history: '/historique_de_navigation',
 };
 
 export const authRoute = {
@@ -43,20 +42,20 @@ export const userRoute = {
   getMe: `${PATH}/user/get_me`,
   getUserData: `${PATH}/user/get_user_data`,
   getUserTags: `${PATH}/user/get_user_tags`,
-  getUserLookFor: `${PATH}/user/get_user_look_for`,
   getUserPhotosPlus: `${PATH}/user/get_user_photos_plus`,
   getNewToken: `${PATH}/user/get_new_token`,
-  updatePhotoProfile: `${PATH}/user/update_photo_profile`,
-  deletePhotoProfile: `${PATH}/user/delete_photo_profile`,
   updateUsertData: `${PATH}/user/update_user_data`,
+  updatePassword: `${PATH}/user/update_password`,
   updateEmail: `${PATH}/user/update_email`,
+  updateBio: `${PATH}/user/update_bio`,
   addTag: `${PATH}/user/add_tag`,
   deleteTag: `${PATH}/user/delete_tag`,
   updateProfileData: `${PATH}/user/update_profile_data`,
-  updateLookFor: `${PATH}/user/update_look_for`,
+  updatePhotoProfile: `${PATH}/user/update_photo_profile`,
+  updateOnePhotoPlus: `${PATH}/user/update_one_photo_plus`,
+  deletePhotoProfile: `${PATH}/user/delete_photo_profile`,
+  deleteOnePhotoPlus: `${PATH}/user/delete_one_photo_plus`,
   deleteAccount: `${PATH}/user/delete_account`,
-  updatePhotoPlus: `${PATH}/user/update_photo_plus`,
-  updatePassword: `${PATH}/user/update_password`,
 };
 
 export const listingRoute = {
@@ -73,7 +72,10 @@ export const searchRoute = {
   searchLocation: `${PATH}/search/search_location`,
   searchTag: `${PATH}/search/search_tag`,
   getLastSearch: `${PATH}/search/get_last_search`,
-  // searchAgeFilter: `${PATH}/search/search_age_filter`,
+};
+
+export const profileRoute = {
+  getProfile: `${PATH}/profile/get_profile`,
 };
 
 export const chatRoute = {

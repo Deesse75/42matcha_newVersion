@@ -1,0 +1,40 @@
+.update_photo_profile_container {
+  width: 95%;
+  height: 95%;
+  display: flex;
+  flex-direction: column;
+  .update_photo_profile_display {
+    width: 400px;
+    height: 450px;
+    display: flex;
+    margin: 0 auto 20px auto;
+    .profile_display_photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .avatar_container {
+      display: flex;
+      position: absolute;
+    }
+  }
+  .update_photo_profile_button {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .update_photo_profile_button_action {
+      width: 200px;
+      height: 30px;
+      margin: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      font-weight: bold;
+      color: $color_nuance_white1;
+      @include submit_button_black;
+    }
+  }
+}

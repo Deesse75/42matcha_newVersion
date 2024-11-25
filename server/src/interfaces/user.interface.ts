@@ -25,17 +25,6 @@ export type UserTagsBackType = {
   tagName: string;
 };
 
-export type UserLookForBackType = {
-  id: number;
-  userId: number;
-  ageMin: number;
-  ageMax: number;
-  tallMin: number;
-  tallMax: number;
-  gender: string | null;
-  withPhoto: boolean;
-};
-
 export type UserLastSearchBackType = {
   id: number;
   userId: number;

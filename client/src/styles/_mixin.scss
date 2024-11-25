@@ -1,3 +1,25 @@
+@mixin submit_button_black {
+  color: $color_nuance_white1;
+  background: rgb(98, 94, 90);
+  background: linear-gradient(
+    180deg,
+    rgba(98, 94, 90, 1) 0%,
+    rgba(38, 32, 34, 1) 50%,
+    rgba(98, 94, 90, 1) 100%
+  );
+  cursor: pointer;
+  &:hover {
+    transition: all 0.3s;
+    background: rgb(38, 32, 34);
+    background: linear-gradient(
+      180deg,
+      rgba(38, 32, 34, 1) 0%,
+      rgba(98, 94, 90, 1) 50%,
+      rgba(38, 32, 34, 1) 100%
+    );
+  }
+}
+
 @mixin wait_to_charge {
   font-size: 15px;
   font-weight: bold;
@@ -47,4 +69,17 @@
     rgba(17, 17, 17, 1) 100%
   );
   box-shadow: 1px 1px 5px 1px $color_nuance_grey5;
+}
+
+@mixin redirect_button {
+  box-shadow: 1px 1px 5px 1px $color_auth_grey1;
+  outline-color: $color_auth_red1;
+  background: rgb(39, 41, 40);
+  background: linear-gradient(
+    180deg,
+    rgba(39, 41, 40, 1) 0%,
+    rgba(71, 187, 152, 0.9) 50%,
+    rgba(39, 41, 40, 1) 100%
+  );
+  cursor: pointer;
 }

@@ -41,21 +41,6 @@ export const findTags = async (
   }
 };
 
-export const findLookFor = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  const query = 'SELECT * FROM LookFor WHERE userId = ?';
-  const values: any[] = [req.body.payloadToken.id];
-  try {
-    req.body.userLookFor = await mysql.getLookFor(query, values);
-    return next();
-  } catch (error) {
-    matchaError.catched(error as Error, res);
-  }
-};
-
 export const findLastSearch = async (
   req: Request,
   res: Response,

@@ -38,17 +38,6 @@ export type MysqlUserTagsType = {
   tagName: string;
 };
 
-export type MysqlLookForType = {
-  id: number;
-  userId: number;
-  ageMin: number;
-  ageMax: number;
-  tallMin: number;
-  tallMax: number;
-  gender: string | null;
-  withPhoto: boolean;
-};
-
 export type MysqlLastSearchType = {
   id: number;
   userId: number;

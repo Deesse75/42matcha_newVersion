@@ -1,0 +1,38 @@
+.photos_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  box-sizing: border-box;
+  .photos_redirect {
+    width: 80%;
+    height: 40px;
+    margin: 30px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .photos_redirect_button {
+      width: 250px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      font-weight: bold;
+      color: $color_nuance_white1;
+      @include redirect_button;
+    }
+  }
+  .photos_update {
+    width: 90%;
+    height: 80%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    @import './subfolder/photos/update_photo_profile';
+    @import './subfolder/photos/update_photos_plus';
+  }
+}

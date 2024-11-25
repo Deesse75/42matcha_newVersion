@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { userTokenValidation } from '../middleware/userToken.validation.js';
 import { listingBodyValidation } from '../middleware/listing.body.validation.js';
-import { findExistingUser, findLastSearch, findLookFor, findTags } from '../middleware/user.data.validation.js';
+import { findExistingUser, findLastSearch, findTags } from '../middleware/user.data.validation.js';
 import {
   getListing,
 } from './listing.controller.js';
@@ -13,7 +13,6 @@ listingRoute.get(
   '/get_listing/:listingName',
   userTokenValidation,
   findExistingUser,
-  findLookFor,
   findTags,
   findLastSearch,
   selectListingName,
@@ -25,7 +24,6 @@ listingRoute.post(
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  findLookFor,
   findTags,
   findLastSearch,
   selectListingName,
@@ -37,7 +35,6 @@ listingRoute.post(
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  findLookFor,
   findTags,
   findLastSearch,
   selectListingName,
@@ -49,7 +46,6 @@ listingRoute.post(
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  findLookFor,
   findTags,
   findLastSearch,
   selectListingName,
@@ -61,7 +57,6 @@ listingRoute.post(
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  findLookFor,
   findTags,
   findLastSearch,
   selectListingName,

@@ -170,7 +170,7 @@ const contactSchema = Joi.object({
 
 const schemaMap: { [key: string]: Joi.ObjectSchema } = {
   '/signin_username': signinUsernameSchema,
-  '/signin_Email': signinEmailSchema,
+  '/signin_email': signinEmailSchema,
   '/signup': signupSchema,
   '/forgot_password': forgotPasswordSchema,
   '/reinit_password': reinitPasswordSchema,

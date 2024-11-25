@@ -1,0 +1,23 @@
+.account_info_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  color: $color_nuance_grey5;
+  .account_info_section {
+    width: auto;
+    display: flex;
+    font-size: 13px;
+    justify-content: end;
+    .account_info_title {
+      width: auto;
+      height: 100%;
+      padding: 0 10px;
+    }
+    .account_info_data {
+      width: 90px;
+      height: 100%;
+    }
+  }
+}

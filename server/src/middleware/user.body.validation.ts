@@ -9,7 +9,7 @@ const updatePhotoProfileSchema = Joi.object({
     'objet.unknown': 'La requete est invalide.',
   });
 
-const updatePhotoPlusSchema = Joi.object({
+const updateOnePhotoPlusSchema = Joi.object({
   photo: Joi.string().required(),
   index: Joi.number().required().min(2).max(5),
 })
@@ -86,9 +86,17 @@ const addTagSchema = Joi.object({
     'objet.unknown': 'La requete est invalide.',
   });
 
+const updateBioSchema = Joi.object({
+  bio: Joi.string().required().max(450).empty(null),
+})
+  .unknown(false)
+  .messages({
+    'objet.unknown': 'La requete est invalide.',
+  });
+
 const updateProfileDataSchema = Joi.object({
   gender: Joi.string()
-    .allow(null)
+    .empty(null)
     .valid(
       'Homme',
       'Femme',
@@ -103,7 +111,7 @@ const updateProfileDataSchema = Joi.object({
       'delete',
     ),
   orientation: Joi.string()
-    .allow(null)
+    .empty(null)
     .valid(
       'Hétérosexuel(le)',
       'Homosexuel(le)',
@@ -119,35 +127,7 @@ const updateProfileDataSchema = Joi.object({
       'Autre',
       'delete',
     ),
-  tall: Joi.number().allow(null).min(0).max(250),
-  biography: Joi.string().allow(null).max(450),
-})
-  .unknown(false)
-  .messages({
-    'objet.unknown': 'La requete est invalide.',
-  });
-
-const updateLookForSchema = Joi.object({
-  ageMin: Joi.number().allow(null).min(18).max(120),
-  ageMax: Joi.number().allow(null).min(18).max(120),
-  tallMin: Joi.number().allow(null).min(0).max(250),
-  tallMax: Joi.number().allow(null).min(0).max(250),
-  gender: Joi.string()
-    .allow(null)
-    .valid(
-      'Homme',
-      'Femme',
-      'Non-binaire',
-      'Agenre',
-      'Bigenre',
-      'Genre fluide',
-      'Femme transgenre',
-      'Homme transgenre',
-      'Pangenre',
-      'Autre',
-      'delete',
-    ),
-  withPhoto: Joi.boolean().required(),
+  tall: Joi.number().empty(null).min(-1).max(250),
 })
   .unknown(false)
   .messages({
@@ -159,10 +139,10 @@ const schemaMap: { [key: string]: Joi.ObjectSchema } = {
   '/update_user_data': updateUserDataSchema,
   '/update_profile_data': updateProfileDataSchema,
   '/add_tag': addTagSchema,
-  '/update_look_for': updateLookForSchema,
-  '/update_photo_plus': updatePhotoPlusSchema,
   '/update_password': updatePasswordSchema,
   '/update_email': updateEmailSchema,
+  '/update_bio': updateBioSchema,
+  '/update_one_photo_plus': updateOnePhotoPlusSchema,
 };
 
 export const userBodyValidation = async (

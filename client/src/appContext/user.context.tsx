@@ -4,7 +4,6 @@ import {
   PhotosPlusFrontType,
   UserFrontType,
   UserLastSearchFrontType,
-  UserLookForFrontType,
   UserNotifFrontType,
   UserTagsFrontType,
 } from '../appConfig/interface';
@@ -13,7 +12,6 @@ type UserContextType = {
   user: UserFrontType | null;
   userTags: UserTagsFrontType[] | null;
   userPhotosPlus: PhotosPlusFrontType | null;
-  userLookFor: UserLookForFrontType | null;
   userLastSearch: UserLastSearchFrontType | null;
   userNotif: UserNotifFrontType[] | null;
   userSocket: Socket | null;
@@ -21,9 +19,6 @@ type UserContextType = {
   setUserTags: React.Dispatch<React.SetStateAction<UserTagsFrontType[] | null>>;
   setUserPhotosPlus: React.Dispatch<
     React.SetStateAction<PhotosPlusFrontType | null>
-  >;
-  setUserLookFor: React.Dispatch<
-    React.SetStateAction<UserLookForFrontType | null>
   >;
   setUserLastSearch: React.Dispatch<
     React.SetStateAction<UserLastSearchFrontType | null>
@@ -39,14 +34,12 @@ export const UserContext = createContext<UserContextType>({
   user: null,
   userTags: null,
   userPhotosPlus: null,
-  userLookFor: null,
   userLastSearch: null,
   userNotif: null,
   userSocket: null,
   setUser: () => {},
   setUserTags: () => {},
   setUserPhotosPlus: () => {},
-  setUserLookFor: () => {},
   setUserLastSearch: () => {},
   setUserNotif: () => {},
   setUserSocket: () => {},
@@ -58,9 +51,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [userTags, setUserTags] = useState<UserTagsFrontType[] | null>(null);
   const [userPhotosPlus, setUserPhotosPlus] =
     useState<PhotosPlusFrontType | null>(null);
-  const [userLookFor, setUserLookFor] = useState<UserLookForFrontType | null>(
-    null,
-  );
   const [userLastSearch, setUserLastSearch] =
     useState<UserLastSearchFrontType | null>(null);
   const [userNotif, setUserNotif] = useState<UserNotifFrontType[] | null>(null);
@@ -70,7 +60,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
     setUserTags(null);
     setUserPhotosPlus(null);
-    setUserLookFor(null);
     setUserLastSearch(null);
     setUserNotif(null);
     setUserSocket(null);
@@ -82,14 +71,12 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         user,
         userTags,
         userPhotosPlus,
-        userLookFor,
         userLastSearch,
         userNotif,
         userSocket,
         setUser,
         setUserTags,
         setUserPhotosPlus,
-        setUserLookFor,
         setUserLastSearch,
         setUserNotif,
         setUserSocket,
