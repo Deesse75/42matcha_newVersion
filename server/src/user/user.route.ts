@@ -4,12 +4,11 @@ import {
   findPhotosPlus,
   findTags,
 } from '../middleware/user.data.validation.js';
-import {
-  userTokenValidation,
-} from '../middleware/userToken.validation.js';
+import { userTokenValidation } from '../middleware/userToken.validation.js';
 import {
   addTag,
   deleteAccount,
+  deleteOnePhotoPlus,
   deletePhotoProfile,
   deleteTag,
   getMe,
@@ -135,7 +134,6 @@ userRoute.post(
   updateOnePhotoPlus,
 );
 
-
 userRoute.delete(
   '/delete_photo_profile',
   userTokenValidation,
@@ -147,7 +145,7 @@ userRoute.delete(
   '/delete_one_photo_plus/:index',
   userTokenValidation,
   findExistingUser,
-  deletePhotoProfile,
+  deleteOnePhotoPlus,
 );
 
 userRoute.delete(

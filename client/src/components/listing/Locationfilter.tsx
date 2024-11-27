@@ -72,22 +72,29 @@ const Locationfilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='dashboard_filter'>
-        <form onSubmit={handleClick} className='dashboard_filter_form'>
-          <select name='location_zone' id='location_zone'>
-            <option defaultValue='default'>Zone de filtrage</option>
+      <form onSubmit={handleClick} className='selected_filter_form'>
+        <div className='selected_filter_form_section'>
+          <select
+            name='location_zone'
+            id='location_zone'
+            className='selected_filter_select'
+          >
+            <option defaultValue='default'>Zone</option>
             <option value='town'>Ville</option>
             <option value='county'>Département</option>
             <option value='region'>Région</option>
           </select>
+        </div>
+        <div className='selected_filter_form_section'>
           <input
+            className='selected_filter_submit'
             type='submit'
             name='location_submit'
             id='location_submit'
             value='Filtrer'
           />
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };

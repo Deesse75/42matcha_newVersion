@@ -3,36 +3,137 @@
   height: 100%;
   display: flex;
   position: relative;
-  flex-direction: column;
   box-sizing: border-box;
-  .photos_redirect {
-    width: 80%;
-    height: 40px;
-    margin: 30px auto;
+
+  .photo_profile_container {
+    width: 25%;
+    height: 80%;
+    margin: auto 10px auto 0;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    @include button_bubble_1;
+    .photo_profile_display {
+      width: 95%;
+      height: 85%;
+      margin: 10px auto;
+      box-sizing: border-box;
+      border-radius: 10px;
+      display: flex;
+      .photo_profile_img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+    }
+  }
+  .photo_plus_container {
+    width: 45%;
+    height: 95%;
+    margin: auto 10px;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    .photo_plus_container_section {
+      width: 49%;
+      height: 99%;
+      display: flex;
+      justify-content: space-between;
+      box-sizing: border-box;
+      flex-direction: column;
+      .one_photo_plus_container {
+        width: 100%;
+        height: 49%;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        border-radius: 10px;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+        @include button_bubble_1;
+        .one_photo_plus_display {
+          width: 95%;
+          height: 80%;
+          display: flex;
+          margin: 10px auto;
+          border-radius: 10px;
+          box-sizing: border-box;
+          .one_photo_plus_display_img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+          }
+        }
+      }
+    }
+  }
+  .photo_button {
+    width: 100%;
+    height: 15%;
     display: flex;
     align-items: center;
     justify-content: center;
-    .photos_redirect_button {
-      width: 250px;
-      height: 30px;
+    .photo_button_action {
+      width: auto;
+      height: 35px;
+      padding: 0 10px;
+      margin: 0 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 5px;
       font-weight: bold;
       color: $color_nuance_white1;
-      @include redirect_button;
+      @include submit_button_black;
     }
   }
-  .photos_update {
-    width: 90%;
-    height: 80%;
-    margin: 0 auto;
+  .avatar_container {
+    width: 25%;
+    height: 60%;
+    position: relative;
+    margin: auto 30px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    flex-direction: column;
     box-sizing: border-box;
-    @import './subfolder/photos/update_photo_profile';
-    @import './subfolder/photos/update_photos_plus';
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    .avatar_close {
+      width: 100%;
+      height: 35px;
+      position: absolute;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      box-sizing: border-box;
+      border-radius: 5px;
+      @include button_bubble_1;
+      .avatar_close_button {
+        width: auto;
+        height: 90%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background-color: transparent;
+        margin-right: 20px;
+        display: flex;
+        cursor: pointer;
+      }
+    }
+    .avatar_component {
+      width: 100%;
+      height: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 }

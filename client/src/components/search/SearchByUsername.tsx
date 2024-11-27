@@ -79,25 +79,21 @@ const SearchByUsername: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-        <div className='search_username_form_row'>
-          <input
-            className='search_username_form_input'
-            type='text'
-            name='username'
-            id='username'
-            maxLength={30}
-            minLength={3}
-            required
-            autoComplete='username'
-            ref={refUsername}
-            placeholder='Rechercher par nom d utilisateur'
-          />
-        </div>
-        <div className='search_username_form_button'>
-          <button onClick={handleSubmit}>
-            <MdOutlineKeyboardDoubleArrowRight size={20} />
-          </button>
-        </div>
+      <input
+        className='search_row_input'
+        type='text'
+        name='username'
+        id='username'
+        maxLength={30}
+        minLength={3}
+        required
+        autoComplete='off'
+        ref={refUsername}
+        placeholder='Rechercher par nom d utilisateur'
+      />
+      <button onClick={handleSubmit} className='search_row_submit'>
+        <MdOutlineKeyboardDoubleArrowRight size={25} />
+      </button>
     </>
   );
 };

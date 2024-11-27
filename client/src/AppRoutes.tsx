@@ -1,10 +1,9 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { appRedir } from './appConfig/appPath';
 import AccountPage from './pages/Account';
 import ChatPage from './pages/Chat';
 import Dashboard from './pages/Dashboard';
-import DeleteAccount from './pages/DeleteAccount';
 import Error500 from './pages/Error500';
 import ErrorNotFound from './pages/ErrorNotFound';
 import ForgotPassword from './pages/ForgotPassword';
@@ -26,7 +25,6 @@ type Props = {
 };
 
 const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
-
   return (
     <>
       <Routes>
@@ -72,23 +70,11 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
         <Route path={appRedir.signout} element={<Signout />} />
         <Route
           path={appRedir.account}
-          element={
-            <AccountPage
-              setMatchaNotif={setMatchaNotif}
-            />
-          }
+          element={<AccountPage setMatchaNotif={setMatchaNotif} />}
         />
         <Route
           path={appRedir.updatePhotos}
-          element={
-            <PhotoProfile
-              setMatchaNotif={setMatchaNotif}
-            />
-          }
-        />
-        <Route
-          path={appRedir.deleteAccount}
-          element={<DeleteAccount setMatchaNotif={setMatchaNotif} />}
+          element={<PhotoProfile setMatchaNotif={setMatchaNotif} />}
         />
         <Route
           path={appRedir.dashboard}

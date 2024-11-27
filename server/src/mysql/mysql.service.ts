@@ -7,9 +7,7 @@ import {
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
-import {
-  PhotosPlusBackType,
-} from '../interfaces/user.interface.js';
+import { PhotosPlusBackType } from '../interfaces/user.interface.js';
 
 type CreateNewUserType = {
   firstname: string;

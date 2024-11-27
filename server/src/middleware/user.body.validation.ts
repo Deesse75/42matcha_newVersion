@@ -19,44 +19,38 @@ const updateOnePhotoPlusSchema = Joi.object({
   });
 
 const updateUserDataSchema = Joi.object({
-  firstname: Joi.string().empty(null)
+  firstname: Joi.string()
+    .empty(null)
     .pattern(new RegExp("^[a-zA-Z][a-zA-Z- ']{2,29}$")),
-  lastname: Joi.string().empty(null)
+  lastname: Joi.string()
+    .empty(null)
     .pattern(new RegExp("^[a-zA-Z][a-zA-Z- ']{2,29}$")),
-  username: Joi.string().empty(null)
+  username: Joi.string()
+    .empty(null)
     .pattern(new RegExp('^[a-zA-Z][a-zA-Z0-9_@]{2,29}$')),
   birthdate: Joi.string().isoDate().empty(null),
-  })
+})
   .unknown(false)
   .messages({
     'objet.unknown': 'La requete est invalide.',
   });
 
-  
-  const updateEmailSchema = Joi.object({
-    currentPassword: Joi.string()
-      .empty()
-      .required()
-      .pattern(
-        new RegExp(
-          '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!?@])[a-zA-Z0-9!?@]{8,30}$',
-        ),
-      ),
-    newEmail: Joi.string()
-      .allow(null)
-      .email({
-        minDomainSegments: 2,
-        maxDomainSegments: 3,
-        tlds: { allow: ['com', 'fr'] },
-      }),
-  })
-    .unknown(false)
-    .messages({
-      'objet.unknown': 'La requete est invalide.',
-    });
+const updateEmailSchema = Joi.object({
+  newEmail: Joi.string()
+    .allow(null)
+    .email({
+      minDomainSegments: 2,
+      maxDomainSegments: 3,
+      tlds: { allow: ['com', 'fr'] },
+    }),
+})
+  .unknown(false)
+  .messages({
+    'objet.unknown': 'La requete est invalide.',
+  });
 
-  const updatePasswordSchema = Joi.object({
-  activePassword: Joi.string()
+const updatePasswordSchema = Joi.object({
+  currentPassword: Joi.string()
     .empty()
     .required()
     .pattern(
@@ -96,7 +90,7 @@ const updateBioSchema = Joi.object({
 
 const updateProfileDataSchema = Joi.object({
   gender: Joi.string()
-    .empty(null)
+    .allow(null)
     .valid(
       'Homme',
       'Femme',
@@ -111,7 +105,7 @@ const updateProfileDataSchema = Joi.object({
       'delete',
     ),
   orientation: Joi.string()
-    .empty(null)
+    .allow(null)
     .valid(
       'Hétérosexuel(le)',
       'Homosexuel(le)',
@@ -127,7 +121,8 @@ const updateProfileDataSchema = Joi.object({
       'Autre',
       'delete',
     ),
-  tall: Joi.number().empty(null).min(-1).max(250),
+  tall: Joi.number().allow(null).min(-1).max(250),
+  delTall: Joi.boolean().required(),
 })
   .unknown(false)
   .messages({

@@ -91,32 +91,37 @@ const AgeFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='dashboard_filter'>
-        <form onSubmit={handleClick} className='dashboard_filter_form'>
+      <form onSubmit={handleClick} className='selected_filter_form'>
+        <div className='selected_filter_form_section'>
           <input
+            className='selected_filter_input'
             type='number'
             min={18}
             max={120}
             name='agemin'
             id='ageMin'
-            placeholder='age minimum'
+            placeholder='Minimum'
           />
           <input
+            className='selected_filter_input'
             type='number'
             min={18}
             max={120}
             name='agemax'
             id='ageMax'
-            placeholder='age maximum'
+            placeholder='Maximum'
           />
+        </div>
+        <div className='selected_filter_form_section'>
           <input
+            className='selected_filter_submit'
             type='submit'
             name='age_filter'
             id='age_filter'
             value='Filtrer'
           />
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };

@@ -37,7 +37,6 @@ const SearchPage: FC<Props> = ({ setMatchaNotif }) => {
       nav(appRedir.loading);
       return;
     }
-    setReloadSearch(true);
     setControlPage(true);
   }, []);
 
@@ -102,14 +101,14 @@ const SearchPage: FC<Props> = ({ setMatchaNotif }) => {
               />
             </div>
             <div className='search_request'>
-              <div className='search_one_container'>
+              <div className='search_one_row'>
                 <SearchByUsername setMatchaNotif={setMatchaNotif} />
               </div>
-              <div className='search_one_container'>
-                <SearchByLocation setMatchaNotif={setMatchaNotif} />
-              </div>
-              <div className='search_one_container'>
+              <div className='search_one_row'>
                 <SearchByTags setMatchaNotif={setMatchaNotif} />
+              </div>
+              <div className='search_one_col'>
+                <SearchByLocation setMatchaNotif={setMatchaNotif} />
               </div>
               <div className='search_multi_container'>
                 <SearchMulti

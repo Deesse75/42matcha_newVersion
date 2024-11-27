@@ -98,7 +98,7 @@ export const updatePassword = async (
   try {
     await updatePasswordService(
       req.body.existingUser,
-      req.body.activePassword,
+      req.body.currentPassword,
       req.body.newPassword,
     );
     res.status(200).json({ message: 'Le mot de passe a été mis à jour.' });
@@ -113,11 +113,7 @@ export const updateEmail = async (
   res: Response,
 ): Promise<void> => {
   try {
-    await updateEmailService(
-      req.body.existingUser,
-      req.body.currentPassword,
-      req.body.newEmail,
-    );
+    await updateEmailService(req.body.existingUser, req.body.newEmail);
     res.status(200).json({ message: 'Un lien vous a été envoyé par email.' });
     return;
   } catch (error) {
@@ -183,12 +179,9 @@ export const updateProfileData = async (
       gender: req.body?.gender ?? null,
       orientation: req.body?.orientation ?? null,
       tall: req.body?.tall ?? null,
-      biography: req.body?.biography ?? null,
+      delTall: req.body.delTall ?? false,
     };
-    const profile = await updateProfileDataService(
-      req.body.existingUser,
-      updateProfile,
-    );
+    await updateProfileDataService(req.body.existingUser, updateProfile);
     res.status(200).json({ message: 'Le profil a été mis à jour.' });
     return;
   } catch (error) {

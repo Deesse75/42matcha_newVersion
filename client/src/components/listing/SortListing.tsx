@@ -48,9 +48,9 @@ const SortListing: FC<Props> = ({ listing, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='dashboard_sort'>
-        <form onSubmit={handleClick} className='dashboard_sort_form'>
-          <select name='sort' id='sort' className='dashboard_sort_select'>
+      <div className='listing_sort_container'>
+        <form onSubmit={handleClick} className='listing_sort_form'>
+          <select name='sort' id='sort' className='listing_sort_select'>
             <option defaultValue='default'>Trier par ...</option>
             <option value='ageUp'>Age croissant</option>
             <option value='ageDown'>Age décroissant</option>
@@ -60,6 +60,7 @@ const SortListing: FC<Props> = ({ listing, setMatchaNotif }) => {
             <option value='reload'>Supprimer le tri</option>
           </select>
           <input
+            className='listing_sort_submit'
             type='submit'
             name='sort_submit'
             id='sort_submit'

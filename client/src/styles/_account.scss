@@ -68,31 +68,6 @@
     display: flex;
     margin-top: 15px;
     @import './subfolder/account/update_bio';
-  }
-  .account_delete {
-    width: 100%;
-    height: 70px;
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    .account_delete_redirect {
-      width: auto;
-      height: 90%;
-      display: flex;
-      padding: 0 60px;
-      justify-content: center;
-      align-items: center;
-      border-radius: 8px;
-      border: none;
-      color: $color_nuance_white1;
-      background-color: $color_nuance_grey5;
-      cursor: pointer;
-      &:hover {
-        background-color: $color_auth_red1;
-        transition: all 0.2s;
-      }
-    }
+    @import './subfolder/account/delete_account';
   }
 }

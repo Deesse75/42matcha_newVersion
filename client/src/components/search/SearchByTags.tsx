@@ -67,25 +67,21 @@ const SearchByTags: FC<Props> = ({ setMatchaNotif }) => {
   }, [tag]);
   return (
     <>
-        <div className='search_tag_form_row'>
-          <input
-            className='search_tag_form_input'
-            type='text'
-            name='tag'
-            id='tag'
-            maxLength={30}
-            minLength={1}
-            required
-            autoComplete='tag'
-            ref={refTag}
-            placeholder="Rechercher par centre d'intêret"
-          />
-        </div>
-        <div className='search_tag_form_button'>
-          <button onClick={handleSubmit}>
-            <MdOutlineKeyboardDoubleArrowRight size={20} />
-          </button>
-        </div>
+      <input
+        className='search_row_input'
+        type='text'
+        name='tag'
+        id='tag'
+        maxLength={30}
+        minLength={1}
+        required
+        autoComplete='off'
+        ref={refTag}
+        placeholder="Rechercher par centre d'intêret"
+      />
+      <button onClick={handleSubmit} className='search_row_submit'>
+        <MdOutlineKeyboardDoubleArrowRight size={25} />
+      </button>
     </>
   );
 };

@@ -14,12 +14,11 @@ export const findExistingUser = async (
     if (!existingUser) {
       res.status(400).json({
         message:
-        'Une erreur est survenue lors de la récupération de vos données.',
+          'Une erreur est survenue lors de la récupération de vos données.',
       });
       return;
     }
     req.body.existingUser = existingUser;
-    console.log('findExistingUser', req.body.existingUser);
     return next();
   } catch (error) {
     matchaError.catched(error as Error, res);

@@ -38,7 +38,7 @@ const UpdateEmail: FC<Props> = ({ setMatchaNotif }) => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${Cookies.get('session')}`,
           },
-          body: JSON.stringify({ newEmailk: email }),
+          body: JSON.stringify({ newEmail: email }),
         });
         const data = await response.json();
         if (!isMounted) return;

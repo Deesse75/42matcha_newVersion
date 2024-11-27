@@ -22,7 +22,6 @@ export const userTokenValidation = (
       id: payload.id,
       email: payload.email,
     };
-    console.log('userTokenValidation', req.body.payloadToken);
     next();
   } catch (error) {
     matchaError.catched(error as Error, res);

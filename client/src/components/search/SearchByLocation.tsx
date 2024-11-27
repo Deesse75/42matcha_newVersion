@@ -9,21 +9,9 @@ type Props = {
 };
 
 const SearchByLocation: FC<Props> = ({ setMatchaNotif }) => {
-  const [location, setLocation] = useState<string | null>(null);
   const [action, setAction] = useState<boolean>(false);
   const nav = useNavigate();
   const memo = useMemory();
-
-  useEffect(() => {
-    if (location) return;
-    const region = localStorage.getItem('region') || null;
-    const county = localStorage.getItem('county') || null;
-    const town = localStorage.getItem('town') || null;
-    if (region) setLocation(region);
-    else if (county) setLocation(county);
-    else if (town) setLocation(town);
-    else setLocation('inconnue');
-  }, []);
 
   useEffect(() => {
     if (!action) return;
@@ -69,24 +57,25 @@ const SearchByLocation: FC<Props> = ({ setMatchaNotif }) => {
 
   return (
     <>
-      <div className='search_location_data'>
-        {location === 'inconnue'
-          ? `Localisation non définie`
-          : `Locaisation : ${location}`}
+      <div className='search_col_section'>
+        <div className='search_col_section_text'>
+          Région : {localStorage.getItem('region') ?? ''}
+        </div>
+        <div className='search_col_section_text'>
+          Département : {localStorage.getItem('county') ?? ''}
+        </div>
+        <div className='search_col_section_text'>
+          Ville : {localStorage.getItem('town') ?? ''}
+        </div>
       </div>
-      <div className='search_location_form_button'>
-        {location && location !== 'inconnue' && (
-          <>
-            <button
-              onClick={() => setAction(true)}
-              name='locationSubmit'
-              id='locationSubmit'
-            >
-              Chercher les profils aux alentours
-            </button>
-          </>
-        )}
-      </div>
+      <button
+        className='search_col_submit'
+        onClick={() => setAction(true)}
+        name='locationSubmit'
+        id='locationSubmit'
+      >
+        Chercher les profils aux alentours
+      </button>
     </>
   );
 };

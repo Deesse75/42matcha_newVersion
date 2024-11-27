@@ -26,12 +26,16 @@ const UpdateBio: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
   };
 
   const handleClear = () => {
-    if (refBio.current) refBio.current.value = '';
+    if (refBio.current) {
+      refBio.current.value = '';
+    }
   };
 
   const handleReinit = () => {
-    const bio = me!.user!.biography || '';
-    if (refBio.current) refBio.current.value = bio;
+    if (refBio.current) {
+      refBio.current.value =
+        me.user && me.user.biography ? me.user.biography : '';
+    }
   };
 
   useEffect(() => {
@@ -60,8 +64,8 @@ const UpdateBio: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
           return;
         }
         setNewBio(null);
+        setMatchaNotif(data.message);
         if (response.status !== 200) {
-          setMatchaNotif(data.message);
           return;
         }
         setReloadAccount('userData');
@@ -120,7 +124,9 @@ const UpdateBio: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
             />
             <input
               className='bio_submit_button'
-              onClick={handleReinit}
+              onClick={() => {
+                handleReinit();
+              }}
               type='button'
               name='bioReinit'
               id='bioReinit'

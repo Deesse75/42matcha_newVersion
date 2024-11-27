@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { authRoute, appRedir } from '../appConfig/appPath';
@@ -10,18 +10,10 @@ type Props = {
 };
 
 const LoadingPage: FC<Props> = ({ setMatchaNotif }) => {
-  const [controlPage, setControlPage] = useState<boolean>(false);
   const nav = useNavigate();
-  const [session, setSession] = useState<string | null>(null);
+  const session = Cookies.get('session');
 
   useEffect(() => {
-    setSession(Cookies.get('matchaOn') ?? null);
-    getLocation();
-    setControlPage(true);
-  }, []);
-
-  useEffect(() => {
-    if (!controlPage) return;
     let isMounted = true;
     const request = async () => {
       try {
@@ -53,10 +45,11 @@ const LoadingPage: FC<Props> = ({ setMatchaNotif }) => {
       }
     };
     request();
+    getLocation();
     return () => {
       isMounted = false;
     };
-  }, [controlPage]);
+  }, []);
 
   return (
     <>
@@ -66,4 +59,3 @@ const LoadingPage: FC<Props> = ({ setMatchaNotif }) => {
 };
 
 export default LoadingPage;
-

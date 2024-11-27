@@ -31,7 +31,7 @@ type ProfileType = {
   gender: string | null;
   orientation: string | null;
   tall: number | null;
-  biography: string | null;
+  delTall: boolean;
 };
 
 export const getMeService = async (
@@ -62,8 +62,9 @@ export const getUserDataService = async (
 export const getUserPhotosPlusService = async (
   user: MysqlUserType,
   userPhotosPlus: MysqlPhotosPlusType,
-): Promise<PhotosPlusBackType> => {
+): Promise<PhotosPlusBackType | null> => {
   try {
+    if (!userPhotosPlus) return null;
     return {
       userId: user.id,
       photo2: userPhotosPlus.photo2
@@ -101,9 +102,12 @@ export const updateUserDataService = async (
 
     if (updateUser.lastname) {
       if (comma) query += ', lastname = ?';
-      else query += ' lastname = ?';
+      else {
+        query += ' lastname = ?';
+        comma = 1;
+      }
       values.push(updateUser.lastname);
-    } else comma = 0;
+    }
 
     if (updateUser.username) {
       const q = 'SELECT * FROM User WHERE username = ?';
@@ -112,9 +116,12 @@ export const updateUserDataService = async (
       if (testUser)
         throw new matchaError(400, "Ce nom d'utilisateur existe déjà.");
       if (comma) query += ', username = ?';
-      else query += ' username = ?';
+      else {
+        query += ' username = ?';
+        comma = 1;
+      }
       values.push(updateUser.username);
-    } else comma = 0;
+    }
 
     if (updateUser.birthdate) {
       if (comma) query += ', birthdate = ?';
@@ -124,7 +131,6 @@ export const updateUserDataService = async (
 
     query += ' WHERE id = ?';
     values.push(user.id);
-
     await mysql.updateTable(query, values);
     if (updateUser.birthdate) {
       query =
@@ -138,13 +144,13 @@ export const updateUserDataService = async (
 
 export const updatePasswordService = async (
   user: MysqlUserType,
-  activePassword: string,
+  currentPassword: string,
   newPassword: string,
 ): Promise<void> => {
   try {
     const comparePassword = await argon.verifyData(
       user.hashedPassword,
-      activePassword,
+      currentPassword,
     );
     if (!comparePassword)
       throw new matchaError(401, 'Le mot de passe actuel est incorrect.');
@@ -159,17 +165,10 @@ export const updatePasswordService = async (
 
 export const updateEmailService = async (
   user: MysqlUserType,
-  currentPassword: string,
   newEmail: string,
 ): Promise<void> => {
   let query: string = '';
   try {
-    const comparePassword = await argon.verifyData(
-      user.hashedPassword,
-      currentPassword,
-    );
-    if (!comparePassword)
-      throw new matchaError(401, 'Le mot de passe est incorrect.');
     query = 'SELECT * FROM User WHERE email = ?';
     const testEmail = await mysql.getUser(query, [newEmail]);
     if (testEmail)
@@ -235,28 +234,32 @@ export const updateProfileDataService = async (
 ): Promise<void> => {
   let query: string = 'UPDATE User SET';
   const values: any[] = [];
+  let comma: number = 0;
   try {
     if (profile.gender) {
-      if (profile.gender === 'delete') query += ' gender = NULL,';
+      if (profile.gender === 'delete') query += ' gender = NULL';
       else {
-        query += ' gender = ?,';
+        query += ' gender = ?';
         values.push(profile.gender);
       }
+      comma = 1;
     }
     if (profile.orientation) {
-      if (profile.orientation === 'delete') query += ' orientation = NULL,';
+      if (comma) query += ',';
+      if (profile.orientation === 'delete') query += ' orientation = NULL';
       else {
-        query += ' orientation = ?,';
+        query += ' orientation = ?';
         values.push(profile.orientation);
       }
+      comma = 1;
     }
-    if (profile.tall) {
-      query += ' tall = ?,';
-      values.push(profile.tall);
-    }
-    if (profile.biography) {
-      query += ' biography = ?,';
-      values.push(profile.biography);
+    if (profile.tall || profile.delTall) {
+      if (comma) query += ',';
+      if (profile.delTall) query += ' tall = 0';
+      if (profile.tall) {
+        query += ' tall = ?';
+        values.push(profile.tall);
+      }
     }
     query += ' WHERE id = ?';
     values.push(user.id);
@@ -314,17 +317,16 @@ export const updateOnePhotoPlusService = async (
     const base64Data = photo.replace(/^data:.*,/, '');
     const photoBuffer = Buffer.from(base64Data, 'base64');
     if (userPhotosPlus) {
-      query = `UPDATE PhotosPlus SET photo${index} = ? WHERE id = ?`;
+      query = `UPDATE PhotosPlus SET photo${index} = ? WHERE userId = ?`;
       values.push(photoBuffer, user.id);
+    } else {
+      query = `INSERT INTO PhotosPlus (userId, photo${index}) VALUES (?, ?)`;
+      values.push(user.id, photoBuffer);
     }
-    else {
-    query = `INSERT INTO PhotosPlus (userId, photo${index}) VALUES (?, ?)`;
-    values.push(user.id, photoBuffer);
+    await mysql.updateTable(query, values);
+  } catch (error) {
+    throw error;
   }
-  await mysql.updateTable(query, values);
-} catch (error) {
-  throw error;
-}
 };
 
 export const deleteOnePhotoPlusService = async (
@@ -332,7 +334,7 @@ export const deleteOnePhotoPlusService = async (
   index: number,
 ): Promise<void> => {
   try {
-    const query = `UPDATE PhotosPlus SET photo${index} = NULL WHERE id = ?`;
+    const query = `UPDATE PhotosPlus SET photo${index} = NULL WHERE userId = ?`;
     await mysql.updateTable(query, [user.id]);
   } catch (error) {
     throw error;
@@ -342,4 +344,11 @@ export const deleteOnePhotoPlusService = async (
 export const updateBioService = async (
   user: MysqlUserType,
   bio: string | null,
-): Promise<void> => {};
+): Promise<void> => {
+  try {
+    const query = 'UPDATE User SET biography = ? WHERE id = ?';
+    await mysql.updateTable(query, [bio, user.id]);
+  } catch (error) {
+    throw error;
+  }
+};

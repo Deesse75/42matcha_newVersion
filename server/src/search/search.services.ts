@@ -49,12 +49,9 @@ export const searchUsernameService = async (
     user.county,
     user.region,
   ];
-  console.log('searchUsernameService 1');
   try {
     const listing = await mysql.getListing(query, values);
-    console.log('searchUsernameService getListing');
     if (!listing) return null;
-    console.log('searchUsernameService go convertListingMiniUser');
     return convertPublicProfileList(listing);
   } catch (error) {
     throw error;
@@ -79,8 +76,8 @@ export const searchTagsService = async (
 //   searchRequest: SearchRequestType,
 // ): Promise<ProfileBackType[] | null> => {
 //   let query: string = `
-//   SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection 
-//   FROM User 
+//   SELECT id, username, age, gender, orientation, region, county, town, fameRating, photo1, lastConnection
+//   FROM User
 //   WHERE id != ?
 //   AND age BETWEEN ? AND ?
 //   AND tall BETWEEN ? AND ?
@@ -110,5 +107,3 @@ export const searchTagsService = async (
 //     throw error;
 //   }
 // };
-
-

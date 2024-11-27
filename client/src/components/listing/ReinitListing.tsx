@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { listingRoute, appRedir } from '../../appConfig/appPath';
 import { useMemory } from '../../appContext/memory.context';
 import Cookies from 'js-cookie';
+import { IoReload } from 'react-icons/io5';
 
 type Props = {
   listingName: string;
@@ -61,13 +62,15 @@ export const ReinitListing: FC<Props> = ({ listingName, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='reinit_listing_container'>
-        <div
-          className='reinit_listing_icon'
+      <div className='listing_reinit'>
+        <button
+          className='listing_reinit_icon'
           onClick={() => {
             setReloadListing(true);
           }}
-        ></div>
+        >
+          <IoReload size={25} />
+        </button>
       </div>
     </>
   );

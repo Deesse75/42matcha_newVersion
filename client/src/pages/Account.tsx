@@ -10,20 +10,16 @@ import UpdateProfileData from '../components/account/UpdateProfileData';
 import UpdateTags from '../components/account/UpdateTags';
 import UpdateUserData from '../components/account/UpdateUserData';
 import PageChargement from '../utils/chargement/PageChargement';
+import DeleteAccount from '../components/account/DeleteAccount';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  setReloadAccount: React.Dispatch<React.SetStateAction<string | null>>;
-  reloadAccount: string | null;
 };
 
-const AccountPage: FC<Props> = ({
-  setMatchaNotif,
-  setReloadAccount,
-  reloadAccount,
-}) => {
+const AccountPage: FC<Props> = ({ setMatchaNotif }) => {
   const me = useUserInfo();
   const nav = useNavigate();
+  const [reloadAccount, setReloadAccount] = useState<string | null>(null);
   const [controlPage, setControlPage] = useState<boolean>(false);
 
   useEffect(() => {
@@ -160,16 +156,7 @@ const AccountPage: FC<Props> = ({
                 setMatchaNotif={setMatchaNotif}
                 setReloadAccount={setReloadAccount}
               />
-            </div>
-            <div className='account_delete'>
-              <button
-                className='account_delete_redirect'
-                onClick={() => {
-                  nav(appRedir.deleteAccount);
-                }}
-              >
-                Supprimer le compte
-              </button>
+              <DeleteAccount setMatchaNotif={setMatchaNotif} />
             </div>
           </div>
         </>

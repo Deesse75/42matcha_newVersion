@@ -8,7 +8,9 @@ import MemoryProvider from './appContext/memory.context.tsx';
 createRoot(document.getElementById('root')!).render(
   <UserProvider>
     <MemoryProvider>
-      <BrowserRouter>
+      <BrowserRouter
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+      >
         <App />
       </BrowserRouter>
     </MemoryProvider>

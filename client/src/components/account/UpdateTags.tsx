@@ -64,10 +64,8 @@ const UpdateTags: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
     <>
       <div className='account_tags_container'>
         <div className='account_tags_edit'>
-          <div className='account_tags_edit_title'>
-            Modifier vos centres d'intêret
-          </div>
-          {me.userTags ? (
+          <div className='account_tags_edit_title'>Centres d'intêrets</div>
+          {me.userTags && (
             <>
               <div className='one_tag_container'>
                 {me.userTags.map((tag, key) => (
@@ -101,10 +99,6 @@ const UpdateTags: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
                   </>
                 )}
               </div>
-            </>
-          ) : (
-            <>
-              <div className='account_tag_empty'>Non renseigné</div>
             </>
           )}
         </div>

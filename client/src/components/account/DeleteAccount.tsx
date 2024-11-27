@@ -1,33 +1,20 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { appRedir, userRoute } from '../appConfig/appPath';
-import PageChargement from '../utils/chargement/PageChargement';
+import { appRedir, userRoute } from '../../appConfig/appPath';
+import ComponentChargement from '../../utils/chargement/ComponentChargement';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const DeleteAccount: FC<Props> = ({ setMatchaNotif }) => {
-  const [action, setAction] = useState(false);
-  const [controlPage, setControlPage] = useState<boolean>(false);
   const nav = useNavigate();
+  const [deleteAccount, setDeleteAccount] = useState<boolean>(false);
+  const [actionDelete, setActionDelete] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!Cookies.get('session')) {
-      nav(appRedir.signout);
-      return;
-    }
-    if (!Cookies.get('matchaOn')) {
-      nav(appRedir.loading);
-      return;
-    }
-    setControlPage(true);
-  }, []);
-
-  useEffect(() => {
-    if (!controlPage) return;
-    if (!action) return;
+    if (!actionDelete) return;
     let isMounted = true;
     const request = async () => {
       try {
@@ -46,6 +33,7 @@ const DeleteAccount: FC<Props> = ({ setMatchaNotif }) => {
           return;
         }
         setMatchaNotif(data.message);
+        setActionDelete(false);
         if (response.status !== 200) {
           nav(appRedir.errorInternal);
           return;
@@ -62,46 +50,57 @@ const DeleteAccount: FC<Props> = ({ setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [action, controlPage]);
+  }, [actionDelete]);
 
   return (
     <>
       <div className='delete_account_container'>
-        {controlPage ? (
+        {deleteAccount ? (
           <>
-            {action ? (
-              <>
-                <div className='wait_to_charge'>Suppression du compte en cours ...</div>
-              </>
-            ) : (
-              <>
-                <div className='delete_account_confirmation'>
-                  <div className='delete_account_title'>
-                    <h1>Veuillez confirmer la suppression du compte</h1>
+            <div className='delete_account_confirm'>
+              {actionDelete ? (
+                <>
+                  <ComponentChargement />
+                </>
+              ) : (
+                <>
+                  <div className='delete_account_confirm_text'>
+                    Confirmer la suppression du compte
                   </div>
-                  <div className='delete_account_button'>
+                  <div className='delete_account_confirm_buttons'>
                     <button
+                      className='delete_account_confirm_button'
                       onClick={() => {
-                        setAction(true);
+                        setActionDelete(true);
                       }}
                     >
-                      Confirmer
+                      Oui
                     </button>
                     <button
+                      className='delete_account_confirm_button'
                       onClick={() => {
-                        nav(appRedir.dashboard);
+                        setDeleteAccount(false);
                       }}
                     >
-                      Annuler
+                      non
                     </button>
                   </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </>
         ) : (
           <>
-            <PageChargement />
+            <div className='delete_account_submit'>
+              <button
+                className='delete_account_submit_button'
+                onClick={() => {
+                  setDeleteAccount(true);
+                }}
+              >
+                Supprimer le compte
+              </button>
+            </div>
           </>
         )}
       </div>

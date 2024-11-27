@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { IoIosArrowForward } from 'react-icons/io';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { appRedir } from '../../appConfig/appPath';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +14,14 @@ const MenuMatcha: FC<Props> = ({}) => {
       <div className='menu_container'>
         {openMenu ? (
           <>
+            <div
+              className='menu_arrow'
+              onClick={() => {
+                setOpenMenu(false);
+              }}
+            >
+              <IoIosArrowBack />
+            </div>
             <div className='menu_list'>
               <div
                 className='menu_list_row'

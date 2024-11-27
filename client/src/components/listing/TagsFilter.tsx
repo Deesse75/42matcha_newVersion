@@ -76,15 +76,14 @@ const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='dashboard_filter'>
-        <form onSubmit={handleClick} className='dashboard_filter_form'>
+      <form onSubmit={handleClick} className='selected_filter_form'>
+        <div className='selected_filter_form_section'>
           <select
             name='select_tag_filter'
             id='select_tag_filter'
-            multiple
-            size={5}
+            className='selected_filter_select'
           >
-            <option value='default'>Filtrer en fonction de vos intêrets</option>
+            <option value='default'>---</option>
             {me.userTags && (
               <>
                 {me.userTags.map((tag, key) => (
@@ -95,14 +94,17 @@ const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
               </>
             )}
           </select>
+        </div>
+        <div className='selected_filter_form_section'>
           <input
+            className='selected_filter_submit'
             type='button'
             name='tag_submit'
             id='tag_submit'
             value='Filtrer'
           />
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };

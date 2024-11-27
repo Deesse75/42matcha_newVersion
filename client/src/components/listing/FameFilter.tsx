@@ -72,24 +72,28 @@ const FameFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='dashboard_filter'>
-        <form onSubmit={handleClick} className='dashboard_filter_form'>
+      <form onSubmit={handleClick} className='selected_filter_form'>
+        <div className='selected_filter_form_section'>
           <input
+            className='selected_filter_input'
             type='number'
             min={0}
             required
             name='fame'
             id='fame'
-            placeholder='Indice supérieur à'
+            placeholder='Supérieur à'
           />
+        </div>
+        <div className='selected_filter_form_section'>
           <input
+            className='selected_filter_submit'
             type='submit'
             name='fame_filter'
             id='fame_filter'
             value='Filtrer'
           />
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };

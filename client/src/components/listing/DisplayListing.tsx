@@ -26,12 +26,12 @@ const DisplayListing: FC<Props> = ({
               : 'listing_header_off'
           }
         >
-          <ReinitListing
+          <SortListing listing={listing} setMatchaNotif={setMatchaNotif} />
+          <FilterListing
             listingName={listingName}
             setMatchaNotif={setMatchaNotif}
           />
-          <SortListing listing={listing} setMatchaNotif={setMatchaNotif} />
-          <FilterListing
+          <ReinitListing
             listingName={listingName}
             setMatchaNotif={setMatchaNotif}
           />
@@ -59,7 +59,7 @@ const DisplayListing: FC<Props> = ({
 
         <div className='listing_footer'>
           <div className='listing_footer_text'>
-            {`${listing && listing.length} profil(s) trouvé(s)`}
+            {`${listing && listing.length ? listing.length : 0} profil(s) trouvé(s)`}
           </div>
         </div>
       </div>

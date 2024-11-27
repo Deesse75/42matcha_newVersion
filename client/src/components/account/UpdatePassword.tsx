@@ -76,48 +76,6 @@ const UpdatePassword: FC<Props> = ({ setMatchaNotif }) => {
   };
 
   useEffect(() => {
-    if (!currentPassword) return;
-    let isMounted = true;
-    const request = async () => {
-      try {
-        const response = await fetch(userRoute.updatePassword, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
-          },
-          body: JSON.stringify({ password: currentPassword }),
-        });
-        const data = await response.json();
-        if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
-          setMatchaNotif(data.message);
-          nav(appRedir.signout);
-          return;
-        }
-        if (response.status === 500) {
-          setMatchaNotif(data.message);
-          nav(appRedir.errorInternal);
-          return;
-        }
-        setCurrentPassword(null);
-        setMatchaNotif(data.message);
-        if (response.status !== 200) {
-          return;
-        }
-      } catch (error) {
-        if (!isMounted) return;
-        setMatchaNotif((error as Error).message);
-        nav(appRedir.errorInternal);
-      }
-    };
-    request();
-    return () => {
-      isMounted = false;
-    };
-  }, [currentPassword]);
-
-  useEffect(() => {
     if (!bodyRequest) return;
     let isMounted = true;
     const request = async () => {
@@ -144,6 +102,8 @@ const UpdatePassword: FC<Props> = ({ setMatchaNotif }) => {
         }
         setBodyRequest(null);
         setMatchaNotif(data.message);
+        setValidCurrentPassword(null);
+        setValidNewPassword(null);
         if (response.status !== 200) {
           return;
         }

@@ -150,12 +150,14 @@ const SearchMulti: FC<Props> = ({
         <div className='search_multi_label'>Age entre</div>
         <div className='search_multi_value'>
           <input
+            className='search_multi_value_num'
             type='number'
             name='ageMin'
             id='ageMin'
             value={lastSearch?.ageMin ?? 18}
           />
           <input
+            className='search_multi_value_num'
             type='number'
             name='ageMax'
             id='ageMax'
@@ -167,12 +169,14 @@ const SearchMulti: FC<Props> = ({
         <div className='search_multi_label'>Taille entre</div>
         <div className='search_multi_value'>
           <input
+            className='search_multi_value_num'
             type='number'
             name='tallMin'
             id='tallMin'
             value={lastSearch?.tallMin ?? 0}
           />
           <input
+            className='search_multi_value_num'
             type='number'
             name='tallMax'
             id='tallMax'
@@ -183,7 +187,11 @@ const SearchMulti: FC<Props> = ({
       <div className='search_multi_row'>
         <div className='search_multi_label'>Genre</div>
         <div className='search_multi_value'>
-          <select className='' name='gender' id='gender'>
+          <select
+            className='search_multi_value_select'
+            name='gender'
+            id='gender'
+          >
             <option defaultValue='default'>{lastSearch?.gender ?? ''}</option>
             <option value='Homme'>Homme</option>
             <option value='Femme'>Femme</option>
@@ -201,7 +209,11 @@ const SearchMulti: FC<Props> = ({
       <div className='search_multi_row'>
         <div className='search_multi_label'>Orientation sexuelle</div>
         <div className='search_multi_value'>
-          <select className='' name='orientation' id='orientation'>
+          <select
+            className='search_multi_value_select'
+            name='orientation'
+            id='orientation'
+          >
             <option defaultValue='default'>
               {lastSearch?.orientation ?? ''}
             </option>
@@ -224,6 +236,7 @@ const SearchMulti: FC<Props> = ({
         <div className='search_multi_label'>Note supérieure à</div>
         <div className='search_multi_value'>
           <input
+            className='search_multi_value_num'
             type='number'
             name='fameMin'
             id='fameMin'
@@ -231,34 +244,42 @@ const SearchMulti: FC<Props> = ({
           />
         </div>
       </div>
-      <div className='search_multi_row'>
-        <label htmlFor='withPhoto'>Avec photo</label>
-        <input
-          type='checkbox'
-          name='withPhoto'
-          id='withPhoto'
-          checked={lastSearch?.withPhoto ?? false}
-        />
-        <label htmlFor='withBio'>Avec annonce</label>
-        <input
-          type='checkbox'
-          name='withBio'
-          id='withBio'
-          checked={lastSearch?.withBio ?? false}
-        />
-      </div>
-
-      <div className='search_multi_bottom'>
-        <div className='search_multi_submit'>
+      <div className='search_multi_row_checkbox'>
+        <div className='search_multi_row_checkbox_section'>
+          <label htmlFor='withPhoto' className='search_multi_value_label'>
+            Avec photo
+          </label>
           <input
-            className='search_multi_submit_button'
-            onClick={handleSubmit}
-            type='submit'
-            name='multiSubmit'
-            id='multiSubmit'
-            value='Rechercher'
+            className='search_multi_value_checkbox'
+            type='checkbox'
+            name='withPhoto'
+            id='withPhoto'
+            checked={lastSearch?.withPhoto ?? false}
           />
         </div>
+        <div className='search_multi_row_checkbox_section'>
+          <label htmlFor='withBio' className='search_multi_value_label'>
+            Avec annonce
+          </label>
+          <input
+            className='search_multi_value_checkbox'
+            type='checkbox'
+            name='withBio'
+            id='withBio'
+            checked={lastSearch?.withBio ?? false}
+          />
+        </div>
+      </div>
+
+      <div className='search_multi_submit'>
+        <input
+          className='search_multi_submit_button'
+          onClick={handleSubmit}
+          type='submit'
+          name='multiSubmit'
+          id='multiSubmit'
+          value='Rechercher'
+        />
       </div>
     </>
   );

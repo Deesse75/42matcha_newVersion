@@ -13,30 +13,39 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
   const me = useUserInfo();
   const nav = useNavigate();
   const refTall = useRef<HTMLInputElement>(null);
+  const refDelTall = useRef<HTMLInputElement>(null);
   const refGender = useRef<HTMLSelectElement>(null);
   const refOrientation = useRef<HTMLSelectElement>(null);
   const [bodyRequest, setBodyRequest] = useState<{
     gender: string | null;
     orientation: string | null;
     tall: number | null;
+    delTall: boolean;
   } | null>(null);
 
   const handleSubmit = () => {
     const gender = refGender.current?.value || null;
     const orientation = refOrientation.current?.value || null;
-    const tall = refTall.current?.value.trim() || null;
+    const tall = refTall.current?.value || null;
+    const delTall = refDelTall.current?.checked || false;
     if (
       (!gender || gender === '---') &&
       (!orientation || orientation === '---') &&
-      (!tall || parseInt(tall) === 0)
+      !tall &&
+      !delTall
     ) {
       setMatchaNotif('Aucune donnée à modifier.');
       return;
     }
+    if (delTall && !me.user?.tall) {
+      setMatchaNotif('Aucune taille à supprimer.');
+      return;
+    }
     setBodyRequest({
-      gender: gender,
-      orientation: orientation,
+      gender: gender === '---' ? null : gender,
+      orientation: orientation === '---' ? null : orientation,
       tall: tall ? parseInt(tall) : null,
+      delTall,
     });
   };
 
@@ -71,9 +80,10 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
           return;
         }
         setReloadAccount('userData');
-        refGender.current!.value = 'default';
-        refOrientation.current!.value = 'default';
-        refTall.current!.value = '0';
+        refGender.current!.value = '---';
+        refOrientation.current!.value = '---';
+        refTall.current!.value = '';
+        refDelTall.current!.checked = false;
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -130,17 +140,17 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
               ref={refOrientation}
             >
               <option defaultValue='default'>---</option>
-              <option value='Homme'>Hétérosexuel(le)</option>
-              <option value='Femme'>Homosexuel(le)</option>
-              <option value='Bisexuel'>Bisexuel(le)</option>
-              <option value='Pansexuel'>Pansexuel(le)</option>
-              <option value='Asexuel'>Asexuel(le)</option>
-              <option value='Demisexuel'>Demisexuel(le)</option>
-              <option value='Sapiosexuel'>Sapiosexuel(le)</option>
-              <option value='Polysexuel'>Polysexuel(le)</option>
+              <option value='Hétérosexuel(le)'>Hétérosexuel(le)</option>
+              <option value='Homosexuel(le)'>Homosexuel(le)</option>
+              <option value='Bisexuel(le)'>Bisexuel(le)</option>
+              <option value='Pansexuel(le)'>Pansexuel(le)</option>
+              <option value='Asexuel(le)'>Asexuel(le)</option>
+              <option value='Demisexuel(le)'>Demisexuel(le)</option>
+              <option value='Sapiosexuel(le)'>Sapiosexuel(le)</option>
+              <option value='Polysexuel(le)'>Polysexuel(le)</option>
               <option value='Queer'>Queer</option>
-              <option value='Skoliosexuel'>Skoliosexuel(le)</option>
-              <option value='Graysexuel'>Graysexuel(le)</option>
+              <option value='Skoliosexuel(le)'>Skoliosexuel(le)</option>
+              <option value='Graysexuel(le)'>Graysexuel(le)</option>
               <option value='Autre'>Autre</option>
               <option value='delete'>Supprimer la valeur actuelle</option>
             </select>
@@ -148,21 +158,27 @@ const UpdateProfileData: FC<Props> = ({ setMatchaNotif, setReloadAccount }) => {
         </div>
 
         <div className='profile_section'>
-          <div className='profile_name'>{`Taille (-1 pour supprimer)`}</div>
+          <div className='profile_name'>{`Taille (0 pour supprimer)`}</div>
           <div className='profile_current_value'>
             {me.user && me.user.tall ? `${me.user.tall} cm` : '-'}
           </div>
           <div className='profile_new_value'>
             <input
-              className='profile_new_value_input'
+              className='profile_new_value_input_tall'
               type='number'
               name='newTall'
               id='newTall'
-              min={-1}
+              min={50}
               max={250}
-              defaultValue={0}
               autoComplete='number'
               ref={refTall}
+            />
+            <label htmlFor='delTall'>Supprimer la taille</label>
+            <input
+              type='checkbox'
+              name='delTall'
+              id='delTall'
+              ref={refDelTall}
             />
           </div>
         </div>

@@ -41,9 +41,10 @@
     display: flex;
     justify-content: space-between;
     .routes_menu {
-      width: 25px;
+      width: 35px;
       height: 100%;
-      border: 1px solid red;
+      box-sizing: border-box;
+      @import './subfolder/menu_matcha';
     }
     .routes_path {
       width: 90%;
@@ -53,6 +54,7 @@
       @import './auth';
       @import './account';
       @import './photo_profile';
+      @import './search';
     }
     .routes_socket_notif {
       width: 25px;

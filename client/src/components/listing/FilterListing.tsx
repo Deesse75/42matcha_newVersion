@@ -15,9 +15,10 @@ const FilterListing: FC<Props> = ({ listingName, setMatchaNotif }) => {
 
   return (
     <>
-      <div className='listing_filter'>
+      <div className='listing_filter_container'>
         <div className='listing_filter_left'>
           <select
+            className='listing_filter_left_select'
             onChange={(e) => {
               setFilterSelected(e.target.value);
             }}
@@ -26,16 +27,16 @@ const FilterListing: FC<Props> = ({ listingName, setMatchaNotif }) => {
             id='filter_select'
           >
             <option defaultValue='default'>Filtrer par ...</option>
-            <option value='age'>Age</option>
-            <option value='location'>Location</option>
-            <option value='fame'>Fame</option>
-            <option value='tags'>Tags</option>
+            <option value='age'>Tranche d'age</option>
+            <option value='location'>Localisation</option>
+            <option value='fame'>Note</option>
+            <option value='tags'>Centre d'intêret</option>
           </select>
         </div>
 
         <div className='listing_filter_right'>
           {filterSelected === 'default' && (
-            <div className='listing_filter_empty'></div>
+            <div className='listing_filter_section_part'></div>
           )}
           {filterSelected === 'age' && (
             <AgeFilter
