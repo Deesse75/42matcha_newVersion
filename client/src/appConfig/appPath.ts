@@ -59,19 +59,18 @@ export const userRoute = {
 };
 
 export const listingRoute = {
+  getListing: `${PATH}/listing/get_listing`,
   getAgeFilter: `${PATH}/listing/get_age_filter`,
   getLocationFilter: `${PATH}/listing/get_location_filter`,
   getFameFilter: `${PATH}/listing/get_fame_filter`,
   getTagsFilter: `${PATH}/listing/get_tags_filter`,
-  getListing: `${PATH}/listing/get_listing`,
 };
 
 export const searchRoute = {
-  searchMulti: `${PATH}/search/search_multi`,
   searchUsername: `${PATH}/search/search_username`,
   searchLocation: `${PATH}/search/search_location`,
   searchTag: `${PATH}/search/search_tag`,
-  getLastSearch: `${PATH}/search/get_last_search`,
+  searchMulti: `${PATH}/search/search_multi`,
 };
 
 export const profileRoute = {

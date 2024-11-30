@@ -39,22 +39,6 @@ export type UserLastSearchBackType = {
   fameRatingMin: number;
 };
 
-export type UserNotifBackType = {
-  id: number;
-  userId: number;
-  message: string;
-  createdAt: string;
-};
-
-export type ChatMessageBackType = {
-  id: number;
-  senderId: number;
-  receiverId: number;
-  message: string;
-  readed: boolean;
-  createdAt: string;
-};
-
 export type ProfileBackType = {
   id: number;
   username: string;
@@ -79,4 +63,3 @@ export type PhotosPlusBackType = {
   photo4: string | null;
   photo5: string | null;
 };
-

@@ -1,20 +1,21 @@
 import { FC, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listingRoute, appRedir } from '../../appConfig/appPath';
-import { useMemory } from '../../appContext/memory.context';
 import { useUserInfo } from '../../appContext/user.context';
 import Cookies from 'js-cookie';
+import { ProfileFrontType } from '../../appConfig/interface';
 
 type Props = {
   listingName: string;
+  setListing: React.Dispatch<React.SetStateAction<ProfileFrontType[] | null>>;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
-  const memo = useMemory();
+const TagsFilter: FC<Props> = ({ listingName, setListing, setMatchaNotif }) => {
   const nav = useNavigate();
   const me = useUserInfo();
   const [bodyRequest, setBodyRequest] = useState<{
+    listingName: string;
     tags: string[];
   } | null>(null);
 
@@ -25,7 +26,7 @@ const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
       setMatchaNotif('Aucun tag selectionné.');
       return;
     }
-    setBodyRequest({ tags: tags });
+    setBodyRequest({ listingName, tags: tags });
   };
 
   useEffect(() => {
@@ -33,17 +34,14 @@ const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(
-          `${listingRoute.getTagsFilter}/${listingName}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${Cookies.get('session')}`,
-            },
-            body: JSON.stringify(bodyRequest),
+        const response = await fetch(listingRoute.getTagsFilter, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('session')}`,
           },
-        );
+          body: JSON.stringify(bodyRequest),
+        });
         const data = await response.json();
         if (!isMounted) return;
         if (data.message && data.message.split(' ')[0] === 'Token') {
@@ -61,7 +59,7 @@ const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
           setMatchaNotif(data.message);
           return;
         }
-        memo.setListing(data.listing);
+        setListing(data.listing);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -77,33 +75,29 @@ const TagsFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
   return (
     <>
       <form onSubmit={handleClick} className='selected_filter_form'>
-        <div className='selected_filter_form_section'>
-          <select
-            name='select_tag_filter'
-            id='select_tag_filter'
-            className='selected_filter_select'
-          >
-            <option value='default'>---</option>
-            {me.userTags && (
-              <>
-                {me.userTags.map((tag, key) => (
-                  <option key={key} value={tag.tagName}>
-                    {`#${tag.tagName} `}
-                  </option>
-                ))}
-              </>
-            )}
-          </select>
-        </div>
-        <div className='selected_filter_form_section'>
-          <input
-            className='selected_filter_submit'
-            type='button'
-            name='tag_submit'
-            id='tag_submit'
-            value='Filtrer'
-          />
-        </div>
+        <select
+          name='select_tag_filter'
+          id='select_tag_filter'
+          className='selected_filter_select'
+        >
+          <option value='default'>---</option>
+          {me.userTags && (
+            <>
+              {me.userTags.map((tag, key) => (
+                <option key={key} value={tag.tagName}>
+                  {`#${tag.tagName} `}
+                </option>
+              ))}
+            </>
+          )}
+        </select>
+        <input
+          className='selected_filter_submit'
+          type='button'
+          name='tag_submit'
+          id='tag_submit'
+          value='Filtrer'
+        />
       </form>
     </>
   );

@@ -1,38 +1,27 @@
 .listing_sort_container {
-  width: 40%;
-  height: 95%;
+  width: 35%;
+  height: 100%;
   margin-left: 2px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   box-sizing: border-box;
-  border-radius: 3px;
-  box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
-  background-color: $color_nuance_white1;
 
-  .listing_sort_form {
-    width: 80%;
-    height: 80%;
+  .listing_sort_select {
+    width: 69%;
+    height: 95%;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .listing_sort_select {
-      width: 65%;
-      height: 30px;
-      display: flex;
-      border: none;
-      border-radius: 5px;
-      outline: none;
-      box-sizing: border-box;
-      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
-    }
-    .listing_sort_submit {
-      width: 29%;
-      height: 30px;
-      display: flex;
-      border-radius: 5px;
-      @include submit_button_black;
-    }
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+  }
+  .listing_sort_submit {
+    width: 30%;
+    height: 95%;
+    display: flex;
+    border-radius: 5px;
+    @include submit_button_black;
   }
 }

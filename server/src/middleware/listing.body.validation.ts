@@ -2,8 +2,21 @@ import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
 
 const ageFilterSchema = Joi.object({
-  ageMin: Joi.number().min(18).max(120).required(),
-  ageMax: Joi.number().min(18).max(120).required(),
+  listingName: Joi.string()
+    .required()
+    .allow(
+      'matcha',
+      'match',
+      'view',
+      'like',
+      'visited',
+      'liked',
+      'banned',
+      'mute',
+      'search',
+    ),
+  ageMin: Joi.number().integer().min(18).max(120).required(),
+  ageMax: Joi.number().integer().min(18).max(120).required(),
 })
   .unknown(false)
   .messages({
@@ -11,6 +24,19 @@ const ageFilterSchema = Joi.object({
   });
 
 const fameFilterSchema = Joi.object({
+  listingName: Joi.string()
+    .required()
+    .allow(
+      'matcha',
+      'match',
+      'view',
+      'like',
+      'visited',
+      'liked',
+      'banned',
+      'mute',
+      'search',
+    ),
   fameMin: Joi.number().min(0).required(),
 })
   .unknown(false)
@@ -19,10 +45,20 @@ const fameFilterSchema = Joi.object({
   });
 
 const locationFilterSchema = Joi.object({
-  zone: Joi.string()
-    .empty()
+  listingName: Joi.string()
     .required()
-    .allow('town', 'county', 'region'),
+    .allow(
+      'matcha',
+      'match',
+      'view',
+      'like',
+      'visited',
+      'liked',
+      'banned',
+      'mute',
+      'search',
+    ),
+  zone: Joi.string().empty().required().allow('town', 'county', 'region'),
 })
   .unknown(false)
   .messages({
@@ -30,6 +66,19 @@ const locationFilterSchema = Joi.object({
   });
 
 const tagsFilterSchema = Joi.object({
+  listingName: Joi.string()
+    .required()
+    .allow(
+      'matcha',
+      'match',
+      'view',
+      'like',
+      'visited',
+      'liked',
+      'banned',
+      'mute',
+      'search',
+    ),
   tags: Joi.array().items(Joi.string().empty().min(1).required()),
 })
   .unknown(false)
@@ -49,6 +98,7 @@ export const listingBodyValidation = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
+  console.log('path', req.path);
   const schema = schemaMap[req.path];
   if (schema) {
     try {

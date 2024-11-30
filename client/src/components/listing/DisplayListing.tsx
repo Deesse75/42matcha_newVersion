@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import SortListing from './SortListing';
 import FilterListing from './FilterListing';
 import MiniProfile from './MiniProfile';
@@ -7,54 +7,63 @@ import { ProfileFrontType } from '../../appConfig/interface';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setListing: React.Dispatch<React.SetStateAction<ProfileFrontType[] | null>>;
   listing: ProfileFrontType[] | null;
-  listingName: string;
+  listingName: string | null;
 };
 
 const DisplayListing: FC<Props> = ({
   setMatchaNotif,
+  setListing,
   listing,
   listingName,
 }) => {
+  const [reinit, setReinit] = useState<boolean>(false);
+
   return (
     <>
       <div className='listing_container'>
-        <div
-          className={
-            listing && listing.length
-              ? 'listing_header_on'
-              : 'listing_header_off'
-          }
-        >
-          <SortListing listing={listing} setMatchaNotif={setMatchaNotif} />
+        <div className='listing_header'>
+          <SortListing
+            listing={listing}
+            setListing={setListing}
+            reinit={reinit}
+            setReinit={setReinit}
+            setMatchaNotif={setMatchaNotif}
+          />
           <FilterListing
+            reinit={reinit}
+            setReinit={setReinit}
             listingName={listingName}
+            setListing={setListing}
             setMatchaNotif={setMatchaNotif}
           />
           <ReinitListing
             listingName={listingName}
+            setListing={setListing}
             setMatchaNotif={setMatchaNotif}
+            setReinit={setReinit}
           />
         </div>
 
-        <div
-          className={
-            listing && listing.length
-              ? 'listing_content_on'
-              : 'listing_content_off'
-          }
-        >
-          {listing && listing.length && (
+        <div className='listing_content'>
+          {listing ? (
             <>
-              {listing.map((profile, key) => (
-                <MiniProfile
-                  key={key as number}
-                  profile={profile}
-                  setMatchaNotif={setMatchaNotif}
-                />
-              ))}
+              {listing.length ? (
+                <>
+                  {listing.map((profile, key) => (
+                    <MiniProfile
+                      key={key as number}
+                      profile={profile}
+                      setMatchaNotif={setMatchaNotif}
+                    />
+                  ))}
+                </>
+              ) : (
+                <div>Aucun profil trouvé</div>
+              )}
             </>
-          )}
+          ) : null}
         </div>
 
         <div className='listing_footer'>

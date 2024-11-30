@@ -1,18 +1,24 @@
 import { FC, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listingRoute, appRedir } from '../../appConfig/appPath';
-import { useMemory } from '../../appContext/memory.context';
 import Cookies from 'js-cookie';
 import { IoReload } from 'react-icons/io5';
+import { ProfileFrontType } from '../../appConfig/interface';
 
 type Props = {
-  listingName: string;
+  listingName: string | null;
+  setListing: React.Dispatch<React.SetStateAction<ProfileFrontType[] | null>>;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setReinit: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const ReinitListing: FC<Props> = ({ listingName, setMatchaNotif }) => {
+export const ReinitListing: FC<Props> = ({
+  listingName,
+  setListing,
+  setMatchaNotif,
+  setReinit,
+}) => {
   const [reloadListing, setReloadListing] = useState<boolean>(false);
-  const memo = useMemory();
   const nav = useNavigate();
 
   useEffect(() => {
@@ -47,7 +53,8 @@ export const ReinitListing: FC<Props> = ({ listingName, setMatchaNotif }) => {
           setMatchaNotif(data.message);
           return;
         }
-        memo.setListing(data.listing);
+        setListing(data.listing);
+        setReinit(true);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -63,14 +70,18 @@ export const ReinitListing: FC<Props> = ({ listingName, setMatchaNotif }) => {
   return (
     <>
       <div className='listing_reinit'>
-        <button
-          className='listing_reinit_icon'
-          onClick={() => {
-            setReloadListing(true);
-          }}
-        >
-          <IoReload size={25} />
-        </button>
+        {listingName && (
+          <>
+            <button
+              className='listing_reinit_icon'
+              onClick={() => {
+                setReloadListing(true);
+              }}
+            >
+              <IoReload size={25} />
+            </button>
+          </>
+        )}
       </div>
     </>
   );

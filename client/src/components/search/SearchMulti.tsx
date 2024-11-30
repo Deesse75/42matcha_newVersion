@@ -1,20 +1,31 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMemory } from '../../appContext/memory.context';
 import { searchRoute, appRedir } from '../../appConfig/appPath';
-import { UserLastSearchFrontType } from '../../appConfig/interface';
 import Cookies from 'js-cookie';
+import { ProfileFrontType } from '../../appConfig/interface';
+
+type BodyRequestType = {
+  ageMin: number | null;
+  ageMax: number | null;
+  gender: string | null;
+  orientation: string | null;
+  tallMin: number | null;
+  tallMax: number | null;
+  withPhoto: boolean;
+  withBio: boolean;
+  fameRatingMin: number | null;
+};
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
-  lastSearch: UserLastSearchFrontType | null;
-  setReloadSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  setListing: React.Dispatch<React.SetStateAction<ProfileFrontType[] | null>>;
+  setListingName: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const SearchMulti: FC<Props> = ({
   setMatchaNotif,
-  lastSearch,
-  setReloadSearch,
+  setListing,
+  setListingName,
 }) => {
   const refAgeMin = useRef<HTMLInputElement>(null);
   const refAgeMax = useRef<HTMLInputElement>(null);
@@ -22,58 +33,65 @@ const SearchMulti: FC<Props> = ({
   const refOrientation = useRef<HTMLSelectElement>(null);
   const refTallMin = useRef<HTMLInputElement>(null);
   const refTallMax = useRef<HTMLInputElement>(null);
-  const refWithPhoto = useRef<HTMLInputElement>(null);
-  const refWithBio = useRef<HTMLInputElement>(null);
   const refFameRating = useRef<HTMLInputElement>(null);
-  const [bodyRequest, setBodyRequest] =
-    useState<UserLastSearchFrontType | null>(null);
+  const [withPhoto, setWithPhoto] = useState<boolean>(false);
+  const [withBio, setWithBio] = useState<boolean>(false);
+  const [bodyRequest, setBodyRequest] = useState<BodyRequestType | null>(null);
   const nav = useNavigate();
-  const memo = useMemory();
 
   const handleSubmit = () => {
-    const newLastSearch: UserLastSearchFrontType = {
-      ageMin: refAgeMin.current ? parseInt(refAgeMin.current.value) : 18,
-      ageMax: refAgeMax.current ? parseInt(refAgeMax.current.value) : 120,
+    const searchRequest: BodyRequestType = {
+      ageMin: refAgeMin.current ? parseInt(refAgeMin.current.value) : null,
+      ageMax: refAgeMax.current ? parseInt(refAgeMax.current.value) : null,
       gender: refGender.current ? refGender.current.value : null,
       orientation: refOrientation.current ? refOrientation.current.value : null,
-      tallMin: refTallMin.current ? parseInt(refTallMin.current.value) : 0,
-      tallMax: refTallMax.current ? parseInt(refTallMax.current.value) : 250,
-      withPhoto: refWithPhoto.current ? refWithPhoto.current.checked : false,
-      withBio: refWithBio.current ? refWithBio.current.checked : false,
+      tallMin: refTallMin.current ? parseInt(refTallMin.current.value) : null,
+      tallMax: refTallMax.current ? parseInt(refTallMax.current.value) : null,
+      withPhoto: withPhoto,
+      withBio: withBio,
       fameRatingMin: refFameRating.current
         ? parseInt(refFameRating.current.value)
-        : 0,
+        : null,
     };
-
-    if (lastSearch === newLastSearch) {
-      setMatchaNotif('Veuillez remplir au moins un champ');
+    if (
+      !searchRequest.ageMin &&
+      !searchRequest.ageMax &&
+      !searchRequest.gender &&
+      !searchRequest.orientation &&
+      !searchRequest.tallMin &&
+      !searchRequest.tallMax &&
+      !searchRequest.fameRatingMin &&
+      !searchRequest.withPhoto &&
+      !searchRequest.withBio
+    ) {
+      setMatchaNotif('Entrez au moins un critère de recherche');
       return;
     }
     if (
-      newLastSearch.ageMin &&
-      (newLastSearch.ageMin < 18 || newLastSearch.ageMin > 120)
+      searchRequest.ageMin &&
+      (searchRequest.ageMin < 18 || searchRequest.ageMin > 120)
     ) {
       setMatchaNotif("L'age minimale doit être compris entre 18 et 120 ans");
       return;
     }
     if (
-      newLastSearch.ageMax &&
-      (newLastSearch.ageMax < 18 || newLastSearch.ageMax > 120)
+      searchRequest.ageMax &&
+      (searchRequest.ageMax < 18 || searchRequest.ageMax > 120)
     ) {
       setMatchaNotif("L'age maximum doit être compris entre 18 et 120 ans");
       return;
     }
     if (
-      newLastSearch.ageMin &&
-      newLastSearch.ageMax &&
-      newLastSearch.ageMin > newLastSearch.ageMax
+      searchRequest.ageMin &&
+      searchRequest.ageMax &&
+      searchRequest.ageMin > searchRequest.ageMax
     ) {
       setMatchaNotif("L'age minimun doit être inférieur à l'age maximum");
       return;
     }
     if (
-      newLastSearch.tallMin &&
-      (newLastSearch.tallMin < 50 || newLastSearch.tallMin > 250)
+      searchRequest.tallMin &&
+      (searchRequest.tallMin < 50 || searchRequest.tallMin > 250)
     ) {
       setMatchaNotif(
         'La taille minimale doit être compris entre 50cm et 250cm',
@@ -81,23 +99,50 @@ const SearchMulti: FC<Props> = ({
       return;
     }
     if (
-      newLastSearch.tallMax &&
-      (newLastSearch.tallMax < 50 || newLastSearch.tallMax > 250)
+      searchRequest.tallMax &&
+      (searchRequest.tallMax < 50 || searchRequest.tallMax > 250)
     ) {
       setMatchaNotif('La taille maximum doit être compris entre 50cm et 250cm');
       return;
     }
     if (
-      newLastSearch.tallMin &&
-      newLastSearch.tallMax &&
-      newLastSearch.tallMin > newLastSearch.tallMax
+      searchRequest.tallMin &&
+      searchRequest.tallMax &&
+      searchRequest.tallMin > searchRequest.tallMax
     ) {
       setMatchaNotif(
         'La taille minimale doit être inférieure à la taille maximale',
       );
       return;
     }
-    setBodyRequest(newLastSearch);
+    if (searchRequest.fameRatingMin && searchRequest.fameRatingMin < 0) {
+      setMatchaNotif('La note minimale doit être supérieure ou égale à 0');
+      return;
+    }
+    setBodyRequest({
+      ageMin: searchRequest.ageMin,
+      ageMax: searchRequest.ageMax,
+      gender: searchRequest.gender === '---' ? null : searchRequest.gender,
+      orientation:
+        searchRequest.orientation === '---' ? null : searchRequest.orientation,
+      tallMin: searchRequest.tallMin,
+      tallMax: searchRequest.tallMax,
+      withPhoto: searchRequest.withPhoto,
+      withBio: searchRequest.withBio,
+      fameRatingMin: searchRequest.fameRatingMin,
+    });
+  };
+
+  const handleClear = () => {
+    if (refAgeMin.current) refAgeMin.current.value = '';
+    if (refAgeMax.current) refAgeMax.current.value = '';
+    if (refGender.current) refGender.current.value = '---';
+    if (refOrientation.current) refOrientation.current.value = '---';
+    if (refTallMin.current) refTallMin.current.value = '';
+    if (refTallMax.current) refTallMax.current.value = '';
+    if (refFameRating.current) refFameRating.current.value = '';
+    setWithPhoto(false);
+    setWithBio(false);
   };
 
   useEffect(() => {
@@ -130,8 +175,8 @@ const SearchMulti: FC<Props> = ({
           setMatchaNotif(data.message);
           return;
         }
-        memo.setListing(data.listing);
-        setReloadSearch(true);
+        setListing(data.listing);
+        setListingName('search');
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -154,14 +199,20 @@ const SearchMulti: FC<Props> = ({
             type='number'
             name='ageMin'
             id='ageMin'
-            value={lastSearch?.ageMin ?? 18}
+            min={18}
+            max={120}
+            autoComplete='number'
+            ref={refAgeMin}
           />
           <input
             className='search_multi_value_num'
             type='number'
             name='ageMax'
             id='ageMax'
-            value={lastSearch?.ageMax ?? 120}
+            min={18}
+            max={120}
+            autoComplete='number'
+            ref={refAgeMax}
           />
         </div>
       </div>
@@ -173,14 +224,20 @@ const SearchMulti: FC<Props> = ({
             type='number'
             name='tallMin'
             id='tallMin'
-            value={lastSearch?.tallMin ?? 0}
+            min={50}
+            max={250}
+            autoComplete='number'
+            ref={refTallMin}
           />
           <input
             className='search_multi_value_num'
             type='number'
             name='tallMax'
             id='tallMax'
-            value={lastSearch?.tallMax ?? 250}
+            min={50}
+            max={250}
+            autoComplete='number'
+            ref={refTallMax}
           />
         </div>
       </div>
@@ -191,8 +248,9 @@ const SearchMulti: FC<Props> = ({
             className='search_multi_value_select'
             name='gender'
             id='gender'
+            ref={refGender}
           >
-            <option defaultValue='default'>{lastSearch?.gender ?? ''}</option>
+            <option defaultValue='default'>---</option>
             <option value='Homme'>Homme</option>
             <option value='Femme'>Femme</option>
             <option value='Non-binaire'>Non-binaire</option>
@@ -213,21 +271,20 @@ const SearchMulti: FC<Props> = ({
             className='search_multi_value_select'
             name='orientation'
             id='orientation'
+            ref={refOrientation}
           >
-            <option defaultValue='default'>
-              {lastSearch?.orientation ?? ''}
-            </option>
-            <option value='Homme'>Hétérosexuel(le)</option>
-            <option value='Femme'>Homosexuel(le)</option>
-            <option value='Bisexuel'>Bisexuel(le)</option>
-            <option value='Pansexuel'>Pansexuel(le)</option>
-            <option value='Asexuel'>Asexuel(le)</option>
-            <option value='Demisexuel'>Demisexuel(le)</option>
-            <option value='Sapiosexuel'>Sapiosexuel(le)</option>
-            <option value='Polysexuel'>Polysexuel(le)</option>
+            <option defaultValue='default'>---</option>
+            <option value='Hétérosexuel(le)'>Hétérosexuel(le)</option>
+            <option value='Homosexuel(le)'>Homosexuel(le)</option>
+            <option value='Bisexuel(le)'>Bisexuel(le)</option>
+            <option value='Pansexuel(le)'>Pansexuel(le)</option>
+            <option value='Asexuel(le)'>Asexuel(le)</option>
+            <option value='Demisexuel(le)'>Demisexuel(le)</option>
+            <option value='Sapiosexuel(le)'>Sapiosexuel(le)</option>
+            <option value='Polysexuel(le)'>Polysexuel(le)</option>
             <option value='Queer'>Queer</option>
-            <option value='Skoliosexuel'>Skoliosexuel(le)</option>
-            <option value='Graysexuel'>Graysexuel(le)</option>
+            <option value='Skoliosexuel(le)'>Skoliosexuel(le)</option>
+            <option value='Graysexuel(le)'>Graysexuel(le)</option>
             <option value='Autre'>Autre</option>
           </select>
         </div>
@@ -240,35 +297,39 @@ const SearchMulti: FC<Props> = ({
             type='number'
             name='fameMin'
             id='fameMin'
-            value={lastSearch?.fameRatingMin ?? 0}
+            min={0}
+            autoComplete='number'
+            ref={refFameRating}
           />
         </div>
       </div>
       <div className='search_multi_row_checkbox'>
-        <div className='search_multi_row_checkbox_section'>
-          <label htmlFor='withPhoto' className='search_multi_value_label'>
-            Avec photo
-          </label>
-          <input
-            className='search_multi_value_checkbox'
-            type='checkbox'
-            name='withPhoto'
-            id='withPhoto'
-            checked={lastSearch?.withPhoto ?? false}
-          />
-        </div>
-        <div className='search_multi_row_checkbox_section'>
-          <label htmlFor='withBio' className='search_multi_value_label'>
-            Avec annonce
-          </label>
-          <input
-            className='search_multi_value_checkbox'
-            type='checkbox'
-            name='withBio'
-            id='withBio'
-            checked={lastSearch?.withBio ?? false}
-          />
-        </div>
+        <label htmlFor='withPhoto' className='search_multi_value_label'>
+          Avec photo
+        </label>
+        <input
+          className='search_multi_value_checkbox'
+          onChange={() => {
+            setWithPhoto(!withPhoto);
+          }}
+          type='checkbox'
+          name='withPhoto'
+          id='withPhoto'
+          checked={withPhoto}
+        />
+        <label htmlFor='withBio' className='search_multi_value_label'>
+          Avec annonce
+        </label>
+        <input
+          className='search_multi_value_checkbox'
+          onChange={() => {
+            setWithBio(!withBio);
+          }}
+          type='checkbox'
+          name='withBio'
+          id='withBio'
+          checked={withBio}
+        />
       </div>
 
       <div className='search_multi_submit'>
@@ -279,6 +340,14 @@ const SearchMulti: FC<Props> = ({
           name='multiSubmit'
           id='multiSubmit'
           value='Rechercher'
+        />
+        <input
+          className='search_multi_submit_button'
+          onClick={handleClear}
+          type='button'
+          name='multiClear'
+          id='multiClear'
+          value='Effacer'
         />
       </div>
     </>

@@ -2,18 +2,23 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdOutlineKeyboardDoubleArrowRight } from 'react-icons/md';
 import { searchRoute, appRedir } from '../../appConfig/appPath';
-import { useMemory } from '../../appContext/memory.context';
 import Cookies from 'js-cookie';
+import { ProfileFrontType } from '../../appConfig/interface';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setListing: React.Dispatch<React.SetStateAction<ProfileFrontType[] | null>>;
+  setListingName: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const SearchByTags: FC<Props> = ({ setMatchaNotif }) => {
+const SearchByTags: FC<Props> = ({
+  setMatchaNotif,
+  setListing,
+  setListingName,
+}) => {
   const [tag, setTag] = useState<string | null>(null);
   const refTag = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
-  const memo = useMemory();
 
   const handleSubmit = () => {
     const tag = refTag.current?.value.trim() || null;
@@ -53,7 +58,9 @@ const SearchByTags: FC<Props> = ({ setMatchaNotif }) => {
           setMatchaNotif(data.message);
           return;
         }
-        memo.setListing(data.listing);
+        setListing(data.listing);
+        setListingName(null);
+        if (refTag.current) refTag.current.value = '';
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);

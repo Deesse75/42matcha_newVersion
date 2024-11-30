@@ -1,13 +1,13 @@
 import Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
 
-const searchAdvanceSchema = Joi.object({
-  ageMin: Joi.number().integer().min(18).max(120).required(),
-  ageMax: Joi.number().integer().min(18).max(120).required(),
-  tallMin: Joi.number().integer().min(100).max(250).required(),
-  tallMax: Joi.number().integer().min(100).max(250).required(),
+const searchMultiSchema = Joi.object({
+  ageMin: Joi.number().integer().min(18).max(120).empty(null),
+  ageMax: Joi.number().integer().min(18).max(120).empty(null),
+  tallMin: Joi.number().integer().min(50).max(250).empty(null),
+  tallMax: Joi.number().integer().min(50).max(250).empty(null),
   gender: Joi.string()
-    .required()
+    .empty(null)
     .valid(
       'Homme',
       'Femme',
@@ -19,13 +19,9 @@ const searchAdvanceSchema = Joi.object({
       'Homme transgenre',
       'Pangenre',
       'Autre',
-    )
-    .allow(null)
-    .messages({
-      'string.base': 'Le genre est invalide',
-    }),
+    ),
   orientation: Joi.string()
-    .required()
+    .empty(null)
     .valid(
       'Hétérosexuel(le)',
       'Homosexuel(le)',
@@ -39,12 +35,10 @@ const searchAdvanceSchema = Joi.object({
       'Skoliosexuel(le)',
       'Graysexuel(le)',
       'Autre',
-    )
-    .allow(null)
-    .messages({
-      'string.base': 'L orientation sexuelle est invalide',
-    }),
-  advancePhoto: Joi.string().valid(0, 1, false, true).required(),
+    ),
+  fameRatingMin: Joi.number().integer().min(0).empty(null),
+  withPhoto: Joi.string().valid(0, 1, false, true).required(),
+  withBio: Joi.string().valid(0, 1, false, true).required(),
 })
   .unknown(false)
   .messages({
@@ -52,7 +46,7 @@ const searchAdvanceSchema = Joi.object({
   });
 
 const schemaMap: { [key: string]: Joi.ObjectSchema } = {
-  '/search_advance': searchAdvanceSchema,
+  '/search_multi': searchMultiSchema,
 };
 
 export const searchBodyValidation = async (

@@ -25,34 +25,6 @@ export type UserTagsFrontType = {
   tagName: string;
 };
 
-export type UserLastSearchFrontType = {
-  ageMin: number;
-  ageMax: number;
-  tallMin: number;
-  tallMax: number;
-  gender: string | null;
-  orientation: string | null;
-  withPhoto: boolean;
-  withBio: boolean;
-  fameRatingMin: number;
-};
-
-export type UserNotifFrontType = {
-  id: number;
-  userId: number;
-  message: string;
-  createdAt: string;
-};
-
-export type ChatMessageFrontType = {
-  id: number;
-  senderId: number;
-  receiverId: number;
-  message: string;
-  readed: boolean;
-  createdAt: string;
-};
-
 export type ProfileFrontType = {
   id: number;
   username: string;
@@ -76,10 +48,4 @@ export type PhotosPlusFrontType = {
   photo3: string | null;
   photo4: string | null;
   photo5: string | null;
-};  
-
-
-export type OpenChatListType = {
-  userId: number;
-  username: string;
 };

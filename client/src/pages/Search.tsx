@@ -1,12 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { appRedir, searchRoute } from '../appConfig/appPath';
-import {
-  ProfileFrontType,
-  UserLastSearchFrontType,
-} from '../appConfig/interface';
-import { useMemory } from '../appContext/memory.context';
+import { appRedir } from '../appConfig/appPath';
+import { ProfileFrontType } from '../appConfig/interface';
 import DisplayListing from '../components/listing/DisplayListing';
 import SearchByLocation from '../components/search/SearchByLocation';
 import SearchByTags from '../components/search/SearchByTags';
@@ -19,14 +15,13 @@ type Props = {
 };
 
 const SearchPage: FC<Props> = ({ setMatchaNotif }) => {
-  const [listing, setListing] = useState<ProfileFrontType[] | null>(null);
-  const memo = useMemory();
   const nav = useNavigate();
-  const [reloadSearch, setReloadSearch] = useState<boolean>(false);
+  const [listing, setListing] = useState<ProfileFrontType[] | null>(null);
+  const [displayListing, setDisplayListing] = useState<
+    ProfileFrontType[] | null
+  >(null);
   const [controlPage, setControlPage] = useState<boolean>(false);
-  const [lastSearch, setLastSearch] = useState<UserLastSearchFrontType | null>(
-    null,
-  );
+  const [listingName, setListingName] = useState<string | null>(null);
 
   useEffect(() => {
     if (!Cookies.get('session')) {
@@ -41,52 +36,10 @@ const SearchPage: FC<Props> = ({ setMatchaNotif }) => {
   }, []);
 
   useEffect(() => {
-    if (!reloadSearch) return;
-    let isMounted = true;
-    const request = async () => {
-      try {
-        const response = await fetch(searchRoute.getLastSearch, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Cookies.get('session')}`,
-          },
-        });
-        const data = await response.json();
-        if (!isMounted) return;
-        if (data.message && data.message.split(' ')[0] === 'Token') {
-          setMatchaNotif(data.message);
-          nav(appRedir.signout);
-          return;
-        }
-        if (response.status === 500) {
-          setMatchaNotif(data.message);
-          nav(appRedir.errorInternal);
-          return;
-        }
-        setReloadSearch(false);
-        if (response.status !== 200) {
-          setMatchaNotif(data.message);
-          return;
-        }
-        setLastSearch(data.lastSearch);
-      } catch (error) {
-        if (!isMounted) return;
-        setMatchaNotif((error as Error).message);
-        nav(appRedir.errorInternal);
-      }
-    };
-    request();
-    return () => {
-      isMounted = false;
-    };
-  }, [reloadSearch]);
-
-  useEffect(() => {
-    if (!memo.listing) return;
-    setListing(memo.listing);
-    memo.setListing(null);
-  }, [memo.listing]);
+    if (!listing) return;
+    setDisplayListing(listing);
+    setListing(null);
+  }, [listing]);
 
   return (
     <>
@@ -96,25 +49,38 @@ const SearchPage: FC<Props> = ({ setMatchaNotif }) => {
             <div className='search_content'>
               <DisplayListing
                 setMatchaNotif={setMatchaNotif}
-                listing={listing}
-                listingName={'search'}
+                setListing={setListing}
+                listing={displayListing}
+                listingName={listingName}
               />
             </div>
             <div className='search_request'>
               <div className='search_one_row'>
-                <SearchByUsername setMatchaNotif={setMatchaNotif} />
+                <SearchByUsername
+                  setMatchaNotif={setMatchaNotif}
+                  setListing={setListing}
+                  setListingName={setListingName}
+                />
               </div>
               <div className='search_one_row'>
-                <SearchByTags setMatchaNotif={setMatchaNotif} />
+                <SearchByTags
+                  setMatchaNotif={setMatchaNotif}
+                  setListing={setListing}
+                  setListingName={setListingName}
+                />
               </div>
               <div className='search_one_col'>
-                <SearchByLocation setMatchaNotif={setMatchaNotif} />
+                <SearchByLocation
+                  setMatchaNotif={setMatchaNotif}
+                  setListing={setListing}
+                  setListingName={setListingName}
+                />
               </div>
               <div className='search_multi_container'>
                 <SearchMulti
                   setMatchaNotif={setMatchaNotif}
-                  lastSearch={lastSearch}
-                  setReloadSearch={setReloadSearch}
+                  setListing={setListing}
+                  setListingName={setListingName}
                 />
               </div>
             </div>

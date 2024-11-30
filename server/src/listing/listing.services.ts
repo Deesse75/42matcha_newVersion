@@ -7,19 +7,19 @@ import { matchaError } from '../utils/matcha_error.js';
 
 export const getListingService = async (
   listingRequest: ListingRequestType,
-): Promise<ProfileBackType[] | null> => {
+): Promise<ProfileBackType[]> => {
   try {
     const listing = await mysql.getListing(
       listingRequest.query,
       listingRequest.values,
     );
-    if (!listing) return null;
+    if (!listing) return [] as ProfileBackType[];
+    console.log('listing', listing.length);
     return convertPublicProfileList(listing);
   } catch (error) {
     throw error;
   }
 };
-
 
 // SELECT *
 // FROM User

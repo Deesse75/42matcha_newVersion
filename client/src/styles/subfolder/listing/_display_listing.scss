@@ -9,10 +9,9 @@
   border-radius: 5px;
   box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
   @include button_bubble_1;
-  .listing_header_on,
-  .listing_header_off {
+  .listing_header {
     width: 100%;
-    height: 70px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -25,7 +24,7 @@
       justify-content: center;
       .listing_reinit_icon {
         width: 40px;
-        height: 40px;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -40,8 +39,7 @@
     @import './listing_filter';
     @import './listing_sort';
   }
-  .listing_content_on,
-  .listing_content_off {
+  .listing_content {
     width: 98%;
     height: 80%;
     margin: 10px auto 0 auto;

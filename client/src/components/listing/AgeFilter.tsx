@@ -1,45 +1,47 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listingRoute, appRedir } from '../../appConfig/appPath';
-import { useMemory } from '../../appContext/memory.context';
 import Cookies from 'js-cookie';
+import { ProfileFrontType } from '../../appConfig/interface';
 
 type Props = {
   listingName: string;
+  setListing: React.Dispatch<React.SetStateAction<ProfileFrontType[] | null>>;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AgeFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
+const AgeFilter: FC<Props> = ({ listingName, setListing, setMatchaNotif }) => {
   const nav = useNavigate();
-  const memo = useMemory();
   const [bodyRequest, setBodyRequest] = useState<{
+    listingName: string;
     ageMin: number;
     ageMax: number;
   } | null>(null);
 
   const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const min = e.currentTarget.agemin.value;
-    const max = e.currentTarget.agemax.value;
-    if (!min && !max) {
-      setMatchaNotif('Veuillez renseigner un âge minimum et/ou maximum');
+    const min = parseInt(e.currentTarget?.agemin?.value);
+    const max = parseInt(e.currentTarget?.agemax?.value);
+    if (!min || !max) {
+      setMatchaNotif("Veuillez renseigner l'âge minimum et maximum");
       return;
     }
-    if (min && (min < 18 || min > 120)) {
+    if (min < 18 || min > 120) {
       setMatchaNotif("L'âge minimum est incorrect");
       return;
     }
-    if (max && (max < 18 || max > 120)) {
+    if (max < 18 || max > 120) {
       setMatchaNotif("L'âge maximum est incorrect");
       return;
     }
-    if (min && max && min > max) {
+    if (min > max) {
       setMatchaNotif("L'âge minimum est supérieur à l'âge maximum");
       return;
     } else
       setBodyRequest({
-        ageMin: min ? parseInt(min) : 18,
-        ageMax: max ? parseInt(max) : 120,
+        listingName,
+        ageMin: min,
+        ageMax: max,
       });
   };
 
@@ -48,17 +50,14 @@ const AgeFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(
-          `${listingRoute.getAgeFilter}/${listingName}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${Cookies.get('session')}`,
-            },
-            body: JSON.stringify(bodyRequest),
+        const response = await fetch(listingRoute.getAgeFilter, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('session')}`,
           },
-        );
+          body: JSON.stringify(bodyRequest),
+        });
         const data = await response.json();
         if (!isMounted) return;
         if (data.message && data.message.split(' ')[0] === 'Token') {
@@ -76,7 +75,8 @@ const AgeFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
           setMatchaNotif(data.message);
           return;
         }
-        memo.setListing(data.listing);
+        setListing(data.listing);
+        console.log(data.listing);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -92,35 +92,31 @@ const AgeFilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
   return (
     <>
       <form onSubmit={handleClick} className='selected_filter_form'>
-        <div className='selected_filter_form_section'>
-          <input
-            className='selected_filter_input'
-            type='number'
-            min={18}
-            max={120}
-            name='agemin'
-            id='ageMin'
-            placeholder='Minimum'
-          />
-          <input
-            className='selected_filter_input'
-            type='number'
-            min={18}
-            max={120}
-            name='agemax'
-            id='ageMax'
-            placeholder='Maximum'
-          />
-        </div>
-        <div className='selected_filter_form_section'>
-          <input
-            className='selected_filter_submit'
-            type='submit'
-            name='age_filter'
-            id='age_filter'
-            value='Filtrer'
-          />
-        </div>
+        <input
+          className='selected_filter_input'
+          type='number'
+          min={18}
+          max={120}
+          name='agemin'
+          id='ageMin'
+          placeholder='Minimum'
+        />
+        <input
+          className='selected_filter_input'
+          type='number'
+          min={18}
+          max={120}
+          name='agemax'
+          id='ageMax'
+          placeholder='Maximum'
+        />
+        <input
+          className='selected_filter_submit'
+          type='submit'
+          name='age_filter'
+          id='age_filter'
+          value='Filtrer'
+        />
       </form>
     </>
   );

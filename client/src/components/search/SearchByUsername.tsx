@@ -2,18 +2,24 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { appRedir, searchRoute } from '../../appConfig/appPath';
 import { MdOutlineKeyboardDoubleArrowRight } from 'react-icons/md';
-import { useMemory } from '../../appContext/memory.context';
 import Cookies from 'js-cookie';
+import { usernameValidation } from '../../utils/inputValidation';
+import { ProfileFrontType } from '../../appConfig/interface';
 
 type Props = {
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
+  setListing: React.Dispatch<React.SetStateAction<ProfileFrontType[] | null>>;
+  setListingName: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const SearchByUsername: FC<Props> = ({ setMatchaNotif }) => {
+const SearchByUsername: FC<Props> = ({
+  setMatchaNotif,
+  setListing,
+  setListingName,
+}) => {
   const [username, setUsername] = useState<string | null>(null);
   const refUsername = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
-  const memo = useMemory();
 
   const handleSubmit = () => {
     const username = refUsername.current?.value.trim() || null;
@@ -25,8 +31,8 @@ const SearchByUsername: FC<Props> = ({ setMatchaNotif }) => {
       setMatchaNotif('Entrez au moins 3 caractères');
       return;
     }
-    if (!/^[a-zA-Z]$/.test(username[0])) {
-      setMatchaNotif("Le nom d'utilisateur doit commencer par une lettre.");
+    if (!usernameValidation(username)) {
+      setMatchaNotif("Le format du nom d'utilisateur recherché est invalide.");
       return;
     }
     setUsername(username);
@@ -64,7 +70,9 @@ const SearchByUsername: FC<Props> = ({ setMatchaNotif }) => {
           setMatchaNotif(data.message);
           return;
         }
-        memo.setListing(data.listing);
+        setListing(data.listing);
+        setListingName(null);
+        if (refUsername.current) refUsername.current.value = '';
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -87,7 +95,7 @@ const SearchByUsername: FC<Props> = ({ setMatchaNotif }) => {
         maxLength={30}
         minLength={3}
         required
-        autoComplete='off'
+        autoComplete='username'
         ref={refUsername}
         placeholder='Rechercher par nom d utilisateur'
       />

@@ -1,18 +1,25 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listingRoute, appRedir } from '../../appConfig/appPath';
-import { useMemory } from '../../appContext/memory.context';
 import Cookies from 'js-cookie';
+import { ProfileFrontType } from '../../appConfig/interface';
 
 type Props = {
   listingName: string;
+  setListing: React.Dispatch<React.SetStateAction<ProfileFrontType[] | null>>;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const Locationfilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
+const Locationfilter: FC<Props> = ({
+  listingName,
+  setListing,
+  setMatchaNotif,
+}) => {
   const nav = useNavigate();
-  const memo = useMemory();
-  const [zone, setZone] = useState<string | null>(null);
+  const [bodyRequest, setBodyRequest] = useState<{
+    listingName: string;
+    zone: string;
+  } | null>(null);
 
   const handleClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,25 +28,25 @@ const Locationfilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
       setMatchaNotif('Veuillez choisir une zone de filtrage');
       return;
     }
-    setZone(zone);
+    setBodyRequest({
+      listingName,
+      zone,
+    });
   };
 
   useEffect(() => {
-    if (!zone) return;
+    if (!bodyRequest) return;
     let isMounted = true;
     const request = async () => {
       try {
-        const response = await fetch(
-          `${listingRoute.getLocationFilter}/${listingName}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${Cookies.get('session')}`,
-            },
-            body: JSON.stringify({ zone }),
+        const response = await fetch(listingRoute.getLocationFilter, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Cookies.get('session')}`,
           },
-        );
+          body: JSON.stringify(bodyRequest),
+        });
         const data = await response.json();
         if (!isMounted) return;
         if (data.message && data.message.split(' ')[0] === 'Token') {
@@ -52,12 +59,12 @@ const Locationfilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
           nav(appRedir.errorInternal);
           return;
         }
-        setZone(null);
+        setBodyRequest(null);
         if (response.status !== 200) {
           setMatchaNotif(data.message);
           return;
         }
-        memo.setListing(data.listing);
+        setListing(data.listing);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);
@@ -68,32 +75,28 @@ const Locationfilter: FC<Props> = ({ listingName, setMatchaNotif }) => {
     return () => {
       isMounted = false;
     };
-  }, [zone]);
+  }, [bodyRequest]);
 
   return (
     <>
       <form onSubmit={handleClick} className='selected_filter_form'>
-        <div className='selected_filter_form_section'>
-          <select
-            name='location_zone'
-            id='location_zone'
-            className='selected_filter_select'
-          >
-            <option defaultValue='default'>Zone</option>
-            <option value='town'>Ville</option>
-            <option value='county'>Département</option>
-            <option value='region'>Région</option>
-          </select>
-        </div>
-        <div className='selected_filter_form_section'>
-          <input
-            className='selected_filter_submit'
-            type='submit'
-            name='location_submit'
-            id='location_submit'
-            value='Filtrer'
-          />
-        </div>
+        <select
+          name='location_zone'
+          id='location_zone'
+          className='selected_filter_select'
+        >
+          <option defaultValue='default'>Zone</option>
+          <option value='town'>Ville</option>
+          <option value='county'>Département</option>
+          <option value='region'>Région</option>
+        </select>
+        <input
+          className='selected_filter_submit'
+          type='submit'
+          name='location_submit'
+          id='location_submit'
+          value='Filtrer'
+        />
       </form>
     </>
   );

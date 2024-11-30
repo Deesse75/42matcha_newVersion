@@ -45,6 +45,7 @@ export const findLastSearch = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
+  if (req.params.listingName !== 'search') return next();
   const query = 'SELECT * FROM LastSearch WHERE userId = ?';
   const values: any[] = [req.body.payloadToken.id];
   try {
