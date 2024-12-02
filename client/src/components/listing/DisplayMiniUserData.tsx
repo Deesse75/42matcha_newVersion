@@ -25,10 +25,23 @@ const DisplayMiniUserData: FC<Props> = ({ profile }) => {
 
   return (
     <>
-      <div className='mini_user_data'>
-        <div className='mini_user_data_username'>{profile.username}</div>
-        <div className='mini_user_data_info'>{`${profile.age} ans, ${location}`}</div>
-        <div className='mini_user_data_info'>{`${preferences}`}</div>
+      <div className='mini_user'>
+        <div className='mini_user_data1'>
+          <div className='mini_user_username'>{profile.username}</div>
+          <div className='mini_user_location'>{`${profile.age} ans, ${location}`}</div>
+        </div>
+        <div className='mini_user_data2'>
+          <div className='mini_user_text'>{`${preferences}`}</div>
+          <div className='mini_user_text'>
+            {profile.tags &&
+              profile.tags.map((tag, key) => (
+                <span
+                  key={key}
+                  className='mini_user_one_tag'
+                >{`#${tag} `}</span>
+              ))}
+          </div>
+        </div>
       </div>
     </>
   );

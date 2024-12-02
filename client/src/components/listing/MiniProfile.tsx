@@ -1,10 +1,12 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { ProfileFrontType } from '../../appConfig/interface';
 import DisplayConnection from './DisplayConnection';
-import DisplayFameRating from './DisplayFameRating';
-import DisplayInteraction from './DisplayInteraction';
 import DisplayMiniUserData from './DisplayMiniUserData';
-import DisplayTags from './DisplayTags';
+import { useUserInfo } from '../../appContext/user.context';
+import { actionRoute, appRedir, socketRoute } from '../../appConfig/appPath';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import { useMemory } from '../../appContext/memory.context';
 
 type Props = {
   key: number;
@@ -13,55 +15,98 @@ type Props = {
 };
 
 const MiniProfile: FC<Props> = ({ profile, setMatchaNotif }) => {
+  const me = useUserInfo();
+  const nav = useNavigate();
+  const memo = useMemory();
+  const [actionView, setActionView] = useState<boolean>(false);
+  const [viewed, setViewed] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!viewed) return;
+
+    const sendSocket = () => {
+      if (me.userSocket) {
+        const senderUsername: string = me!.user!.username;
+        const receiverId: number = profile.id;
+        me.userSocket.emit(socketRoute.sendView, senderUsername, receiverId);
+        setViewed(false);
+      }
+    };
+    sendSocket();
+  }, [viewed]);
+
+  useEffect(() => {
+    if (!actionView) return;
+    let isMounted = true;
+    const request = async () => {
+      try {
+        const response = await fetch(
+          `${actionRoute.actionView}/${profile.id}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Cookies.get('session')}`,
+            },
+          },
+        );
+        const data = await response.json();
+        if (!isMounted) return;
+        if (data.message && data.message.split(' ')[0] === 'Token') {
+          setMatchaNotif(data.message);
+          nav(appRedir.signout);
+          return;
+        }
+        if (response.status === 500) {
+          setMatchaNotif(data.message);
+          nav(appRedir.errorInternal);
+          return;
+        }
+        setActionView(false);
+        if (response.status !== 200) {
+          setMatchaNotif(data.message);
+          return;
+        }
+        setViewed(true);
+        memo.setActiveProfileId(profile.id);
+        nav(appRedir.displayProfile);
+      } catch (error) {
+        if (!isMounted) return;
+        setMatchaNotif((error as Error).message);
+        nav(appRedir.errorInternal);
+      }
+    };
+    request();
+    return () => {
+      isMounted = false;
+    };
+  }, [actionView]);
+
   return (
     <>
-      <div key={profile.id} className='mini_profile_container'>
-        <div className='mini_profile_left'>
-          <div className='mini_profile_left_top'>
+      <div
+        key={profile.id}
+        className='mini_profile_container'
+        onClick={() => {
+          setActionView(true);
+        }}
+      >
+        <div className='mini_profile_connection'>
+          <DisplayConnection profile={profile} />
+        </div>
+        <div className='mini_profile_user'>
+          <div className='mini_profile_photo'>
             <img
-              src={profile.photo ? profile.photo : '/avatar/default_avatar.jpg'}
-              alt={
-                profile.photo
-                  ? 'Photo de profil personnalisée'
-                  : 'Photo de profil par défaut'
-              }
-              style={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '10px',
-                border: 'none',
-              }}
+              className='mini_profile_photo_img'
+              src={me.user?.photo ?? '/avatar/default_avatar.jpg'}
+              alt='Photo de profil'
             />
           </div>
-          <div className='mini_profile_left_bottom'>
-            <DisplayConnection
-              id={profile.id}
-              lastCo={profile.lastConnection ? profile.lastConnection : null}
-            />
-            <DisplayFameRating fameRating={profile.fameRating} size={20} />
-          </div>
-        </div>
-
-        <div className='mini_profile_right'>
-          <div className='mini_profile_right_data'>
+          <div className='mini_profile_data'>
             <DisplayMiniUserData profile={profile} />
-            <div className='mini_user_tags'>
-              {profile.tags && (
-                <>
-                  {profile.tags.map((tag, index) => (
-                    <DisplayTags key={index as number} tag={tag} />
-                  ))}
-                </>
-              )}
-            </div>
-          </div>
-          <div className='mini_profile_right_interaction'>
-            <DisplayInteraction
-              id={profile.id}
-              setMatchaNotif={setMatchaNotif}
-            />
           </div>
         </div>
+        <div className='mini_profile_right'></div>
       </div>
     </>
   );

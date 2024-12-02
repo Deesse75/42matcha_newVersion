@@ -19,7 +19,7 @@ export const appRedir = {
   chat: '/discussion_instantanee',
   history: '/historique_de_navigation',
   updatePhotos: '/modification_photos',
-  displayProfil: '/affichage_profil',
+  displayProfile: '/affichage_profil',
   contact: '/contact',
   deleteAccount: '/suppression_du_compte',
   errorInternal: '/erreur_interne',
@@ -91,12 +91,12 @@ export const socketRoute = {
   connection_failed: 'connection_failed', //getMe.tsx
   validEmail: 'validEmail',
   updateToken: 'updateToken',
+  sendView: 'sendView', //{receiverId: number}
 
   isConnected: 'isUserConnected',
   receptIsConnected: 'receptIsConnected',
 
   // newDisconnect: 'newDisconnect',
-  // sendView: 'sendView', //{receiverId: number}
   // sendLike: 'sendLike', //{senderUsername: string, receiverId: number}
   // sendDislike: 'sendDislike', //{senderUsername: string, receiverId: number}
   // sendBan: 'sendBan', //{receiverId: number}

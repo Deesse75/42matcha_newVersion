@@ -56,6 +56,23 @@ function App() {
         };
         request();
       });
+
+      me.userSocket.on(socketRoute.receptView, (username: string) => {
+        setNotif(`${username} a visité votre profil`);
+        appMemo.setReloadList(true);
+      });
+
+      me.userSocket.on(socketRoute.receptLike, (username: string) => {
+        setNotif(`${username} a liké votre profil`);
+        appMemo.setReloadList(true);
+      });
+
+      me.userSocket.on(socketRoute.receptDislike, (username: string) => {
+        setNotif(`${username} a supprimé son Like`);
+        appMemo.setReloadList(true);
+      });
+
+
     };
     listenSocket();
     return () => {
@@ -63,6 +80,7 @@ function App() {
       me.userSocket.off(socketRoute.updateToken);
     };
   }, [me.userSocket]);
+
 
   return (
     <>

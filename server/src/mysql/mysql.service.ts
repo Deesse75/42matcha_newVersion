@@ -105,7 +105,7 @@ export async function getListing(
   }
 }
 
-export async function getActionBetween(
+export async function getAction(
   query: string,
   values: any[],
 ): Promise<boolean> {

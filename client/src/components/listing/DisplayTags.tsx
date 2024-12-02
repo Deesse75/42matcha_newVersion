@@ -8,7 +8,7 @@ type Props = {
 const DisplayTags: FC<Props> = ({ tag }) => {
   return (
     <>
-      <span className='mini_user_one_tag'>{`#${tag} `}</span>
+      <span className='mini_user_one_tag'>{`#${tag}`}</span>
     </>
   );
 };

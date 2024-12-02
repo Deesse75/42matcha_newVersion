@@ -3,19 +3,19 @@ import { FaCircle } from 'react-icons/fa';
 import { socketRoute } from '../../appConfig/appPath';
 import { useUserInfo } from '../../appContext/user.context';
 import { convertDate } from '../../utils/convertDateFunctions';
+import { ProfileFrontType } from '../../appConfig/interface';
 
 type Props = {
-  id: number;
-  lastCo: string | null;
+  profile: ProfileFrontType;
 };
 
-const DisplayConnection: FC<Props> = ({ id, lastCo }) => {
+const DisplayConnection: FC<Props> = ({ profile }) => {
   const me = useUserInfo();
   const [connected, setConnected] = useState<boolean>(false);
 
   useEffect(() => {
     if (!me.userSocket) return;
-    me.userSocket.emit(socketRoute.isConnected, id);
+    me.userSocket.emit(socketRoute.isConnected, profile.id);
 
     me.userSocket.on(socketRoute.receptIsConnected, (isConnected: boolean) => {
       setConnected(isConnected);
@@ -27,14 +27,20 @@ const DisplayConnection: FC<Props> = ({ id, lastCo }) => {
       <div className='lastco'>
         {connected ? (
           <>
-            <FaCircle size={16} style={{ color: 'green' }} />
+            <div className='lastco_icon'>
+              <FaCircle size={13} style={{ color: 'green' }} />
+            </div>
             <div className='lastco_text'>En ligne</div>
           </>
         ) : (
           <>
-            <FaCircle size={16} style={{ color: 'red' }} />
+            <div className='lastco_icon'>
+              <FaCircle size={13} style={{ color: 'red' }} />
+            </div>
             <div className='lastco_text'>
-              {lastCo ? convertDate(lastCo) : '...'}
+              {profile.lastConnection
+                ? convertDate(profile.lastConnection)
+                : 'Hors ligne'}
             </div>
           </>
         )}

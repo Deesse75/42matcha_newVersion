@@ -52,3 +52,24 @@ export const findActionBetween = async (
     matchaError.catched(error as Error, res);
   }
 };
+
+export const alreadyViewed = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const receiverId: number = parseInt(req.params.id);
+  const query: string =
+    'SELECT * FROM ViewTable WHERE senderId = ? AND receiverId = ?';
+  const values: any[] = [req.body.existingUser.id, receiverId];
+  try {
+    const action = await mysql.getAction(query, values);
+    if (action) {
+      res.status(200).json({ message: 'view.' });
+      return;
+    }
+    return next();
+  } catch (error) {
+    matchaError.catched(error as Error, res);
+  }
+};

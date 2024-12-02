@@ -5,7 +5,7 @@ type Props = {};
 const SocketNotif: FC<Props> = ({}) => {
   return (
     <>
-      <div className='socket_notif'>Socket notification</div>
+      <div className='socket_notif'></div>
     </>
   );
 };
