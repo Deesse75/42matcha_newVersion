@@ -33,6 +33,7 @@ const MiniProfile: FC<Props> = ({ profile, setMatchaNotif }) => {
       }
     };
     sendSocket();
+    nav(appRedir.displayProfile);
   }, [viewed]);
 
   useEffect(() => {
@@ -69,7 +70,6 @@ const MiniProfile: FC<Props> = ({ profile, setMatchaNotif }) => {
         }
         setViewed(true);
         memo.setActiveProfileId(profile.id);
-        nav(appRedir.displayProfile);
       } catch (error) {
         if (!isMounted) return;
         setMatchaNotif((error as Error).message);

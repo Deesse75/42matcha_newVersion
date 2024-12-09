@@ -5,11 +5,16 @@ import {
 } from '../interfaces/mysql_out.interfaces.js';
 import {
   PhotosPlusBackType,
+  ProfileBackType,
   UserBackType,
   UserTagsBackType,
 } from '../interfaces/user.interface.js';
 import * as mysql from '../mysql/mysql.service.js';
-import { convertPublicPhoto, convertPublicUser } from '../utils/convertData.js';
+import {
+  convertPublicPhoto,
+  convertPublicProfile,
+  convertPublicUser,
+} from '../utils/convertData.js';
 import { matchaError } from '../utils/matcha_error.js';
 import * as argon from '../utils/argon.services.js';
 import * as mailer from '../utils/mailer.services.js';
@@ -348,6 +353,25 @@ export const updateBioService = async (
   try {
     const query = 'UPDATE User SET biography = ? WHERE id = ?';
     await mysql.updateTable(query, [bio, user.id]);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProfileService = async (
+  user: MysqlUserType,
+  id: number,
+): Promise<ProfileBackType> => {
+  if (user.id === id) {
+    throw new matchaError(400, 'Requête invalide.');
+  }
+  const query = 'SELECT * FROM User WHERE id = ?';
+  try {
+    const profile = await mysql.getUser(query, [id]);
+    if (!profile) throw new matchaError(404, 'Profil introuvable.');
+    const queryTags = 'SELECT * FROM Tags WHERE userId = ?';
+    const tags = await mysql.getTags(queryTags, [id]);
+    return convertPublicProfile(profile, tags);
   } catch (error) {
     throw error;
   }

@@ -54,12 +54,9 @@ export const actionView = async (
   res: Response,
 ): Promise<void> => {
   try {
-    await actionViewService(
-      req.body.existingUser,
-      req.body.interaction,
-      parseInt(req.params.id),
-    );
+    await actionViewService(req.body.existingUser, parseInt(req.params.id));
     res.status(200).json({ message: 'view' });
+    console.log('action controller');
     return;
   } catch (error) {
     return matchaError.catched(error as Error, res);

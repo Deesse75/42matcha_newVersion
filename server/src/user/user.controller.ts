@@ -8,6 +8,7 @@ import {
   deleteTagService,
   getMeService,
   getNewTokenService,
+  getProfileService,
   getUserDataService,
   getUserPhotosPlusService,
   updateBioService,
@@ -259,6 +260,22 @@ export const deleteOnePhotoPlus = async (
     res
       .status(200)
       .json({ message: 'Les photos secondaires ont été mises à jour.' });
+    return;
+  } catch (error) {
+    return matchaError.catched(error as Error, res);
+  }
+};
+
+export const getProfile = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const profile = await getProfileService(
+      req.body.existingUser,
+      parseInt(req.params.id),
+    );
+    res.status(200).json({ profile: profile });
     return;
   } catch (error) {
     return matchaError.catched(error as Error, res);

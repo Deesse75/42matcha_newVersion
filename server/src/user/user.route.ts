@@ -13,6 +13,7 @@ import {
   deleteTag,
   getMe,
   getNewToken,
+  getProfile,
   getUserData,
   getUserPhotosPlus,
   getUserTags,
@@ -153,6 +154,13 @@ userRoute.delete(
   userTokenValidation,
   findExistingUser,
   deleteAccount,
+);
+
+userRoute.get(
+  '/get_profile/:id',
+  userTokenValidation,
+  findExistingUser,
+  getProfile,
 );
 
 export default userRoute;

@@ -44,12 +44,10 @@ export const deleteLikeService = async (
 
 export const actionViewService = async (
   user: MysqlUserType,
-  interaction: string,
   receiverId: number,
 ): Promise<void> => {
   let query: string = '';
   try {
-    if (interaction !== 'none') return;
     query = 'Insert INTO ViewTable (senderId, receiverId) VALUES (?, ?)';
     await mysql.updateTable(query, [user.id, receiverId]);
     query = 'UPDATE User SET fameRating = ? WHERE id = ?';
@@ -89,4 +87,3 @@ export const actionBanService = async (
     throw error;
   }
 };
-

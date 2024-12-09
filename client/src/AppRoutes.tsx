@@ -93,7 +93,7 @@ const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
           element={<HistoryPage setMatchaNotif={setMatchaNotif} />}
         />
         <Route
-          path={appRedir.displayProfil}
+          path={appRedir.displayProfile}
           element={<DisplayProfil setMatchaNotif={setMatchaNotif} />}
         />
 

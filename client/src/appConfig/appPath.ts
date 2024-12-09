@@ -56,6 +56,8 @@ export const userRoute = {
   deletePhotoProfile: `${PATH}/user/delete_photo_profile`,
   deleteOnePhotoPlus: `${PATH}/user/delete_one_photo_plus`,
   deleteAccount: `${PATH}/user/delete_account`,
+  getProfile: `${PATH}/user/get_profile`,
+  getProfilePhotoPlus: `${PATH}/user/get_profile_photo_plus`,
 };
 
 export const listingRoute = {
