@@ -1,11 +1,24 @@
 import { matchaError } from '../utils/matcha_error.js';
 import { mysqlDb } from '../mysql/mysql.config.js';
 import {
-  MysqlMiniUserType,
+  MysqlActionType,
+  MysqlChatMessageType,
+  MysqlLastSearchType,
   MysqlUserTagsType,
   MysqlUserType,
 } from '../interfaces/mysql_out.interfaces.js';
-import { CreateNewUserType } from '../interfaces/auth.interfaces.js';
+import { PhotosPlusBackType } from '../interfaces/user.interface.js';
+
+type CreateNewUserType = {
+  firstname: string;
+  lastname: string;
+  username: string;
+  birthdate: Date;
+  email: string;
+  emailCode: string;
+  hashedPassword: string;
+  fameRating: number;
+};
 
 export async function createNewUser(newUser: CreateNewUserType): Promise<void> {
   const query = 'INSERT INTO User SET ?';
@@ -19,10 +32,7 @@ export async function createNewUser(newUser: CreateNewUserType): Promise<void> {
   }
 }
 
-export async function updateUserMysqlData(
-  query: string,
-  values: any,
-): Promise<void> {
+export async function updateTable(query: string, values: any[]): Promise<void> {
   try {
     await mysqlDb.query(query, values);
   } catch (error) {
@@ -30,55 +40,119 @@ export async function updateUserMysqlData(
   }
 }
 
-export async function getOneUserData(
+export async function getUser(
   query: string,
-  values: any,
+  values: any[],
 ): Promise<MysqlUserType | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows[0];
   } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
-  }
-}
-export async function getManyUserData(
-  query: string,
-  values: any,
-): Promise<MysqlUserType[] | MysqlMiniUserType[] | null> {
-  try {
-    const [rows]: any = await mysqlDb.query(query, values);
-    if (!rows[0]) return null;
-    return rows;
-  } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
+    throw new matchaError(500, (error as Error).message);
   }
 }
 
-export async function getUserTags(
+export async function getTags(
   query: string,
-  values: any,
+  values: any[],
 ): Promise<MysqlUserTagsType[] | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
+    throw new matchaError(500, (error as Error).message);
+  }
+}
+
+export async function getLastSearch(
+  query: string,
+  values: any[],
+): Promise<MysqlLastSearchType | null> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows[0];
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
+  }
+}
+
+export async function getPhotosPlus(
+  query: string,
+  values: any[],
+): Promise<PhotosPlusBackType | null> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows[0];
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
   }
 }
 
 export async function getListing(
   query: string,
-  values: any,
-): Promise<MysqlMiniUserType[] | null> {
+  values: any[],
+): Promise<MysqlUserType[] | null> {
   try {
-    const [rows]: any = await mysqlDb.query(query, values);
+    const [rows]: any[] = await mysqlDb.query(query, values);
     if (!rows[0]) return null;
     return rows;
   } catch (error) {
-    throw new matchaError(500, 'Une erreur interne est survenue');
+    throw new matchaError(500, (error as Error).message);
   }
 }
 
+export async function getAction(
+  query: string,
+  values: any[],
+): Promise<boolean> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return false;
+    return true;
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
+  }
+}
 
+export async function getUnseenMess(
+  query: string,
+  values: any[],
+): Promise<{ id: number; senderId: number; message: string }[] | null> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows;
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
+  }
+}
+
+export async function getCommonTags(
+  query: string,
+  values: any[],
+): Promise<number[] | null> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows;
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
+  }
+}
+
+export async function getUserStatChat(
+  query: string,
+  values: any[],
+): Promise<MysqlChatMessageType[] | null> {
+  try {
+    const [rows]: any[] = await mysqlDb.query(query, values);
+    if (!rows[0]) return null;
+    return rows;
+  } catch (error) {
+    throw new matchaError(500, (error as Error).message);
+  }
+}

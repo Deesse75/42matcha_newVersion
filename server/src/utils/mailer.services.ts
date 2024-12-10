@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import { matchaError } from './matcha_error.js';
 import * as jwt from './jwt.service.js';
-import * as temp from './mailer.template.js';
+import * as mess from './mailer.template.js';
 
 const transporter = nodemailer.createTransport({
   service: 'smtps',
@@ -22,19 +22,20 @@ export const sendNewEmail = (
 ): void => {
   const MAIL = process.env.MAILER_EMAIL || '';
   try {
-    transporter.sendMail(
-      {
-        from: `no-reply <${MAIL}>`,
-        to: to,
-        subject: subject,
-        html: text,
-      },
-      (error, info) => {
-        if (error) {
-          throw error;
-        }
-      },
-    );
+    console.log('MAILER to: ', to, 'subject: ', subject, 'text: ', text);
+    // transporter.sendMail(
+    //   {
+    //     from: `no-reply <${MAIL}>`,
+    //     to: to,
+    //     subject: subject,
+    //     html: text,
+    //   },
+    //   (error, info) => {
+    //     if (error) {
+    //       throw error;
+    //     }
+    //   },
+    // );
   } catch (error) {
     throw new matchaError(500, (error as Error).message);
   }
@@ -50,28 +51,58 @@ export const sendEmailTokenProcess = async (
       email,
       process.env.JWT_SECRET_MAIL || '',
     );
-    // sendNewEmail(
-    //   email,
-    //   'Validation de votre adresse email',
-    //   temp.validateSignupEmail(token),
-    // );
-    console.log(temp.validateSignupEmail(token));
+    sendNewEmail(
+      email,
+      'Validation de votre adresse email',
+      mess.sendToken(token),
+    );
   } catch (error) {
     throw error;
   }
 };
 
-export const sendEmailPasswordProcess = async (
+export const sendEmailCodeProcess = async (
   email: string,
-  emailCode: string,
+  num: string,
 ): Promise<void> => {
   try {
-    // sendNewEmail(
-    //   email,
-    //   'Réinitialisation de votre mot de passe',
-    //   temp.sendPasswordCode(emailCode),
-    // );
-    console.log(temp.sendPasswordCode(emailCode));
+    sendNewEmail(
+      email,
+      'Réinitialisation de votre mot de passe',
+      mess.sendCode(num),
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendContactUsProcess = async (
+  userName: string,
+  userEmail: string,
+  subject: string,
+  text: string,
+): Promise<void> => {
+  try {
+    sendNewEmail(
+      process.env.MAILER_EMAIL || '',
+      'Message via Contactez-nous',
+      mess.sendContact(userName, userEmail, subject, text),
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const sendAlertProcess = async (
+  userId: number,
+  text: string,
+): Promise<void> => {
+  try {
+    sendNewEmail(
+      process.env.MAILER_EMAIL || '',
+      'Message de signalement',
+      mess.sendAdmin(userId, text),
+    );
   } catch (error) {
     throw error;
   }

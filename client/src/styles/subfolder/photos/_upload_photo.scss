@@ -1,0 +1,36 @@
+.avatar_container {
+  width: 400px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  background: rgb(208, 209, 209);
+  background: linear-gradient(
+    180deg,
+    rgba(208, 209, 209, 1) 0%,
+    rgba(159, 164, 164, 1) 5%,
+    rgba(208, 209, 209, 1) 20%,
+    rgba(193, 195, 195, 1) 100%
+  );
+  box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+
+  .avatar_close_container {
+    width: 80%;
+    height: 20px;
+    display: flex;
+    justify-content: end;
+    margin-top: -15px;
+    margin-right: 20px;
+    .avatar_close {
+      width: 50px;
+      height: 100%;
+      display: flex;
+      color: black;
+      cursor: pointer;
+    }
+  }
+}

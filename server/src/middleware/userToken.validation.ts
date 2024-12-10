@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from '../utils/jwt.service.js';
+import url from 'url';
 import { matchaError } from '../utils/matcha_error.js';
 
 export const userTokenValidation = (

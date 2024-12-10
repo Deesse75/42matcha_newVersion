@@ -1,0 +1,143 @@
+.account_tags_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .account_tags_edit {
+    width: 49%;
+    height: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    .account_tags_edit_title {
+      width: 100%;
+      height: 35px;
+      display: flex;
+      font-size: 17px;
+      color: $color_nuance_grey1;
+      align-items: center;
+      justify-content: center;
+      margin: 5px auto;
+      box-sizing: border-box;
+      border-radius: 5px;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+      @include button_bubble_1;
+    }
+    .one_tag_container {
+      width: 95%;
+      max-height: 70%;
+      padding: 5px;
+      box-sizing: border-box;
+      display: flex;
+      flex-wrap: wrap;
+      overflow: hidden;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .one_tag_off,
+      .one_tag_on {
+        width: auto;
+        height: 20px;
+        display: flex;
+        padding: 3px 5px;
+        margin: 5px 5px 0 0;
+        border-radius: 5px;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey5;
+        cursor: pointer;
+      }
+      .one_tag_off {
+        background-color: $color_pal_yellow;
+      }
+    }
+    .one_tag_delete_confirm {
+      width: 85%;
+      height: 29%;
+      display: flex;
+      margin: 0 auto;
+      align-items: center;
+      justify-content: space-between;
+      .one_tag_delete_confirm_button {
+        width: 48%;
+        height: 35px;
+        border-radius: 5px;
+        @include submit_button_black;
+      }
+    }
+  }
+  .account_tags_add {
+    width: 49%;
+    height: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    .account_tags_add_title {
+      width: 100%;
+      height: 35px;
+      display: flex;
+      font-size: 17px;
+      color: $color_nuance_grey1;
+      align-items: center;
+      justify-content: center;
+      margin: 5px auto;
+      box-sizing: border-box;
+      border-radius: 5px;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+      @include button_bubble_1;
+    }
+    .add_tag_container {
+      width: 100%;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .add_tag_part1 {
+        width: 100%;
+        height: 65%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+
+        .add_tag_input {
+          width: 90%;
+          height: 35px;
+          padding: 0 5px;
+          outline: none;
+          box-sizing: border-box;
+          border: none;
+          border-radius: 5px;
+          box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+        }
+      }
+      .add_tag_part2 {
+        width: 100%;
+        height: 30%;
+        display: flex;
+        box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
+
+        .add_tag_submit {
+          width: 80%;
+          height: 35px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 5px;
+          @include submit_button_black;
+        }
+      }
+    }
+  }
+}

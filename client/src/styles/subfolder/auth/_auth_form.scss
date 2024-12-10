@@ -1,0 +1,82 @@
+.form_container {
+  width: 80%;
+  padding: 20px 10px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px 1px $color_auth_grey4;
+  .form_row {
+    width: 90%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: $color_nuance_white1;
+    box-shadow: 1px 1px 5px 1px $color_auth_grey4;
+    justify-content: space-between;
+    .form_icon {
+      width: 40px;
+      height: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 10px;
+      border-radius: 10px;
+      background: rgb(71, 187, 152);
+      background: linear-gradient(
+        180deg,
+        rgba(71, 187, 152, 1) 0%,
+        rgba(162, 215, 185, 1) 50%,
+        rgba(71, 187, 152, 1) 100%
+      );
+      box-sizing: border-box;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    }
+    .form_input {
+      width: 69%;
+      height: 90%;
+      margin-right: 5px;
+      outline: none;
+      border: none;
+      border-radius: 10px;
+      padding: 0 10px 0 20px;
+      box-sizing: border-box;
+      background-color: transparent;
+    }
+    .form_end_container {
+      width: 15%;
+      height: 90%;
+      margin-right: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .form_end_icon_container {
+        width: 30%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+  .form_submit {
+    width: 90%;
+    height: 35px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-around;
+    .form_submit_button {
+      width: 200px;
+      height: 100%;
+      display: flex;
+      border-radius: 10px;
+      border: none;
+      @include submit_button_black;
+    }
+  }
+  @import './auth_reinit';
+}

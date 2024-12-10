@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import {
+  contactUs,
   forgotPassword,
   initializeDatabase,
   reinitPassword,
   resendEmail,
-  signinEmail,
-  signinUsername,
+  signin,
   signup,
   validateEmail,
 } from './auth.controller.js';
@@ -17,52 +17,52 @@ import {
   isEmailCertified,
 } from '../middleware/auth.data.validation.js';
 
-const authRouter = Router();
+const authRoute = Router();
 
-authRouter.get('/init', initializeDatabase);
-authRouter.post(
+authRoute.get('/init', initializeDatabase);
+authRoute.post(
   '/signup',
   authBodyValidation,
   birthdateValidation,
   authUserValidation,
   signup,
 );
-authRouter.post(
+authRoute.post(
   '/signin_username',
   authBodyValidation,
   authUserValidation,
   isEmailCertified,
-  signinUsername,
+  signin,
 );
-authRouter.post(
+authRoute.post(
   '/signin_email',
   authBodyValidation,
   authUserValidation,
   isEmailCertified,
-  signinEmail,
+  signin,
 );
-authRouter.post(
+authRoute.post(
   '/forgot_password',
   authBodyValidation,
   authUserValidation,
   isEmailCertified,
   forgotPassword,
 );
-authRouter.post(
+authRoute.post(
   '/resend_email',
   authBodyValidation,
   authUserValidation,
   isEmailCertified,
   resendEmail,
 );
-authRouter.patch(
+authRoute.patch(
   '/reinit_password',
   authBodyValidation,
   authUserValidation,
   isEmailCertified,
   reinitPassword,
 );
-authRouter.post(
+authRoute.post(
   '/validate_email',
   authBodyValidation,
   authTokenValidation,
@@ -71,4 +71,6 @@ authRouter.post(
   validateEmail,
 );
 
-export default authRouter;
+authRoute.post('/contact_us', authBodyValidation, contactUs);
+
+export default authRoute;

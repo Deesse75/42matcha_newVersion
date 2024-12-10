@@ -1,25 +1,98 @@
-@import './auth/authPageComponents';
+.auth_page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-image: url('background/vecteezy_cartoon-couple.jpg');
+  background-repeat: no-repeat;
+  background-size: 85%;
+  background-position: end;
+  background-attachment: fixed;
+  background-position-x: 180%;
 
-.auth_page_container {
-  @include page_container;
-
-  .auth_pages_display {
+  .auth_page_container {
     width: 50%;
-    min-height: 100%;
+    height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .auth_img_container {
-    width: 50%;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .auth_img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    flex-direction: column;
+    .auth_page_title {
+      width: 90%;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      font-size: 25px;
+      font-family: 'Playwrite FR Moderne', serif;
+      color: $color_nuance_grey5;
+      box-sizing: border-box;
+      margin: 30px auto 10px auto;
+      border-radius: 8px;
+      background: rgb(71, 187, 152);
+      background: linear-gradient(
+        180deg,
+        rgba(71, 187, 152, 1) 0%,
+        rgba(162, 215, 185, 1) 50%,
+        rgba(71, 187, 152, 1) 100%
+      );
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    }
+    .auth_page_loading_text {
+      width: 90%;
+      height: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 17px;
+    }
+    .auth_page_signin_connect {
+      width: 90%;
+      height: 25px;
+      display: flex;
+      justify-content: end;
+      margin: 5px auto;
+      .auth_page_signin_connect_button {
+        width: auto;
+        height: 100%;
+        padding: 0 15px;
+        border-radius: 5px;
+        border: none;
+        outline-color: $color_auth_red1;
+        font-size: 13px;
+        @include submit_button_black;
+      }
+    }
+    .auth_page_form_container {
+      width: 90%;
+      height: 60%;
+      padding: 20px 0;
+      margin: 5px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      box-sizing: border-box;
+      background-color: transparent;
+      @import './subfolder/auth/auth_form';
+    }
+    .auth_page_redirect {
+      width: 90%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      .auth_page_redirect_button {
+        width: 300px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 7px;
+        font-size: 15px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        color: $color_auth_grey1;
+        @include redirect_button;
+      }
     }
   }
 }

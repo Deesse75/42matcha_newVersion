@@ -1,0 +1,113 @@
+.mini_profile_container {
+  width: 99%;
+  height: 100px;
+  margin: 5px auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: white;
+  box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+  .mini_profile_connection {
+    width: 100%;
+    height: 17px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    .lastco {
+      width: 100px;
+      height: 100%;
+      margin-right: 5px;
+      display: flex;
+      font-size: 13px;
+      .lastco_icon {
+        width: 20px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+      }
+      .lastco_text {
+        width: 50px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+  .mini_profile_user {
+    width: 80%;
+    height: 90px;
+    margin: auto 5px;
+    display: flex;
+    align-items: center;
+    .mini_profile_photo {
+      width: 20%;
+      height: 95%;
+      margin: 0 15px;
+      display: flex;
+      border-radius: 10px;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey5;
+      .mini_profile_photo_img {
+        width: 95%;
+        height: 95%;
+        display: flex;
+        align-items: center;
+        justify-self: unset;
+        border-radius: 10px;
+      }
+    }
+    .mini_profile_data {
+      width: 78%;
+      height: 90%;
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      border-radius: 10px;
+      .mini_user {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        .mini_user_data1 {
+          width: 40%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          .mini_user_username {
+            width: 100%;
+            height: 50%;
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+          }
+          .mini_user_location {
+            width: 100%;
+            height: 50%;
+            display: flex;
+          }
+        }
+        .mini_user_data2 {
+          width: 60%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          .mini_user_text {
+            width: 100%;
+            height: auto;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,4 @@
-import Cookies from 'js-cookie';
-
-const getGeoloc = async (): Promise<GeolocationPosition> => {
+async function getBrowserLocation(): Promise<GeolocationPosition> {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -11,49 +9,60 @@ const getGeoloc = async (): Promise<GeolocationPosition> => {
       },
     );
   });
-};
+}
 
-async function getCountryByGeoloc(url: string): Promise<string> {
+async function setLocation(url: string): Promise<void> {
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error('error');
     const data = await response.json();
-    return data.address.state;
+    localStorage.setItem('region', data.address.state);
+    localStorage.setItem('county', data.address.county || data.address.city);
+    localStorage.setItem(
+      'town',
+      data.address.city
+        ? data.address.city
+        : data.address.town
+          ? data.address.town
+          : data.address.village,
+    );
   } catch (error) {
     throw error;
   }
 }
 
-async function getCountryByIp(url: string): Promise<string> {
+async function getIpLocation(
+  url: string,
+): Promise<{ lat: number; lon: number } | null> {
   try {
     const response = await fetch(url);
-    if (!response.ok) return 'ko';
+    if (!response.ok) return null;
     const data = await response.json();
-    return data.regionName;
+    return {
+      lat: data.lat,
+      lon: data.lon,
+    };
   } catch (error) {
-    return 'ko';
+    return null;
   }
 }
 
-export async function getCountry(): Promise<void> {
-  let country: string = '';
-  let url: string = '';
+export async function getLocation(): Promise<void> {
   try {
-    const loc = await getGeoloc();
-    url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${loc.coords.latitude}&lon=${loc.coords.longitude}`;
-    country = await getCountryByGeoloc(url);
+    const loc = await getBrowserLocation();
+    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${loc.coords.latitude}&lon=${loc.coords.longitude}`;
+    await setLocation(url);
   } catch (error) {
-    url = 'http://ip-api.com/json';
     try {
-      country = await getCountryByIp(url);
+      const loc: { lat: number; lon: number } | null = await getIpLocation(
+        'http://ip-api.com/json',
+      );
+      if (loc) {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${loc.lat}&lon=${loc.lon}`;
+        await setLocation(url);
+      }
     } catch (error) {
       return;
     }
   }
-  if (country === 'ko') return;
-  Cookies.set('Geoloc', country, {
-    expires: undefined,
-    sameSite: 'None',
-    secure: true,
-  });
 }

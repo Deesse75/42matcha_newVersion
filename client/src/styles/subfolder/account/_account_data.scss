@@ -1,0 +1,88 @@
+.update_account_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  .update_account_left {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    .update_account_left_section {
+      width: 95%;
+      height: 35px;
+      margin-top: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .update_account_left_title {
+        width: 23%;
+        display: flex;
+        align-items: center;
+      }
+      .update_account_left_current {
+        width: 40%;
+        display: flex;
+        padding-left: 5px;
+        margin-right: 10px;
+        align-items: center;
+        font-size: 13px;
+        box-sizing: border-box;
+        color: $color_nuance_grey1;
+        font-weight: bold;
+        font-family: 'Playwrite FR Moderne', serif;
+        border-bottom: 1px dashed $color_nuance_grey1;
+      }
+      .update_account_left_input {
+        width: 40%;
+        height: 100%;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        padding-left: 10px;
+        box-sizing: border-box;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey5;
+      }
+    }
+    .update_account_left_submit {
+      width: 95%;
+      height: 30px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .update_account_submit_button {
+        width: auto;
+        height: 90%;
+        padding: 0 30px;
+        margin: 0 10px;
+        display: flex;
+        align-items: center;
+        border-radius: 5px;
+        @include submit_button_black;
+      }
+    }
+  }
+  .update_account_right {
+    width: 49%;
+    margin-left: 15px;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    .update_account_right_section {
+      width: 48%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+      @import './update_password';
+      @import './update_email';
+    }
+  }
+}

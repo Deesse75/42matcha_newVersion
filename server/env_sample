@@ -10,3 +10,4 @@ MAILER_EMAIL=
 MAILER_PASS=
 MAILER_HOST=smtp-mail.outlook.com
 VALIDATE_ROUTE=http://localhost:8000/validation_email
+VALIDATE_UPDATE_ROUTE=http://localhost:8000//validation_nouvelle_adresse_email

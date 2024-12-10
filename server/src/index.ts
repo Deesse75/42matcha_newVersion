@@ -6,9 +6,13 @@ import { Server } from 'socket.io';
 import isEnvConfigurate from './utils/env.service.js';
 import { configMysql, mysqlDb } from './mysql/mysql.config.js';
 import { manageSocket } from './socket/socket.services.js';
-import authRouter from './auth/auth.route.js';
-import userRouter from './user/user.route.js';
-import listingRouter from './listing/listing.route.js';
+import actionRoute from './action/action.route.js';
+import authRoute from './auth/auth.route.js';
+import listingRoute from './listing/listing.route.js';
+import searchRoute from './search/search.route.js';
+import userRoute from './user/user.route.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 //configure environment
 dotenv.config();
@@ -31,7 +35,7 @@ try {
 //config cors
 const domains = process.env.DOMAINS_CORS || '';
 const corsOptions = {
-  origin: domains,
+  origin: domains, //origin: domains.split(','),
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   optionsSuccessStatus: 200,
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -57,18 +61,22 @@ manageSocket(io);
 
 //Routes
 app.use(express.json({ limit: '100mb' }));
-app.use('/auth', authRouter);
-app.use('/user', userRouter);
-// app.use('/profile', profileRouter);
-// app.use('/action', actionRouter);
-app.use('/listing', listingRouter);
-// app.use('/search', searchRouter);
-app.use('/*', (req: Request, res: Response) => {
-  res.status(404).json({
-    message: "La ressource que vous essayez d'atteindre n'existe pas",
-  });
-});
+app.use('/auth', authRoute);
+app.use('/user', userRoute);
+app.use('/action', actionRoute);
+app.use('/listing', listingRoute);
+app.use('/search', searchRoute);
+// app.use('/chat', chatRoute);
 
+//gestion des entrees d'url dans le navigateur en mode prod
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+// const matchaPath = path.join(__dirname, '..', 'dist');
+// console.log('matchaPath', matchaPath);
+// app.use(express.static(matchaPath));
+// app.get('*', (req: Request, res: Response) => {
+//   res.sendFile(path.join(matchaPath, 'index.js'));
+// });
 
 // Start the server
 server.listen(8001, () => {

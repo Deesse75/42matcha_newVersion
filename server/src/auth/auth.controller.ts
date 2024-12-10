@@ -1,6 +1,7 @@
 import { matchaError } from '../utils/matcha_error.js';
-import { Response, Request, NextFunction } from 'express';
+import { Response, Request } from 'express';
 import {
+  authContactUs,
   authForgotPassword,
   authInitDatabase,
   authReinitPassword,
@@ -13,23 +14,17 @@ import {
 export const initializeDatabase = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
   try {
     await authInitDatabase();
-    res.status(200).json({ message: 'ok' });
+    res.status(200).json({ message: 'Le serveur est opérationnel' });
     return;
   } catch (error) {
     return matchaError.catched(error as Error, res);
   }
 };
 
-export const signup = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  console.log('controller signup');
+export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
     await authSignup(
       req.body.firstname,
@@ -48,27 +43,15 @@ export const signup = async (
   }
 };
 
-export const signinUsername = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const signin = async (req: Request, res: Response): Promise<void> => {
   try {
-    const token = await authSignin(req.body.existingUser, req.body.password);
-    res.status(200).json({
-      token: token,
-    });
-    return;
-  } catch (error) {
-    return matchaError.catched(error as Error, res);
-  }
-};
-
-export const signinEmail = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    const token = await authSignin(req.body.existingUser, req.body.password);
+    const token = await authSignin(
+      req.body.existingUser,
+      req.body.password,
+      req.body.region,
+      req.body.county,
+      req.body.town,
+    );
     res.status(200).json({
       token: token,
     });
@@ -85,7 +68,7 @@ export const validateEmail = async (
   try {
     await authValidate(req.body.existingUser, req.body.code);
     res.status(200).json({
-      message: 'Votre adresse email a été validée, vous pouvez vous connecter.',
+      message: 'Votre adresse email a été validée.',
     });
     return;
   } catch (error) {
@@ -114,7 +97,7 @@ export const forgotPassword = async (
 ): Promise<void> => {
   try {
     await authForgotPassword(req.body.existingUser);
-    res.status(200).json({ message: 'ok' });
+    res.status(200).json({ message: 'Un code vous a été envoyé par email.' });
     return;
   } catch (error) {
     return matchaError.catched(error as Error, res);
@@ -132,8 +115,23 @@ export const reinitPassword = async (
       req.body.existingUser,
     );
     res.status(200).json({
-      message: 'Votre pouvez vous connecter avec votre nouveau mot de passe.',
+      message: 'Votre mot de passe a été modifié.',
     });
+    return;
+  } catch (error) {
+    return matchaError.catched(error as Error, res);
+  }
+};
+
+export const contactUs = async (req: Request, res: Response) => {
+  try {
+    authContactUs(
+      req.body.contactName,
+      req.body.contactEmail,
+      req.body.subject,
+      req.body.text,
+    );
+    res.status(200).json({ message: 'Votre message a été envoyé.' });
     return;
   } catch (error) {
     return matchaError.catched(error as Error, res);

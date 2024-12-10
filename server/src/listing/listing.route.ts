@@ -1,16 +1,23 @@
 import { Router } from 'express';
 import { userTokenValidation } from '../middleware/userToken.validation.js';
 import { listingBodyValidation } from '../middleware/listing.body.validation.js';
-import { findExistingUser } from '../middleware/user.data.validation.js';
-import { ageFilter, fameFilter, getListing, locationFilter, tagsFilter } from './listing.controller.js';
+import {
+  findExistingUser,
+  findLastSearch,
+  findTags,
+} from '../middleware/user.data.validation.js';
+import { getListing } from './listing.controller.js';
+import { selectListingName } from '../middleware/listingName.validation.js';
 
 const listingRoute = Router();
 
-listingRoute.post(
-  '/get_listing',
-  listingBodyValidation,
+listingRoute.get(
+  '/get_listing/:listingName',
   userTokenValidation,
   findExistingUser,
+  findTags,
+  findLastSearch,
+  selectListingName,
   getListing,
 );
 
@@ -19,7 +26,9 @@ listingRoute.post(
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  ageFilter,
+  findLastSearch,
+  selectListingName,
+  getListing,
 );
 
 listingRoute.post(
@@ -27,7 +36,10 @@ listingRoute.post(
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  fameFilter,
+  findTags,
+  findLastSearch,
+  selectListingName,
+  getListing,
 );
 
 listingRoute.post(
@@ -35,7 +47,10 @@ listingRoute.post(
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  locationFilter,
+  findTags,
+  findLastSearch,
+  selectListingName,
+  getListing,
 );
 
 listingRoute.post(
@@ -43,7 +58,10 @@ listingRoute.post(
   listingBodyValidation,
   userTokenValidation,
   findExistingUser,
-  tagsFilter,
+  findTags,
+  findLastSearch,
+  selectListingName,
+  getListing,
 );
 
 export default listingRoute;

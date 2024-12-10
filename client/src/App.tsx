@@ -1,42 +1,119 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { appRedir, socketRoute, userRoute } from './appConfig/appPath';
+import { useUserInfo } from './appContext/user.context';
+import Cookies from 'js-cookie';
 import AppRoutes from './AppRoutes';
-import Footer from './footer/Footer';
-import Header from './header/Header';
-import MatchaNotif from './notification/matchaNotification/MatchaNotif';
+import Footer from './components/footer/Footer';
+import Header from './components/Header';
+import MatchaNotif from './components/notification/MatchaNotif';
+import MenuMatcha from './components/menu/MenuMatcha';
+import SocketNotif from './components/notification/SocketNotif';
 
 function App() {
-  const [matchaMenuIcon, setMatchaMenuIcon] = useState<boolean>(false);
-  const [matchaMenuOpen, setMatchaMenuOpen] = useState<boolean>(false);
   const [matchaNotif, setMatchaNotif] = useState<string | null>(null);
+  const nav = useNavigate();
+  const me = useUserInfo();
+
+  useEffect(() => {
+    if (import.meta.hot) {
+      if (Cookies.get('session')) nav(appRedir.getMe);
+      else nav(appRedir.loading);
+    }
+  }, [import.meta.hot]);
+
+  useEffect(() => {
+    const listenSocket = () => {
+      if (!me.userSocket) return;
+
+      me.userSocket.on(socketRoute.updateToken, () => {
+        const request = async () => {
+          try {
+            const response = await fetch(
+              `${userRoute.getNewToken}/${me.user?.id}`,
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+            );
+            const data = await response.json();
+            if (response.status !== 200) {
+              setMatchaNotif(data.message);
+              nav(appRedir.errorInternal);
+              return;
+            }
+            Cookies.set('session', data.token, {
+              expires: undefined,
+              sameSite: 'None',
+              secure: true,
+            });
+          } catch (error) {
+            setMatchaNotif((error as Error).message);
+            nav(appRedir.errorInternal);
+          }
+        };
+        request();
+      });
+
+      me.userSocket.on(socketRoute.receptView, (username: string) => {
+        setNotif(`${username} a visité votre profil`);
+        appMemo.setReloadList(true);
+      });
+
+      me.userSocket.on(socketRoute.receptLike, (username: string) => {
+        setNotif(`${username} a liké votre profil`);
+        appMemo.setReloadList(true);
+      });
+
+      me.userSocket.on(socketRoute.receptDislike, (username: string) => {
+        setNotif(`${username} a supprimé son Like`);
+        appMemo.setReloadList(true);
+      });
+
+
+    };
+    listenSocket();
+    return () => {
+      if (!me.userSocket) return;
+      me.userSocket.off(socketRoute.updateToken);
+    };
+  }, [me.userSocket]);
+
 
   return (
     <>
-      <div className='header'>
-        <Header
-          matchaMenuOpen={matchaMenuOpen}
-          setMatchaMenuOpen={setMatchaMenuOpen}
-          matchaMenuIcon={matchaMenuIcon}
-        />
-      </div>
-
-      <div className='system_notification'>
+      <div className='matcha_notification'>
         <MatchaNotif
           matchaNotif={matchaNotif}
           setMatchaNotif={setMatchaNotif}
-          setMatchaMenuOpen={setMatchaMenuOpen}
         />
       </div>
 
       <div className='routes'>
-        <AppRoutes
-          setMatchaMenuIcon={setMatchaMenuIcon}
-          setMatchaMenuOpen={setMatchaMenuOpen}
-          setMatchaNotif={setMatchaNotif}
-        />
-      </div>
-
-      <div className='footer'>
-        <Footer />
+        <div className='routes_header'>
+          <Header />
+        </div>
+        <div className='routes_empty'></div>
+        <div className='routes_body'>
+          <div className='routes_menu'>
+            {me.user && me.user.id && (
+              <>
+                <MenuMatcha />
+              </>
+            )}
+          </div>
+          <div className='routes_path'>
+            <AppRoutes setMatchaNotif={setMatchaNotif} />
+          </div>
+          <div className='routes_socket_notif'>
+            <SocketNotif />
+          </div>
+        </div>
+        <div className='routes_footer'>
+          <Footer />
+        </div>
       </div>
     </>
   );

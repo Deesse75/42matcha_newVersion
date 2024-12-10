@@ -1,0 +1,65 @@
+.listing_filter_container {
+  width: 59%;
+  height: 100%;
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  .listing_filter_left {
+    width: 30%;
+    height: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    .listing_filter_left_select {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      outline: none;
+      border: none;
+      border-radius: 5px;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+    }
+  }
+  .listing_filter_right {
+    width: 65%;
+    height: 95%;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    .selected_filter_form {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      .selected_filter_input,
+      .selected_filter_select {
+        width: 100px;
+        height: 100%;
+        margin-right: 10px;
+        display: flex;
+        box-sizing: border-box;
+        outline: none;
+        border: none;
+        border-radius: 3px;
+        box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+      }
+      .selected_filter_select {
+        width: 150px;
+      }
+      .selected_filter_submit {
+        width: 100px;
+        height: 100%;
+        padding: 0 20px;
+        display: flex;
+        border-radius: 5px;
+        @include submit_button_black;
+      }
+    }
+  }
+}

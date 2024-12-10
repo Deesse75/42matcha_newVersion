@@ -1,49 +1,37 @@
 import { FC } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { appRedir } from './appConfig/appPath';
-import LoadingPage from './auth/LoadingPage';
-import ValidateLinkEmail from './auth/validate/ValidateLinkEmail';
-import GetMe from './home/GetMe';
-import Signin from './auth/signin/Signin';
-import Signup from './auth/signup/Signup';
-import ForgotPassword from './auth/forgot/ForgotPassword';
-import ResendLinkEmail from './auth/resend/ResendLinkEmail';
-import Error500 from './error/Error500';
-import Error404 from './error/Error404';
-import Attribution from './footer/components/Attribution';
-import ContactUs from './footer/components/ContactUs';
-import Legacy from './footer/components/Legacy';
-import Signout from './header/components/Signout';
-import ProfilePage from './home/profile/ProfilePage';
-import DeleteProfile from './home/profile/DeleteProfile';
-import DashboardPage from './home/dashboard/DashboardPage';
-import ChatPage from './home/chat/ChatPage';
-import SearchPage from './home/search/SearchPage';
-import HistoryPage from './home/history/HistoryPage';
+import AccountPage from './pages/Account';
+import ChatPage from './pages/Chat';
+import Dashboard from './pages/Dashboard';
+import Error500 from './pages/Error500';
+import ErrorNotFound from './pages/ErrorNotFound';
+import ForgotPassword from './pages/ForgotPassword';
+import GetMe from './pages/GetMe';
+import Loading from './pages/Loading';
+import PhotoProfile from './pages/PhotoProfile';
+import ResendEmail from './pages/ResendEmail';
+import SearchPage from './pages/Search';
+import Signin from './pages/Signin';
+import Signout from './pages/Signout';
+import Signup from './pages/Signup';
+import ValidateEmail from './pages/ValidateEmail';
+import HistoryPage from './pages/History';
+import ContactUs from './pages/ContactUs';
+import DisplayProfil from './pages/DisplayProfil';
 
 type Props = {
-  setMatchaMenuIcon: React.Dispatch<React.SetStateAction<boolean>>;
-  setMatchaMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMatchaNotif: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const AppRoutes: FC<Props> = ({
-  setMatchaMenuIcon,
-  setMatchaMenuOpen,
-  setMatchaNotif,
-}) => {
+const AppRoutes: FC<Props> = ({ setMatchaNotif }) => {
   return (
     <>
       <Routes>
+        {/* logged out */}
         <Route
           path={appRedir.loading}
-          element={
-            <LoadingPage
-              setMatchaMenuOpen={setMatchaMenuOpen}
-              setMatchaMenuIcon={setMatchaMenuIcon}
-              setMatchaNotif={setMatchaNotif}
-            />
-          }
+          element={<Loading setMatchaNotif={setMatchaNotif} />}
         />
         <Route
           path={appRedir.signin}
@@ -59,76 +47,58 @@ const AppRoutes: FC<Props> = ({
         />
         <Route
           path={appRedir.resend}
-          element={<ResendLinkEmail setMatchaNotif={setMatchaNotif} />}
+          element={<ResendEmail setMatchaNotif={setMatchaNotif} />}
         />
         <Route
-          path={appRedir.validateLinkEmail}
-          element={
-            <ValidateLinkEmail
-              setMatchaMenuOpen={setMatchaMenuOpen}
-              setMatchaMenuIcon={setMatchaMenuIcon}
-              setMatchaNotif={setMatchaNotif}
-            />
-          }
+          path={appRedir.validateEmail}
+          element={<ValidateEmail setMatchaNotif={setMatchaNotif} />}
         />
 
-        <Route
-          path={appRedir.errorNotfound}
-          element={<Error404 setMatchaMenuOpen={setMatchaMenuOpen} />}
-        />
-        <Route
-          path={appRedir.errorInternal}
-          element={<Error500 setMatchaMenuOpen={setMatchaMenuOpen} />}
-        />
-
-        <Route path={appRedir.attribution} element={<Attribution />} />
+        {/* both */}
+        <Route path={appRedir.errorNotfound} element={<ErrorNotFound />} />
+        <Route path={appRedir.errorInternal} element={<Error500 />} />
         <Route
           path={appRedir.contact}
-          element={
-            <ContactUs
-              setMatchaNotif={setMatchaNotif}
-              setMatchaMenuOpen={setMatchaMenuOpen}
-            />
-          }
+          element={<ContactUs setMatchaNotif={setMatchaNotif} />}
         />
-        <Route path={appRedir.rules} element={<Legacy />} />
 
+        {/* logged in */}
         <Route
           path={appRedir.getMe}
-          element={
-            <GetMe
-              setMatchaMenuIcon={setMatchaMenuIcon}
-              setMatchaNotif={setMatchaNotif}
-            />
-          }
+          element={<GetMe setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route path={appRedir.signout} element={<Signout />} />
+        <Route
+          path={appRedir.account}
+          element={<AccountPage setMatchaNotif={setMatchaNotif} />}
         />
         <Route
-          path='/*'
-          element={<Error404 setMatchaMenuOpen={setMatchaMenuOpen} />}
+          path={appRedir.updatePhotos}
+          element={<PhotoProfile setMatchaNotif={setMatchaNotif} />}
         />
-        <Route
-          path={appRedir.signout}
-          element={
-            <Signout
-              setMatchaMenuOpen={setMatchaMenuOpen}
-              setMatchaMenuIcon={setMatchaMenuIcon}
-            />
-          }
-        />
-        <Route path={appRedir.profile} element={<ProfilePage />} />
-        <Route path={appRedir.deleteProfile} element={<DeleteProfile />} />
         <Route
           path={appRedir.dashboard}
-          element={
-            <DashboardPage
-              setMatchaNotif={setMatchaNotif}
-              setMatchaMenuIcon={setMatchaMenuIcon}
-            />
-          }
+          element={<Dashboard setMatchaNotif={setMatchaNotif} />}
         />
-        <Route path={appRedir.chat} element={<ChatPage />} />
-        <Route path={appRedir.search} element={<SearchPage />} />
-        <Route path={appRedir.history} element={<HistoryPage />} />
+        <Route
+          path={appRedir.chat}
+          element={<ChatPage setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route
+          path={appRedir.search}
+          element={<SearchPage setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route
+          path={appRedir.history}
+          element={<HistoryPage setMatchaNotif={setMatchaNotif} />}
+        />
+        <Route
+          path={appRedir.displayProfile}
+          element={<DisplayProfil setMatchaNotif={setMatchaNotif} />}
+        />
+
+        {/* wrong page */}
+        <Route path='/*' element={<ErrorNotFound />} />
       </Routes>
     </>
   );

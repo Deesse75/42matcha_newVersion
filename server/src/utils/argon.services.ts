@@ -19,7 +19,6 @@ export const verifyData = async (
   try {
     return await argon2.verify(currentData, newData);
   } catch (error) {
-    console.log('verifyData error', error);
     throw new matchaError(500, 'Une erreur interne est survenue');
   }
 };

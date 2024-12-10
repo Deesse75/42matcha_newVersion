@@ -1,10 +1,9 @@
-export type FullProfileType = {
+export type UserFrontType = {
   id: number;
   firstname: string;
   lastname: string;
   username: string;
-  email: string;
-  birthdate: string | null;
+  birthdate: string;
   age: number;
   gender: string | null;
   orientation: string | null;
@@ -14,22 +13,19 @@ export type FullProfileType = {
   tall: number;
   biography: string | null;
   fameRating: number;
-  photo1: string | null;
-  photo2: string | null;
-  photo3: string | null;
-  photo4: string | null;
-  photo5: string | null;
-  ageMin: number;
-  ageMax: number;
-  genderLookFor: string | null;
+  photo: string | null;
   lastConnection: string | null;
-  tags: string[] | null;
   createdAt: string;
   updatedAt: string;
 };
 
+export type UserTagsFrontType = {
+  id: number;
+  userId: number;
+  tagName: string;
+};
 
-export type MiniProfileType = {
+export type ProfileFrontType = {
   id: number;
   username: string;
   age: number;
@@ -38,14 +34,18 @@ export type MiniProfileType = {
   region: string | null;
   county: string | null;
   town: string | null;
+  tall: number;
+  biography: string | null;
   fameRating: number;
-  photo1: string | null;
-  tags: string[] | null;
+  photo: string | null;
   lastConnection: string | null;
+  tags: string[] | null;
 };
 
-export type UserTagsType = {
-  id: number;
+export type PhotosPlusFrontType = {
   userId: number;
-  tagName: string;
+  photo2: string | null;
+  photo3: string | null;
+  photo4: string | null;
+  photo5: string | null;
 };

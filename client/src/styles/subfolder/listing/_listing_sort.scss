@@ -1,0 +1,27 @@
+.listing_sort_container {
+  width: 35%;
+  height: 100%;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+
+  .listing_sort_select {
+    width: 69%;
+    height: 95%;
+    display: flex;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 5px 1px $color_nuance_grey1;
+  }
+  .listing_sort_submit {
+    width: 30%;
+    height: 95%;
+    display: flex;
+    border-radius: 5px;
+    @include submit_button_black;
+  }
+}
